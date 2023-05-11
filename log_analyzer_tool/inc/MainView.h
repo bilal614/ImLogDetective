@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "IMainView.h"
+#include "dearimgui/ITextWidgetFactory.h"
 
 namespace LogAnalyzerTool
 {
@@ -12,7 +13,7 @@ class MainViewModel;
 class MainView : public IMainView
 {
 public:
-    MainView(IWindowFactory& windowFactory, MainViewModel& mainViewModel);
+    MainView(IWindowFactory& windowFactory, ITextWidgetFactory& textWidgetFactory, MainViewModel& mainViewModel);
     ~MainView();
     void show() override;
 private:
