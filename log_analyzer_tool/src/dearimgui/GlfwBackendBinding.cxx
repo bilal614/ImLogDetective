@@ -4,13 +4,16 @@
 #include "dearimgui/ITextWidgetFactory.h"
 #include "dearimgui/IWindowFactory.h"
 #include "LogAnalyzerToolDefs.h"
-#include "MainView.h"
+#include "views/MainView.h"
+#include "views/LogView.h"
+#include "views/LogFilterView.h"
 #include "MainViewModel.h"
 #include "dearimgui/IOContext.h"
 #include "dearimgui/MainViewPort.h"
 #include "dearimgui/WindowFactory.h"
 #include "dearimgui/TextWidgetFactory.h"
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include "imgui.h"
@@ -39,6 +42,8 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IWindowFactory> windowFactory;
     std::unique_ptr<ITextWidgetFactory> textWidgetFactory;
     std::unique_ptr<MainViewModel> mainViewModel;
+    std::unique_ptr<ILogFilterView> logFilterView;
+    std::unique_ptr<ILogView> logView;
     std::unique_ptr<MainView> mainView;
 };
 
@@ -57,6 +62,7 @@ GlfwBackendBinding::Impl::Impl() :
     glShaderLanguageVersion{"#version 130"},
     windowFactory{},
     mainViewModel{std::make_unique<MainViewModel>()},
+    logView{ },
     mainView{ }
 {
     glfwSetErrorCallback(glfw_error_callback);
@@ -99,7 +105,9 @@ GlfwBackendBinding::Impl::Impl() :
     mainViewPort = std::make_unique<MainViewPort>();
     textWidgetFactory = std::make_unique<TextWidgetFactory>();
     windowFactory  = std::make_unique<WindowFactory>(*mainViewPort);
-    mainView = std::make_unique<MainView>(*windowFactory.get(), *textWidgetFactory.get(), *mainViewModel.get());
+    logFilterView = std::make_unique<LogFilterView>();
+    logView = std::make_unique<LogView>(*textWidgetFactory);
+    mainView = std::make_unique<MainView>(*windowFactory.get(), *logFilterView, *logView.get(), *mainViewModel.get());
 
 }
 

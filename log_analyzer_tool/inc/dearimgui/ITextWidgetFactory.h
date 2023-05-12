@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 
 namespace LogAnalyzerTool
 {
@@ -19,7 +19,7 @@ class ITextWidgetFactory
 public:
     virtual ~ITextWidgetFactory() = default;
     virtual void createUnformattedText(const std::string& text) = 0;
-    virtual void createTextColored(const std::string& text, const TextColor& color) = 0;
+    virtual void createTextColored(std::string_view text, const TextColor& color) = 0;
 };
 
 }

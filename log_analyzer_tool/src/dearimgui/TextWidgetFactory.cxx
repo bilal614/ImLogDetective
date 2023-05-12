@@ -16,7 +16,7 @@ struct TextWidgetFactory::Impl
 TextWidgetFactory::Impl::Impl() :
     colorMap{
         {TextColor::Red, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)},
-        {TextColor::Orange, ImVec4(1.0f, 0.75f, 0.0f, 1.0f)},
+        {TextColor::Orange, ImVec4(1.0f, 0.5f, 0.0f, 1.0f)},
         {TextColor::Yellow, ImVec4(1.0f, 1.0f, 0.0f, 1.0f)},
         {TextColor::Green, ImVec4(0.0f, 1.0f, 0.0f, 1.0f)},
         {TextColor::White, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
@@ -38,12 +38,12 @@ void TextWidgetFactory::createUnformattedText(const std::string& text)
     ImGui::TextUnformatted(text.c_str());
 }
 
-void TextWidgetFactory::createTextColored(const std::string& text, const TextColor& color)
+void TextWidgetFactory::createTextColored(std::string_view text, const TextColor& color)
 {
     auto textColor = p->colorMap.find(color);
     if(textColor != p->colorMap.end())
     {
-        ImGui::TextColored(textColor->second, "%s", text.c_str());
+        ImGui::TextColored(textColor->second, "%s", text.data());
     }
 }
 
