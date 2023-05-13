@@ -13,6 +13,7 @@ public:
     ImVec2 getAreaSize() const override;
     ImVec2 getWorkAreaSize() const override;
     ImVec2 getViewportPosition() const override;
+    ImVec2 getViewportCenter() const override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

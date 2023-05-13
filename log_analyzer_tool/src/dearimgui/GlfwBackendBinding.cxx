@@ -1,13 +1,13 @@
 
 #include "dearimgui/GlfwBackendBinding.h"
-
 #include "dearimgui/ITextWidgetFactory.h"
 #include "dearimgui/IWindowFactory.h"
 #include "LogAnalyzerToolDefs.h"
-#include "views/MainView.h"
+#include "presenters/MainPresenter.h"
+#include "views/FolderSelectionMenuBar.h"
+#include "views/FolderSelectionPopup.h"
 #include "views/LogView.h"
 #include "views/LogFilterView.h"
-#include "MainViewModel.h"
 #include "dearimgui/IOContext.h"
 #include "dearimgui/MainViewPort.h"
 #include "dearimgui/WindowFactory.h"
@@ -41,10 +41,11 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IOContext> ioContext;
     std::unique_ptr<IWindowFactory> windowFactory;
     std::unique_ptr<ITextWidgetFactory> textWidgetFactory;
-    std::unique_ptr<MainViewModel> mainViewModel;
+    std::unique_ptr<IFolderSelectionMenuBar> folderSelectionMenuBar;
+    std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
     std::unique_ptr<ILogFilterView> logFilterView;
     std::unique_ptr<ILogView> logView;
-    std::unique_ptr<MainView> mainView;
+    std::unique_ptr<MainPresenter> mainPresenter;
 };
 
 GlfwBackendBinding::Impl::~Impl()
@@ -61,9 +62,8 @@ GlfwBackendBinding::Impl::~Impl()
 GlfwBackendBinding::Impl::Impl() :
     glShaderLanguageVersion{"#version 130"},
     windowFactory{},
-    mainViewModel{std::make_unique<MainViewModel>()},
-    logView{ },
-    mainView{ }
+    logView{ nullptr },
+    mainPresenter{ nullptr }
 {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -93,8 +93,9 @@ GlfwBackendBinding::Impl::Impl() :
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
         // Setup Dear ImGui style
-        //ImGui::StyleColorsDark();
-        ImGui::StyleColorsClassic();
+        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsClassic();
+        //ImGui::StyleColorsLight();
 
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -105,9 +106,16 @@ GlfwBackendBinding::Impl::Impl() :
     mainViewPort = std::make_unique<MainViewPort>();
     textWidgetFactory = std::make_unique<TextWidgetFactory>();
     windowFactory  = std::make_unique<WindowFactory>(*mainViewPort);
+    folderSelectionMenuBar = std::make_unique<FolderSelectionMenuBar>();
+    folderSelectionPopup = std::make_unique<FolderSelectionPopup>();
     logFilterView = std::make_unique<LogFilterView>();
     logView = std::make_unique<LogView>(*textWidgetFactory);
-    mainView = std::make_unique<MainView>(*windowFactory.get(), *logFilterView, *logView.get(), *mainViewModel.get());
+    mainPresenter = std::make_unique<MainPresenter>(*windowFactory,
+        *mainViewPort,
+        *folderSelectionMenuBar,
+        *folderSelectionPopup,
+        *logFilterView, 
+        *logView);
 
 }
 
@@ -140,7 +148,7 @@ void GlfwBackendBinding::runMainLoop()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        p->mainView->show();
+        p->mainPresenter->update();
 
         // Rendering
         ImGui::Render();

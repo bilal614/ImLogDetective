@@ -8,10 +8,11 @@ add_executable(${LOG_ANALYZER_TOOL}
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/MainViewPort.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TextWidgetFactory.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/WindowFactory.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionMenuBar.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionPopup.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/LogFilterView.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/LogView.cxx
-    ${LOG_ANALYZER_TOOL_DIR}/src/views/MainView.cxx
-    ${LOG_ANALYZER_TOOL_DIR}/src/MainViewModel.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/presenters/MainPresenter.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/models/LogDataModel.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/main.cxx
 )

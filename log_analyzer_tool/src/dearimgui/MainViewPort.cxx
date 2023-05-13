@@ -51,4 +51,9 @@ ImVec2 MainViewPort::getViewportPosition() const
     return ImVec2{};
 }
 
+ImVec2 MainViewPort::getViewportCenter() const
+{
+    return p->imGuiViewport->GetCenter();
+}
+
 }
