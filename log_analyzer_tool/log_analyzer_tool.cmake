@@ -6,6 +6,7 @@ add_executable(${LOG_ANALYZER_TOOL}
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/IOContext.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/GlfwBackendBinding.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/MainViewPort.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TabBar.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TextWidgetFactory.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/WindowFactory.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionMenuBar.cxx
@@ -13,7 +14,11 @@ add_executable(${LOG_ANALYZER_TOOL}
     ${LOG_ANALYZER_TOOL_DIR}/src/views/LogFilterView.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/LogView.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/presenters/MainPresenter.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFilePresenter.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFilePresenterFactory.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFileTabsPresenter.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/models/LogDataModel.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/models/LogFileParser.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/main.cxx
 )
 

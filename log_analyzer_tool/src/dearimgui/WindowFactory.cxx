@@ -60,7 +60,14 @@ ScopedImGuiWindow WindowFactory::createChildWindow(const std::string& windowName
 {
     auto position = ImVec2{0, 0};
     auto size = ImVec2{0, 0};
-    return ScopedImGuiWindow{windowName, size, position, p->openCloseWidgetPresent.get(), p->childWindowFlags, WindowType::ChildWindow};
+    return ScopedImGuiWindow{
+        windowName, 
+        size, 
+        position, 
+        p->openCloseWidgetPresent.get(),
+        p->childWindowFlags,
+        WindowType::ChildWindow
+    };
 }
 
 }

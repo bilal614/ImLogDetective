@@ -1,15 +1,10 @@
 #include "presenters/MainPresenter.h"
-#include "views/ILogView.h"
-#include "views/ILogFilterView.h"
+#include "presenters/ILogFileTabsPresenter.h"
 #include "views/IFolderSelectionPopup.h"
 #include "dearimgui/IWindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
 #include "dearimgui/ScopedImGuiWindow.hpp"
-#include "dearimgui/ITextWidgetFactory.h"
 
-//TODO Remove later
-#include "models/LogDataModel.h"
-#include <string_view>
 
 namespace LogAnalyzerTool
 {
@@ -20,34 +15,26 @@ struct MainPresenter::Impl
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFilterView& logFilterView, 
-        ILogView& logView);
+        ILogFileTabsPresenter& logFileTabsPresenter);
     ~Impl() = default;
 
     IWindowFactory& windowFactory;
     IMainViewPort& mainViewPort;
     IFolderSelectionMenuBar& folderSelectionMenuBar;
     IFolderSelectionPopup& folderSelectionPopup;
-    ILogFilterView& logFilterView;
-    ILogView& logView;
-    
-    //TODO Remove later
-    LogDataModel logDataModel;
+    ILogFileTabsPresenter& logFileTabsPresenter;
 };
 
 MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFilterView& logFilterView, 
-        ILogView& logView) :
+        ILogFileTabsPresenter& logFileTabsPresenter) :
     mainViewPort{mainViewPort},
     folderSelectionPopup{folderSelectionPopup},
     folderSelectionMenuBar{folderSelectionMenuBar},
-    logFilterView{logFilterView},
-    logView{logView},
     windowFactory{windowFactory},
-    logDataModel{"Dummy Data"}
+    logFileTabsPresenter{logFileTabsPresenter}
 {
 }
 
@@ -55,9 +42,8 @@ MainPresenter::MainPresenter(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFilterView& logFilterView, 
-        ILogView& logView) : 
-    p {std::make_unique<Impl>(windowFactory, mainViewPort, folderSelectionMenuBar, folderSelectionPopup, logFilterView, logView)}
+        ILogFileTabsPresenter& logFileTabsPresenter) : 
+    p {std::make_unique<Impl>(windowFactory, mainViewPort, folderSelectionMenuBar, folderSelectionPopup, logFileTabsPresenter)}
 {
 }
 
@@ -81,28 +67,8 @@ void MainPresenter::update()
     }
 
     auto secondWindow = p->windowFactory.createChildWindow("Child Window");
-    p->logFilterView.drawFilterCheckBoxes();
 
-    auto dummyData = p->logDataModel.getLogData(); 
-    for(auto data : dummyData)
-    {
-        if(data.find("DEBUG") != std::string_view::npos && p->logFilterView.getDebugChecked())
-        {
-            p->logView.drawLogLineText(data, TextColor::White);
-        }
-        if(data.find("INFO") != std::string_view::npos  && p->logFilterView.getInfoChecked())
-        {
-            p->logView.drawLogLineText(data, TextColor::White);
-        }
-        if(data.find("WARNING") != std::string_view::npos && p->logFilterView.getWarningChecked())
-        {
-            p->logView.drawLogLineText(data, TextColor::Orange);
-        }
-        if(data.find("ERROR") != std::string_view::npos && p->logFilterView.getErrorChecked())
-        {
-            p->logView.drawLogLineText(data, TextColor::Red);
-        }
-    }
+    p->logFileTabsPresenter.update(p->folderSelectionPopup.getSelectedFolder());
 }
 
 }

@@ -9,7 +9,7 @@ namespace LogAnalyzerTool
 enum class WindowType
 {
     MainWindow,
-    ChildWindow,
+    ChildWindow
 };
 struct ScopedImGuiWindow
 {

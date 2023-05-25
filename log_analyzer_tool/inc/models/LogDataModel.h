@@ -13,9 +13,8 @@ class LogDataModel : public ILogDataModel
 public:
     LogDataModel(const std::string& dataSource);
     ~LogDataModel();
-    void addLogData(std::string_view dataLine) override;
-    void addMultipleLogData(const std::vector<std::string>&& data) override;
-    std::vector<std::string_view> getLogData() override; 
+    void addLogData(std::string dataLine) override;
+    const std::vector<LogData>& getLogData() override; 
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

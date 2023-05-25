@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <tuple>
 #include <vector>
 
 namespace LogAnalyzerTool
@@ -8,13 +9,27 @@ namespace LogAnalyzerTool
 
 class ITextWidgetFactory;
 
+enum LogLevel 
+{
+    Debug,
+    Info, 
+    Warning,
+    Error,
+    Unknown
+};
+
+struct LogData
+{
+    const std::string logLine;
+    const LogLevel level;
+};
+
 class ILogDataModel 
 {
 public:
     virtual ~ILogDataModel() = default;
-    virtual void addLogData(std::string_view dataLine) = 0;
-    virtual void addMultipleLogData(const std::vector<std::string>&& data) = 0;
-    virtual std::vector<std::string_view> getLogData() = 0; 
+    virtual void addLogData(std::string dataLine) = 0;
+    virtual const std::vector<LogData>& getLogData() = 0; 
 };
 
 }

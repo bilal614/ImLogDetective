@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "dearimgui/IMainViewPort.h"
+#include "presenters/ILogFilePresenter.h"
 #include "presenters/IMainPresenter.h"
 #include "views/IFolderSelectionMenuBar.h"
 #include "views/ILogView.h"
@@ -10,10 +11,9 @@ namespace LogAnalyzerTool
 {
 class IFolderSelectionMenuBar;
 class IFolderSelectionPopup;
-class ILogView;
-class ILogFilterView;
 class IMainViewPort;
 class IWindowFactory;
+class ILogFileTabsPresenter;
 
 class MainPresenter : public IMainPresenter
 {
@@ -22,8 +22,7 @@ public:
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFilterView& logFilterView, 
-        ILogView& logView);
+        ILogFileTabsPresenter& logFileTabsPresenter);
     ~MainPresenter();
     void update() override;
 private:
