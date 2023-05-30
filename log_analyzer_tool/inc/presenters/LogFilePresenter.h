@@ -7,6 +7,7 @@
 namespace LogAnalyzerTool
 {
 
+class ILogDataModel;
 class ILogFileParser;
 class ILogFilterView;
 class ILogView;
@@ -19,7 +20,8 @@ public:
         IWindowFactory& windowFactory,
         ILogFilterView& logFilterView, 
         ILogView& logView,
-        ILogFileParser& logFileParser);
+        ILogFileParser& logFileParser,
+        ILogDataModel& logDataModel);
     ~LogFilePresenter();
     void update(const std::filesystem::path& filePath) override;
 private:

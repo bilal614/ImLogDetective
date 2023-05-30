@@ -5,7 +5,6 @@
 namespace LogAnalyzerTool
 {
 
-
 struct LogDataModel::Impl
 {
 

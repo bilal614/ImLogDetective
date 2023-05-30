@@ -1,6 +1,9 @@
 #include "presenters/LogFilePresenterFactory.h"
+#include "models/LogDataModel.h"
 #include "presenters/LogFilePresenter.h"
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace LogAnalyzerTool
 {
@@ -21,6 +24,7 @@ struct LogFilePresenterFactory::Impl
     ILogFilterView& logFilterView; 
     ILogView& logView;
     ILogFileParser& logFileParser;
+    std::unordered_map<std::string, std::unique_ptr<LogDataModel>> logDataModels;
 };
 
 LogFilePresenterFactory::Impl::Impl(IWindowFactory& windowFactory,
@@ -47,7 +51,14 @@ LogFilePresenterFactory::~LogFilePresenterFactory() = default;
 
 std::unique_ptr<ILogFilePresenter> LogFilePresenterFactory::createLogFilePresenter(const std::filesystem::path& filePath)
 {
-    return std::make_unique<LogFilePresenter>(p->windowFactory, p->logFilterView, p->logView, p->logFileParser);
+    std::string fileName = filePath.stem().string();
+    p->logDataModels.insert({fileName, std::make_unique<LogDataModel>(fileName)});
+    return std::make_unique<LogFilePresenter>(
+        p->windowFactory,
+        p->logFilterView,
+        p->logView,
+        p->logFileParser,
+        *p->logDataModels[fileName]);
 }
 
 }

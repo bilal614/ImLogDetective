@@ -1,5 +1,6 @@
 #include "dearimgui/IMainViewPort.h"
 #include "LogAnalyzerToolDefs.h"
+#include "dearimgui/IScopedImGuiWindow.h"
 #include "dearimgui/ScopedImGuiWindow.hpp"
 #include "dearimgui/WindowFactory.h"
 #include "imgui.h"
@@ -11,7 +12,7 @@ struct WindowFactory::Impl
 {
     Impl(const IMainViewPort& mainViewPort);
     ~Impl() = default;
-    ScopedImGuiWindow addWindow();
+    std::unique_ptr<IScopedImGuiWindow> addWindow();
 
     const IMainViewPort& mainViewPort;
     std::unique_ptr<bool> openCloseWidgetPresent;
@@ -33,14 +34,14 @@ WindowFactory::Impl::Impl(const IMainViewPort& mainWindow) :
     childWindowFlags = ImGuiWindowFlags_HorizontalScrollbar;
 }
 
-ScopedImGuiWindow WindowFactory::Impl::addWindow()
+std::unique_ptr<IScopedImGuiWindow> WindowFactory::Impl::addWindow()
 {
-    return ScopedImGuiWindow{LogAnalyzerToolApplicationName, 
+    return std::make_unique<ScopedImGuiWindow>(LogAnalyzerToolApplicationName, 
         mainViewPort.getAreaSize(), 
         mainViewPort.getViewportPosition(), 
         openCloseWidgetPresent.get(), 
         mainWindowFlags,
-        WindowType::MainWindow};
+        WindowType::MainWindow);
 }
 
 WindowFactory::WindowFactory(const IMainViewPort& mainWindow) :
@@ -51,23 +52,23 @@ WindowFactory::WindowFactory(const IMainViewPort& mainWindow) :
 
 WindowFactory::~WindowFactory() = default;
 
-ScopedImGuiWindow WindowFactory::createWindow()
+std::unique_ptr<IScopedImGuiWindow> WindowFactory::createWindow()
 {
     return p->addWindow();
 }
 
-ScopedImGuiWindow WindowFactory::createChildWindow(const std::string& windowName)
+std::unique_ptr<IScopedImGuiWindow> WindowFactory::createChildWindow(const std::string& windowName)
 {
     auto position = ImVec2{0, 0};
     auto size = ImVec2{0, 0};
-    return ScopedImGuiWindow{
+    return std::make_unique<ScopedImGuiWindow>(
         windowName, 
         size, 
         position, 
         p->openCloseWidgetPresent.get(),
         p->childWindowFlags,
         WindowType::ChildWindow
-    };
+    );
 }
 
 }

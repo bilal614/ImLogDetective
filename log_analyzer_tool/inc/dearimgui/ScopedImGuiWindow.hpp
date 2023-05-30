@@ -1,19 +1,20 @@
 #pragma once
 
+#include "dearimgui/IScopedImGuiWindow.h"
 #include "imgui.h"
 #include <string>
 
 namespace LogAnalyzerTool
 {
 
-enum class WindowType
-{
-    MainWindow,
-    ChildWindow
-};
-struct ScopedImGuiWindow
+struct ScopedImGuiWindow : public IScopedImGuiWindow
 {
     WindowType windowType;
+
+    WindowType getWindowType()
+    {
+        return windowType;
+    }
 
     ScopedImGuiWindow(const std::string& windowName, const ImVec2& size, const ImVec2& position, bool* openClose, ImGuiWindowFlags windowFlags, WindowType type) 
         : windowType{type}

@@ -1,13 +1,13 @@
+#include "LogAnalyzerToolDefs.h"
 #include "presenters/LogFilePresenter.h"
 #include "views/ILogView.h"
 #include "views/ILogFilterView.h"
 #include "dearimgui/ITextWidgetFactory.h"
 #include "dearimgui/IWindowFactory.h"
-#include "dearimgui/ScopedImGuiWindow.hpp"
 #include "models/ILogFileParser.h"
+#include "models/ILogDataModel.h"
 
 //TODO Remove later
-#include "models/LogDataModel.h"
 
 
 namespace LogAnalyzerTool
@@ -18,7 +18,8 @@ struct LogFilePresenter::Impl
     Impl(IWindowFactory& windowFactory,
         ILogFilterView& logFilterView, 
         ILogView& logView,
-        ILogFileParser& logFileParser);
+        ILogFileParser& logFileParser,
+        ILogDataModel& logDataModel);
     ~Impl() = default;
 
     bool logDataIsRead;
@@ -26,20 +27,19 @@ struct LogFilePresenter::Impl
     ILogFilterView& logFilterView;
     ILogView& logView;
     ILogFileParser& logFileParser;
-    
-    //TODO Remove later
-    LogDataModel logDataModel;
+    ILogDataModel& logDataModel;
 };
 
 LogFilePresenter::Impl::Impl(IWindowFactory& windowFactory,
         ILogFilterView& logFilterView, 
         ILogView& logView,
-        ILogFileParser& logFileParser) :
+        ILogFileParser& logFileParser,
+        ILogDataModel& logDataModel) :
     windowFactory{windowFactory},
     logFilterView{logFilterView},
     logView{logView},
     logFileParser{logFileParser},
-    logDataModel{"Dummy Data"},
+    logDataModel{logDataModel},
     logDataIsRead{false}
 {
 }
@@ -48,8 +48,9 @@ LogFilePresenter::LogFilePresenter(
         IWindowFactory& windowFactory,
         ILogFilterView& logFilterView, 
         ILogView& logView,
-        ILogFileParser& logFileParser) : 
-    p {std::make_unique<Impl>(windowFactory, logFilterView, logView, logFileParser)}
+        ILogFileParser& logFileParser,
+        ILogDataModel& logDataModel) : 
+    p {std::make_unique<Impl>(windowFactory, logFilterView, logView, logFileParser, logDataModel)}
 {
 }
 
@@ -58,10 +59,10 @@ LogFilePresenter::~LogFilePresenter() = default;
 void LogFilePresenter::update(const std::filesystem::path& filePath)
 {
     //TODO Below must move to ILogFilePresenter
-    auto logFilterWindow = p->windowFactory.createChildWindow("LogFilterWindow");
+    auto logFilterWindow = p->windowFactory.createChildWindow(LogFilterChildWindow);
     p->logFilterView.drawFilterCheckBoxes();
     {
-        auto logFileContentWindow = p->windowFactory.createChildWindow("LogFileContentWindow");
+        auto logFileContentWindow = p->windowFactory.createChildWindow(LogFileContentChildWindow);
         if(!p->logDataIsRead)
         {
             p->logDataIsRead = true;

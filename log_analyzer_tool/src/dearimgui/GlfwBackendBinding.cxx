@@ -6,7 +6,6 @@
 #include "LogAnalyzerToolDefs.h"
 #include "models/LogFileParser.h"
 #include "presenters/MainPresenter.h"
-#include "presenters/LogFilePresenter.h"
 #include "presenters/LogFilePresenterFactory.h"
 #include "presenters/LogFileTabsPresenter.h"
 #include "views/FolderSelectionMenuBar.h"
@@ -124,7 +123,6 @@ GlfwBackendBinding::Impl::Impl() :
     logView = std::make_unique<LogView>(*textWidgetFactory);
     logFileParser = std::make_unique<LogFileParser>();
     logFilePresenterFactory = std::make_unique<LogFilePresenterFactory>(*windowFactory, *logFilterView, *logView, *logFileParser);
-    logFilePresenter = std::make_unique<LogFilePresenter>(*windowFactory, *logFilterView, *logView, *logFileParser);
     logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenterFactory, *tabBar);
     mainPresenter = std::make_unique<MainPresenter>(*windowFactory,
         *mainViewPort,

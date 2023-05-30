@@ -52,6 +52,9 @@ if(OPENGL_FOUND AND PKG_CONFIG_FOUND AND GLFW3_FOUND)
     #log_analyzer_tool
     include(${PROJECT_ROOT}/log_analyzer_tool/log_analyzer_tool.cmake)
 
+    #include test_log_analyzer_tool
+    include(${PROJECT_ROOT}/log_analyzer_tool/test_log_analyzer_tool.cmake)
+
     #test app
     add_executable(test_app
     ${PROJECT_SOURCE_DIR}/imgui/examples/example_glfw_opengl3/main.cpp
