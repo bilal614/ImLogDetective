@@ -9,7 +9,9 @@ find_package(GTest REQUIRED)
 if(GTest_FOUND)
     add_executable(${TEST_LOG_ANALYZER_TOOL}
         ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFilePresenter.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFileTabsPresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestLogFilePresenter.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestLogFileTabsPresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/main.cxx
     )
 

@@ -32,12 +32,10 @@ protected:
     std::unordered_map<LogAnalyzerTool::LogLevel, std::string> dummyLogLines;
     const std::vector<LogAnalyzerTool::LogData> dummyLogData;
 
-    void SetUp() override;
-
-    LogAnalyzerTool::LogFilePresenter logFilePresenter;
-
     TestLogFilePresenter();
     ~TestLogFilePresenter() = default;
+
+    LogAnalyzerTool::LogFilePresenter logFilePresenter;
 };
 
 TestLogFilePresenter::TestLogFilePresenter() :
@@ -59,12 +57,6 @@ TestLogFilePresenter::TestLogFilePresenter() :
         LogAnalyzerTool::LogData{dummyLogLines[LogAnalyzerTool::LogLevel::Error], LogAnalyzerTool::LogLevel::Error}
     }
 {
-
-}
-
-void TestLogFilePresenter::SetUp()
-{
-    ::testing::InSequence seq;
 
 }
 
@@ -103,7 +95,6 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_info_warning_error_che
     EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow)).Times(1);
     EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
 
-
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 
     EXPECT_CALL(logFilterViewMock, getDebugChecked()).WillOnce(::testing::Return(false));
@@ -129,7 +120,6 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_warning_error_checked)
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
     EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow)).Times(1);
     EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
-
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 

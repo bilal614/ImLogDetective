@@ -20,13 +20,13 @@ struct LogFileTabsPresenter::Impl
         std::filesystem::path logFilePath;
         std::unique_ptr<ILogFilePresenter> logFilePresenter;
 
-        std::tuple<std::string, bool, std::function<void()>> getItem()
+        TabBarItem getItem()
         {
             bool logFileContentsRead = readLogFile;
             readLogFile = false;
-            return std::tuple(name, isOpen, [&]{
+            return TabBarItem{name, isOpen, [&]{
                 logFilePresenter->update(logFilePath);
-            });
+            }};
         }
     };
 
@@ -55,7 +55,7 @@ LogFileTabsPresenter::~LogFileTabsPresenter() = default;
 
 void LogFileTabsPresenter::update(const std::filesystem::path& folderPath)
 {
-    std::vector<std::tuple<std::string, bool, std::function<void()>>> tabItemsToDraw;
+    std::vector<TabBarItem> tabItemsToDraw;
     bool folderPathChanged = false;
     if(p->folderPath != folderPath)
     {
