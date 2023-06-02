@@ -6,10 +6,12 @@
 namespace LogAnalyzerTool
 {
 
+class IImGuiTextFilterWrapper;
+
 class LogFilterView : public ILogFilterView
 {
 public:
-    LogFilterView();
+    LogFilterView(IImGuiTextFilterWrapper& textFilterWrapper);
     ~LogFilterView();
     void drawFilterCheckBoxes() const override;
     bool getDebugChecked() const override;

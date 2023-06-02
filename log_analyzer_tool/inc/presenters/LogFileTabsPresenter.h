@@ -6,13 +6,14 @@
 namespace LogAnalyzerTool
 {
 
-class ILogFilePresenterFactory;
+class ILogFilePresenter;
+class ILogDataModelFactory;
 class ITabBar;
 
 class LogFileTabsPresenter : public ILogFileTabsPresenter
 {
 public:
-    LogFileTabsPresenter(ILogFilePresenterFactory& logFilePresenterFactory, ITabBar& tabBar);
+    LogFileTabsPresenter(ILogFilePresenter& logFilePresenter, ILogDataModelFactory& logFilePresenterFactory, ITabBar& tabBar);
     ~LogFileTabsPresenter();
     void update(const std::filesystem::path& folderPath) override;
 private:

@@ -1,30 +1,33 @@
 #include "views/LogFilterView.h"
+#include "dearimgui/IImGuiTextFilterWrapper.h"
 #include "imgui.h"
 
 namespace LogAnalyzerTool
 {
 struct LogFilterView::Impl
 {
-    Impl();
+    Impl(IImGuiTextFilterWrapper& textFilterWrapper);
     ~Impl() = default;
 
     bool debugBoxChecked;
     bool infoBoxChecked;
     bool warningBoxChecked;
     bool errorBoxChecked;
+    IImGuiTextFilterWrapper& textFilterWrapper;
+    
 };
 
-LogFilterView::Impl::Impl() :
+LogFilterView::Impl::Impl(IImGuiTextFilterWrapper& textFilterWrapper) :
     debugBoxChecked{true},
     infoBoxChecked{true},
     warningBoxChecked{true},
-    errorBoxChecked{true}
+    errorBoxChecked{true},
+    textFilterWrapper{textFilterWrapper}
 {
-
 }
 
-LogFilterView::LogFilterView() :
-    p{std::make_unique<Impl>()}
+LogFilterView::LogFilterView(IImGuiTextFilterWrapper& textFilterWrapper) :
+    p{std::make_unique<Impl>(textFilterWrapper)}
 {
 }
 
@@ -41,6 +44,7 @@ void LogFilterView::drawFilterCheckBoxes() const
     ImGui::SameLine();
     ImGui::Checkbox("ERROR", &p->errorBoxChecked);
     ImGui::Separator();
+    p->textFilterWrapper.draw();
 }
 
 bool LogFilterView::getDebugChecked() const

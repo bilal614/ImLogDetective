@@ -5,11 +5,12 @@
 namespace LogAnalyzerTool
 {
 
+class ILogDataModel;
 class ILogFilePresenter
 {
 public:
     virtual ~ILogFilePresenter() = default;
-    virtual void update(const std::filesystem::path& filePath) = 0;
+    virtual void update(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel) = 0;
 };
 
 }

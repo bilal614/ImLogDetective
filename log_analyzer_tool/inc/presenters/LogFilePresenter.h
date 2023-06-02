@@ -11,6 +11,7 @@ class ILogDataModel;
 class ILogFileParser;
 class ILogFilterView;
 class ILogView;
+class IImGuiTextFilterWrapper;
 class IWindowFactory;
 
 class LogFilePresenter : public ILogFilePresenter
@@ -21,9 +22,9 @@ public:
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,
-        ILogDataModel& logDataModel);
+        IImGuiTextFilterWrapper& textFilterWrapper);
     ~LogFilePresenter();
-    void update(const std::filesystem::path& filePath) override;
+    void update(const std::filesystem::path& filePath,  bool readLogFile, ILogDataModel& logDataModel) override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

@@ -1,11 +1,14 @@
 #include "LogAnalyzerToolDefs.h"
+#include "dearimgui/ITabBar.h"
 #include "presenters/LogFileTabsPresenter.h"
-#include "mocks/LogFilePresenterFactoryMock.h"
+#include "mocks/LogFilePresenterMock.h"
+#include "mocks/LogDataModelFactoryMock.h"
 #include "mocks/TabBarMock.h"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include <filesystem>
 #include <fstream>
+#include <gmock/gmock-more-actions.h>
 #include <gmock/gmock-spec-builders.h>
 
 namespace TestLogAnalyzerTool
@@ -17,7 +20,8 @@ class TestLogFileTabsPresenter : public ::testing::Test {
 protected:
     ::testing::InSequence seq;
 
-    LogFilePresenterFactoryMock logFilePresenterFactoryMock;
+    LogDataModelFactoryMock logDataModelFactoryMock;
+    LogFilePresenterMock logFilePresenterMock;
     TabBarMock tabBarMock;
     std::filesystem::path filePath;
     std::vector<std::string> dummyTempFileNames;
@@ -32,11 +36,11 @@ protected:
 };
 
 TestLogFileTabsPresenter::TestLogFileTabsPresenter() :
-    logFilePresenterFactoryMock{},
+    logFilePresenterMock{},
     tabBarMock{},
     filePath{},
     dummyTempFileNames{"foo", "bar", "bla"},
-    logFileTabsPresenter{logFilePresenterFactoryMock, tabBarMock}
+    logFileTabsPresenter{logFilePresenterMock, logDataModelFactoryMock, tabBarMock}
 {
     std::sort(dummyTempFileNames.begin(),dummyTempFileNames.end(),
         [&](std::string lhs, std::string rhs) {return lhs > rhs;});
@@ -65,11 +69,22 @@ TEST_F(TestLogFileTabsPresenter, test_LogFileTabsPresenter_update) {
 
     for(const auto& fileName : dummyTempFileNames)
     {
-        EXPECT_CALL(logFilePresenterFactoryMock, createLogFilePresenter(filePath / fileName));
+        EXPECT_CALL(logDataModelFactoryMock, createLogFilePresenter(fileName));
     }
-    EXPECT_CALL(tabBarMock, drawTabBar(::testing::_));
+    std::vector<LogAnalyzerTool::TabBarItem> data;
+
+    EXPECT_CALL(tabBarMock, drawTabBar(::testing::_)).WillOnce(DoAll(::testing::SaveArg<0>(&data)));
 
     logFileTabsPresenter.update(filePath);
+
+    EXPECT_EQ(data.size(), dummyTempFileNames.size());
+
+    size_t index = 0;
+    for(const auto& name : dummyTempFileNames)
+    {
+        EXPECT_EQ(data[index].name, name);
+        EXPECT_TRUE(data[index++].isOpen);
+    }
 }
 
 }

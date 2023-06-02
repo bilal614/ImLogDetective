@@ -3,8 +3,8 @@
 #include "views/IFolderSelectionPopup.h"
 #include "dearimgui/IWindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
-#include "dearimgui/ScopedImGuiWindow.hpp"
-
+#include "dearimgui/IScopedImGuiWindow.h"
+#include "imgui.h" // Unfortunately needed because of ImVec2
 
 namespace LogAnalyzerTool
 {
@@ -66,8 +66,9 @@ void MainPresenter::update()
         }
     }
 
-    auto secondWindow = p->windowFactory.createChildWindow("Child Window");
+    //FileListViewPresenter
 
+    //TODO provide vector of file paths to logFileTabsPresenter.update i.o. folder
     p->logFileTabsPresenter.update(p->folderSelectionPopup.getSelectedFolder());
 }
 

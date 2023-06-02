@@ -6,7 +6,8 @@
 #include "LogAnalyzerToolDefs.h"
 #include "models/LogFileParser.h"
 #include "presenters/MainPresenter.h"
-#include "presenters/LogFilePresenterFactory.h"
+#include "presenters/LogFilePresenter.h"
+#include "presenters/LogDataModelFactory.h"
 #include "presenters/LogFileTabsPresenter.h"
 #include "views/FolderSelectionMenuBar.h"
 #include "views/FolderSelectionPopup.h"
@@ -16,6 +17,7 @@
 #include "dearimgui/MainViewPort.h"
 #include "dearimgui/WindowFactory.h"
 #include "dearimgui/TextWidgetFactory.h"
+#include "dearimgui/ImGuiTextFilterWrapper.h"
 #include "dearimgui/TabBar.h"
 #include <iostream>
 #include <memory>
@@ -46,14 +48,15 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IOContext> ioContext;
     std::unique_ptr<IWindowFactory> windowFactory;
     std::unique_ptr<ITextWidgetFactory> textWidgetFactory;
+    std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
     std::unique_ptr<IFolderSelectionMenuBar> folderSelectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
     std::unique_ptr<ILogFilterView> logFilterView;
     std::unique_ptr<ILogView> logView;
     std::unique_ptr<ILogFileParser> logFileParser;
-    std::unique_ptr<ILogFileTabsPresenter> logFileTabsPresenter;
-    std::unique_ptr<ILogFilePresenterFactory> logFilePresenterFactory;
     std::unique_ptr<ILogFilePresenter> logFilePresenter;
+    std::unique_ptr<ILogFileTabsPresenter> logFileTabsPresenter;
+    std::unique_ptr<ILogDataModelFactory> logDataModelFactory;
     std::unique_ptr<ITabBar> tabBar;
     std::unique_ptr<MainPresenter> mainPresenter;
 };
@@ -118,12 +121,14 @@ GlfwBackendBinding::Impl::Impl() :
     windowFactory  = std::make_unique<WindowFactory>(*mainViewPort);
     folderSelectionMenuBar = std::make_unique<FolderSelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>();
-    logFilterView = std::make_unique<LogFilterView>();
+    textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
+    logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
     logView = std::make_unique<LogView>(*textWidgetFactory);
     logFileParser = std::make_unique<LogFileParser>();
-    logFilePresenterFactory = std::make_unique<LogFilePresenterFactory>(*windowFactory, *logFilterView, *logView, *logFileParser);
-    logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenterFactory, *tabBar);
+    logFilePresenter = std::make_unique<LogFilePresenter>(*windowFactory, *logFilterView, *logView, *logFileParser, *textFilterWrapper);
+    logDataModelFactory = std::make_unique<LogDataModelFactory>();
+    logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar);
     mainPresenter = std::make_unique<MainPresenter>(*windowFactory,
         *mainViewPort,
         *folderSelectionMenuBar,
