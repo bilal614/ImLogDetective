@@ -10,11 +10,13 @@ add_executable(${LOG_ANALYZER_TOOL}
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TextWidgetFactory.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/WindowFactory.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/views/FileListView.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionMenuBar.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionPopup.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/LogFilterView.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/LogView.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/presenters/MainPresenter.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/presenters/FileListPresenter.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFilePresenter.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogDataModelFactory.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFileTabsPresenter.cxx

@@ -13,6 +13,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include "imgui.h"//Unfortunately needed for ImVec2 struct
+
 namespace TestLogAnalyzerTool
 {
 
@@ -59,14 +61,13 @@ TestLogFilePresenter::TestLogFilePresenter() :
         LogAnalyzerTool::LogData{dummyLogLines[LogAnalyzerTool::LogLevel::Error], LogAnalyzerTool::LogLevel::Error}
     }
 {
-
 }
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
@@ -96,9 +97,9 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_err
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_info_warning_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
@@ -126,9 +127,9 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_info_warning_error_che
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_warning_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
@@ -154,9 +155,9 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_warning_error_checked)
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
@@ -180,9 +181,9 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_error_checked) {
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_error_checked_reading_log_file_off) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
     

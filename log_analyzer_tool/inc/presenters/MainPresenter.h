@@ -9,6 +9,7 @@
 
 namespace LogAnalyzerTool
 {
+class IFileListPresenter;
 class IFolderSelectionMenuBar;
 class IFolderSelectionPopup;
 class IMainViewPort;
@@ -22,7 +23,8 @@ public:
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter);
+        ILogFileTabsPresenter& logFileTabsPresenter,
+        IFileListPresenter& fileListPresenter);
     ~MainPresenter();
     void update() override;
 private:

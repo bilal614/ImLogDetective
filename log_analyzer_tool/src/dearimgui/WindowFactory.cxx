@@ -5,7 +5,6 @@
 #include "dearimgui/WindowFactory.h"
 #include "imgui.h"
 
-
 namespace LogAnalyzerTool
 {
 struct WindowFactory::Impl
@@ -57,10 +56,11 @@ std::unique_ptr<IScopedImGuiWindow> WindowFactory::createWindow()
     return p->addWindow();
 }
 
-std::unique_ptr<IScopedImGuiWindow> WindowFactory::createChildWindow(const std::string& windowName)
+std::unique_ptr<IScopedImGuiWindow> WindowFactory::createChildWindow(
+    const std::string& windowName,
+    const ImVec2& position,
+    const ImVec2& size)
 {
-    auto position = ImVec2{0, 0};
-    auto size = ImVec2{0, 0};
     return std::make_unique<ScopedImGuiWindow>(
         windowName, 
         size, 

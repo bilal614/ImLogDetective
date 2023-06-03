@@ -1,5 +1,7 @@
 #include "presenters/MainPresenter.h"
+#include "LogAnalyzerToolDefs.h"
 #include "presenters/ILogFileTabsPresenter.h"
+#include "presenters/IFileListPresenter.h"
 #include "views/IFolderSelectionPopup.h"
 #include "dearimgui/IWindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
@@ -15,11 +17,13 @@ struct MainPresenter::Impl
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter);
+        ILogFileTabsPresenter& logFileTabsPresenter,
+        IFileListPresenter& fileListPresenter);
     ~Impl() = default;
 
     IWindowFactory& windowFactory;
     IMainViewPort& mainViewPort;
+    IFileListPresenter& fileListPresenter;
     IFolderSelectionMenuBar& folderSelectionMenuBar;
     IFolderSelectionPopup& folderSelectionPopup;
     ILogFileTabsPresenter& logFileTabsPresenter;
@@ -29,12 +33,14 @@ MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter) :
+        ILogFileTabsPresenter& logFileTabsPresenter,
+        IFileListPresenter& fileListPresenter) :
     mainViewPort{mainViewPort},
     folderSelectionPopup{folderSelectionPopup},
     folderSelectionMenuBar{folderSelectionMenuBar},
     windowFactory{windowFactory},
-    logFileTabsPresenter{logFileTabsPresenter}
+    logFileTabsPresenter{logFileTabsPresenter},
+    fileListPresenter{fileListPresenter}
 {
 }
 
@@ -42,8 +48,14 @@ MainPresenter::MainPresenter(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
         IFolderSelectionMenuBar& folderSelectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter) : 
-    p {std::make_unique<Impl>(windowFactory, mainViewPort, folderSelectionMenuBar, folderSelectionPopup, logFileTabsPresenter)}
+        ILogFileTabsPresenter& logFileTabsPresenter,
+        IFileListPresenter& fileListPresenter) : 
+    p {std::make_unique<Impl>(windowFactory,
+        mainViewPort,
+        folderSelectionMenuBar,
+        folderSelectionPopup,
+        logFileTabsPresenter,
+        fileListPresenter)}
 {
 }
 
@@ -51,6 +63,7 @@ MainPresenter::~MainPresenter() = default;
 
 void MainPresenter::update()
 {
+    //TODO Move Layout logic elsewhere
     // Create\Draw GUI widgets here in sequential order
     auto mainWindow = p->windowFactory.createWindow();
     p->folderSelectionMenuBar.drawFolderSelectionMenuBar();
@@ -66,10 +79,26 @@ void MainPresenter::update()
         }
     }
 
-    //FileListViewPresenter
+    auto mainWindowSize = mainWindow->getWindowSize();
+    auto mainWindowPosition = mainWindow->getWindowPosition();
 
-    //TODO provide vector of file paths to logFileTabsPresenter.update i.o. folder
-    p->logFileTabsPresenter.update(p->folderSelectionPopup.getSelectedFolder());
+    {
+        //FileListViewPresenter
+        ImVec2 fileListBoxPosition{mainWindowPosition.x*0.1f, 0.0};
+        ImVec2 fileListBoxSize{mainWindowSize.x*0.1f, 0.0};
+        //TODO provide vector of file paths to logFileTabsPresenter.update i.o. folder
+        auto logFilterWindow = p->windowFactory.createChildWindow(FileListWindow, fileListBoxPosition, fileListBoxSize);
+        {
+            p->fileListPresenter.update(p->folderSelectionPopup.getSelectedFolder());
+        }
+    }
+    ImGui::SameLine();
+    {
+        ImVec2 mainContentBoxPosition{mainWindowPosition.x*0.10f, mainWindowPosition.y};
+        ImVec2 mainContentBoxSize{mainWindowSize.x*0.89f, 0.0};
+        auto mainContentChildWindow=p->windowFactory.createChildWindow(LogsWindow, mainContentBoxPosition, mainContentBoxSize);
+        p->logFileTabsPresenter.update(p->folderSelectionPopup.getSelectedFolder());
+    }
 }
 
 }

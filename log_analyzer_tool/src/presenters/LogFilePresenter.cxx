@@ -7,6 +7,7 @@
 #include "dearimgui/IWindowFactory.h"
 #include "models/ILogFileParser.h"
 #include "models/ILogDataModel.h"
+#include "imgui.h"
 
 namespace LogAnalyzerTool
 {
@@ -55,10 +56,10 @@ LogFilePresenter::~LogFilePresenter() = default;
 void LogFilePresenter::update(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel)
 {
     //TODO Below must move to ILogFilePresenter
-    auto logFilterWindow = p->windowFactory.createChildWindow(LogFilterChildWindow);
+    auto logFilterWindow = p->windowFactory.createChildWindow(LogFilterChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
     p->logFilterView.drawFilterCheckBoxes();
     {
-        auto logFileContentWindow = p->windowFactory.createChildWindow(LogFileContentChildWindow);
+        auto logFileContentWindow = p->windowFactory.createChildWindow(LogFileContentChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
         if(readLogFile)
         {
             p->logFileParser.readLogFileData(filePath, logDataModel);

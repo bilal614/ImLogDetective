@@ -5,10 +5,12 @@
 #include "dearimgui/ITabBar.h"
 #include "LogAnalyzerToolDefs.h"
 #include "models/LogFileParser.h"
-#include "presenters/MainPresenter.h"
+#include "presenters/FileListPresenter.h"
 #include "presenters/LogFilePresenter.h"
 #include "presenters/LogDataModelFactory.h"
 #include "presenters/LogFileTabsPresenter.h"
+#include "presenters/MainPresenter.h"
+#include "views/FileListView.h"
 #include "views/FolderSelectionMenuBar.h"
 #include "views/FolderSelectionPopup.h"
 #include "views/LogView.h"
@@ -51,9 +53,11 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
     std::unique_ptr<IFolderSelectionMenuBar> folderSelectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
+    std::unique_ptr<IFileListView> fileListView;
     std::unique_ptr<ILogFilterView> logFilterView;
     std::unique_ptr<ILogView> logView;
     std::unique_ptr<ILogFileParser> logFileParser;
+    std::unique_ptr<IFileListPresenter> fileListPresenter;
     std::unique_ptr<ILogFilePresenter> logFilePresenter;
     std::unique_ptr<ILogFileTabsPresenter> logFileTabsPresenter;
     std::unique_ptr<ILogDataModelFactory> logDataModelFactory;
@@ -125,15 +129,18 @@ GlfwBackendBinding::Impl::Impl() :
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
     logView = std::make_unique<LogView>(*textWidgetFactory);
+    fileListView = std::make_unique<FileListView>();
     logFileParser = std::make_unique<LogFileParser>();
     logFilePresenter = std::make_unique<LogFilePresenter>(*windowFactory, *logFilterView, *logView, *logFileParser, *textFilterWrapper);
+    fileListPresenter = std::make_unique<FileListPresenter>(*fileListView);
     logDataModelFactory = std::make_unique<LogDataModelFactory>();
     logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar);
     mainPresenter = std::make_unique<MainPresenter>(*windowFactory,
         *mainViewPort,
         *folderSelectionMenuBar,
         *folderSelectionPopup,
-        *logFileTabsPresenter);
+        *logFileTabsPresenter,
+        *fileListPresenter);
 
 }
 
