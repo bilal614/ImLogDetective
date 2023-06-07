@@ -13,7 +13,7 @@ class FileListPresenter : public IFileListPresenter
 public:
     FileListPresenter(IFileListView& fileListView);
     ~FileListPresenter();
-    void update(const std::filesystem::path& filePath) override;
+    void update(const std::filesystem::path& folderPath) override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

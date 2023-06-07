@@ -17,8 +17,7 @@
 #include "views/LogFilterView.h"
 #include "dearimgui/IOContext.h"
 #include "dearimgui/MainViewPort.h"
-#include "dearimgui/WindowFactory.h"
-#include "dearimgui/TextWidgetFactory.h"
+#include "dearimgui/WidgetFactory.h"
 #include "dearimgui/ImGuiTextFilterWrapper.h"
 #include "dearimgui/TabBar.h"
 #include <iostream>
@@ -48,8 +47,7 @@ struct GlfwBackendBinding::Impl
     GLFWwindow* window;
     std::unique_ptr<IMainViewPort> mainViewPort;
     std::unique_ptr<IOContext> ioContext;
-    std::unique_ptr<IWindowFactory> windowFactory;
-    std::unique_ptr<ITextWidgetFactory> textWidgetFactory;
+    std::unique_ptr<IWidgetFactory> widgetFactory;
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
     std::unique_ptr<IFolderSelectionMenuBar> folderSelectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
@@ -78,7 +76,7 @@ GlfwBackendBinding::Impl::~Impl()
 
 GlfwBackendBinding::Impl::Impl() :
     glShaderLanguageVersion{"#version 130"},
-    windowFactory{},
+    widgetFactory{},
     logView{ nullptr },
     mainPresenter{ nullptr }
 {
@@ -121,21 +119,20 @@ GlfwBackendBinding::Impl::Impl() :
     ioContext = std::make_unique<IOContext>();
     ioContext->unsetIniFile();
     mainViewPort = std::make_unique<MainViewPort>();
-    textWidgetFactory = std::make_unique<TextWidgetFactory>();
-    windowFactory  = std::make_unique<WindowFactory>(*mainViewPort);
+    widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort);
     folderSelectionMenuBar = std::make_unique<FolderSelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>();
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
-    logView = std::make_unique<LogView>(*textWidgetFactory);
-    fileListView = std::make_unique<FileListView>();
+    logView = std::make_unique<LogView>(dynamic_cast<ITextWidgetFactory&>(*widgetFactory));
+    fileListView = std::make_unique<FileListView>(dynamic_cast<IListTreeFactory&>(*widgetFactory));
     logFileParser = std::make_unique<LogFileParser>();
-    logFilePresenter = std::make_unique<LogFilePresenter>(*windowFactory, *logFilterView, *logView, *logFileParser, *textFilterWrapper);
+    logFilePresenter = std::make_unique<LogFilePresenter>(dynamic_cast<IWindowFactory&>(*widgetFactory), *logFilterView, *logView, *logFileParser, *textFilterWrapper);
     fileListPresenter = std::make_unique<FileListPresenter>(*fileListView);
     logDataModelFactory = std::make_unique<LogDataModelFactory>();
     logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar);
-    mainPresenter = std::make_unique<MainPresenter>(*windowFactory,
+    mainPresenter = std::make_unique<MainPresenter>(dynamic_cast<IWindowFactory&>(*widgetFactory),
         *mainViewPort,
         *folderSelectionMenuBar,
         *folderSelectionPopup,
