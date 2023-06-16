@@ -3,6 +3,7 @@
 #include "dearimgui/ITextWidgetFactory.h"
 #include "dearimgui/IWindowFactory.h"
 #include "dearimgui/ITabBar.h"
+#include "event_handling/EventLoop.h"
 #include "LogAnalyzerToolDefs.h"
 #include "models/LogFileParser.h"
 #include "presenters/FileListPresenter.h"
@@ -47,6 +48,7 @@ struct GlfwBackendBinding::Impl
     GLFWwindow* window;
     std::unique_ptr<IMainViewPort> mainViewPort;
     std::unique_ptr<IOContext> ioContext;
+    std::unique_ptr<EventLoop> eventLoop;
     std::unique_ptr<IWidgetFactory> widgetFactory;
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
     std::unique_ptr<IFolderSelectionMenuBar> folderSelectionMenuBar;
@@ -120,6 +122,7 @@ GlfwBackendBinding::Impl::Impl() :
     ioContext->unsetIniFile();
     mainViewPort = std::make_unique<MainViewPort>();
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort);
+    eventLoop = std::make_unique<EventLoop>();
     folderSelectionMenuBar = std::make_unique<FolderSelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>();
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
@@ -128,7 +131,13 @@ GlfwBackendBinding::Impl::Impl() :
     logView = std::make_unique<LogView>(dynamic_cast<ITextWidgetFactory&>(*widgetFactory));
     fileListView = std::make_unique<FileListView>(dynamic_cast<IListTreeFactory&>(*widgetFactory));
     logFileParser = std::make_unique<LogFileParser>();
-    logFilePresenter = std::make_unique<LogFilePresenter>(dynamic_cast<IWindowFactory&>(*widgetFactory), *logFilterView, *logView, *logFileParser, *textFilterWrapper);
+    logFilePresenter = std::make_unique<LogFilePresenter>(
+        dynamic_cast<IWindowFactory&>(*widgetFactory), 
+        *eventLoop, 
+        *logFilterView, 
+        *logView,
+        *logFileParser,
+        *textFilterWrapper);
     fileListPresenter = std::make_unique<FileListPresenter>(*fileListView);
     logDataModelFactory = std::make_unique<LogDataModelFactory>();
     logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar);
@@ -143,10 +152,13 @@ GlfwBackendBinding::Impl::Impl() :
 
 GlfwBackendBinding::GlfwBackendBinding() : p{std::make_unique<Impl>()}
 {
-
+    p->eventLoop->start();
 }
 
-GlfwBackendBinding::~GlfwBackendBinding() = default;
+GlfwBackendBinding::~GlfwBackendBinding()
+{
+    p->eventLoop->stop();
+}
 
 void GlfwBackendBinding::runMainLoop()
 {

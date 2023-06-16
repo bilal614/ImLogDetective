@@ -1,12 +1,14 @@
 #include "LogAnalyzerToolDefs.h"
-#include "presenters/LogFilePresenter.h"
-#include "views/ILogView.h"
-#include "views/ILogFilterView.h"
 #include "dearimgui/IImGuiTextFilterWrapper.h"
 #include "dearimgui/ITextWidgetFactory.h"
 #include "dearimgui/IWindowFactory.h"
 #include "models/ILogFileParser.h"
+#include "event_handling/Event.hpp"
+#include "event_handling/EventLoop.h"
 #include "models/ILogDataModel.h"
+#include "presenters/LogFilePresenter.h"
+#include "views/ILogView.h"
+#include "views/ILogFilterView.h"
 #include "imgui.h"
 
 namespace LogAnalyzerTool
@@ -15,39 +17,82 @@ namespace LogAnalyzerTool
 struct LogFilePresenter::Impl
 {
     Impl(IWindowFactory& windowFactory,
+        EventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,
         IImGuiTextFilterWrapper& textFilterWrapper);
     ~Impl() = default;
+    void updateLogData(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel);
 
     IWindowFactory& windowFactory;
+    EventLoop& eventLoop;
     ILogFilterView& logFilterView;
     ILogView& logView;
     ILogFileParser& logFileParser;
     IImGuiTextFilterWrapper& textFilterWrapper;
 };
 
-LogFilePresenter::Impl::Impl(IWindowFactory& windowFactory,
-        ILogFilterView& logFilterView, 
-        ILogView& logView,
-        ILogFileParser& logFileParser,
-        IImGuiTextFilterWrapper& textFilterWrapper) :
-    windowFactory{windowFactory},
-    logFilterView{logFilterView},
-    logView{logView},
-    logFileParser{logFileParser},
-    textFilterWrapper{textFilterWrapper}
+LogFilePresenter::Impl::Impl(
+    IWindowFactory& windowFactory,
+    EventLoop& eventLoop,
+    ILogFilterView& logFilterView, 
+    ILogView& logView,
+    ILogFileParser& logFileParser,
+    IImGuiTextFilterWrapper& textFilterWrapper) :
+        windowFactory{windowFactory},
+        eventLoop{eventLoop},
+        logFilterView{logFilterView},
+        logView{logView},
+        logFileParser{logFileParser},
+        textFilterWrapper{textFilterWrapper}
 {
+}
+
+void LogFilePresenter::Impl::updateLogData(
+    const std::filesystem::path& filePath, 
+    bool readLogFile, 
+    ILogDataModel& logDataModel)
+{
+    if(readLogFile)
+    {
+        logFileParser.readLogFileData(filePath, logDataModel);
+    }
+
+    auto logData = logDataModel.getLogData();
+
+    for(auto data : logData)
+    {
+        if(textFilterWrapper.passFilter(data.logLine))
+        {
+            if(data.level == LogLevel::Debug && logFilterView.getDebugChecked())
+            {
+                logView.drawLogLineText(data.logLine, TextColor::White);
+            }
+            if(data.level == LogLevel::Info  && logFilterView.getInfoChecked())
+            {
+                logView.drawLogLineText(data.logLine, TextColor::White);
+            }
+            if(data.level == LogLevel::Warning && logFilterView.getWarningChecked())
+            {
+                logView.drawLogLineText(data.logLine, TextColor::Orange);
+            }
+            if(data.level == LogLevel::Error && logFilterView.getErrorChecked())
+            {
+                logView.drawLogLineText(data.logLine, TextColor::Red);
+            }
+        }
+    }
 }
 
 LogFilePresenter::LogFilePresenter(
         IWindowFactory& windowFactory,
+        EventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,
         IImGuiTextFilterWrapper& textFilterWrapper) : 
-    p {std::make_unique<Impl>(windowFactory, logFilterView, logView, logFileParser, textFilterWrapper)}
+    p {std::make_unique<Impl>(windowFactory, eventLoop, logFilterView, logView, logFileParser, textFilterWrapper)}
 {
 }
 
@@ -55,39 +100,11 @@ LogFilePresenter::~LogFilePresenter() = default;
 
 void LogFilePresenter::update(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel)
 {
-    //TODO Below must move to ILogFilePresenter
     auto logFilterWindow = p->windowFactory.createChildWindow(LogFilterChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
     p->logFilterView.drawFilterCheckBoxes();
     {
         auto logFileContentWindow = p->windowFactory.createChildWindow(LogFileContentChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
-        if(readLogFile)
-        {
-            p->logFileParser.readLogFileData(filePath, logDataModel);
-        }
-        auto logData = logDataModel.getLogData();
-
-        for(auto data : logData)
-        {
-            if(p->textFilterWrapper.passFilter(data.logLine))
-            {
-                if(data.level == LogLevel::Debug && p->logFilterView.getDebugChecked())
-                {
-                    p->logView.drawLogLineText(data.logLine, TextColor::White);
-                }
-                if(data.level == LogLevel::Info  && p->logFilterView.getInfoChecked())
-                {
-                    p->logView.drawLogLineText(data.logLine, TextColor::White);
-                }
-                if(data.level == LogLevel::Warning && p->logFilterView.getWarningChecked())
-                {
-                    p->logView.drawLogLineText(data.logLine, TextColor::Orange);
-                }
-                if(data.level == LogLevel::Error && p->logFilterView.getErrorChecked())
-                {
-                    p->logView.drawLogLineText(data.logLine, TextColor::Red);
-                }
-            }
-        }
+        p->updateLogData(filePath, readLogFile, logDataModel);
     }
 }
 

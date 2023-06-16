@@ -10,6 +10,7 @@ add_executable(${LOG_ANALYZER_TOOL}
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TabBar.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/WidgetFactory.cxx
+    ${LOG_ANALYZER_TOOL_DIR}/src/event_handling/EventLoop.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/FileListView.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionMenuBar.cxx
     ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionPopup.cxx

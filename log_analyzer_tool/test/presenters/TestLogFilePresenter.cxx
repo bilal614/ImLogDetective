@@ -1,4 +1,5 @@
 #include "LogAnalyzerToolDefs.h"
+#include "event_handling/EventLoop.h"
 #include "presenters/LogFilePresenter.h"
 #include "mocks/ImGuiTextFilterWrapperMock.h"
 #include "mocks/LogDataModelMock.h"
@@ -24,6 +25,8 @@ class TestLogFilePresenter : public ::testing::Test {
 protected:
     ::testing::InSequence seq;
 
+    LogAnalyzerTool::EventLoop eventLoop;
+
     ImGuiTextFilterWrapperMock imGuiTextFilterWrapperMock;
     LogDataModelMock logDataModelMock;
     LogFileParserMock logFileParserMock;
@@ -44,6 +47,7 @@ protected:
 
 TestLogFilePresenter::TestLogFilePresenter() :
     logFilePresenter{windowFactoryMock,
+        eventLoop,
         logFilterViewMock,
         logViewMock,
         logFileParserMock,

@@ -24,11 +24,13 @@ struct FileListPresenter::Impl
 FileListPresenter::Impl::Impl(IFileListView& fileListView) :
     fileListView{fileListView},
     folderPath{},
-    fileListClickCallback{[&]{ std::cout << "Clicked" << std::endl;}}
+    fileListClickCallback{[&]{ 
+            std::cout << "Clicked" << std::endl;
+        }
+    }
 {
 
 }
-
 
 FileListPresenter::FileListPresenter(IFileListView& fileListView) :
     p{std::make_unique<Impl>(fileListView)}

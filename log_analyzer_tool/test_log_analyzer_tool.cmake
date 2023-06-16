@@ -8,6 +8,8 @@ find_package(GTest REQUIRED)
 
 if(GTest_FOUND)
     add_executable(${TEST_LOG_ANALYZER_TOOL}
+        ${LOG_ANALYZER_TOOL_DIR}/src/event_handling/EventLoop.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/event_handling/TestEventLoop.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFilePresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/presenters/LogFileTabsPresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestLogFilePresenter.cxx

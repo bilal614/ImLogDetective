@@ -5,9 +5,6 @@
 #include <vector>
 #include "imgui.h"
 
-//REMOVE LATER
-#include <iostream>
-
 namespace LogAnalyzerTool
 {
 
