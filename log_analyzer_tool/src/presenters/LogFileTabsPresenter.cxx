@@ -1,9 +1,11 @@
 #include "presenters/LogFileTabsPresenter.h"
+#include "event_handling/IEvent.h"
 #include "presenters/ILogFilePresenter.h"
 #include "presenters/ILogDataModelFactory.h"
 #include "models/ILogDataModel.h"
 #include "dearimgui/ITabBar.h"
 
+#include <algorithm>
 #include <functional>
 #include <unordered_map>
 #include <vector>
@@ -13,87 +15,138 @@ namespace LogAnalyzerTool
 
 struct LogFileTabsPresenter::Impl
 {
-    struct LogFileData
+    struct LogFileTab
     {
-        LogFileData(const std::filesystem::path& filePath, bool read, std::unique_ptr<ILogDataModel> logDataModel) :
-            filePath{filePath},
-            readLogFile{read},
-            logDataModel{std::move(logDataModel)}
-        { }
+        LogFileTab(
+            const std::filesystem::path& path, 
+            bool read, 
+            bool isOpen, 
+            std::unique_ptr<ILogDataModel> dataModel,
+            ILogFilePresenter& logFilePresenter) :
+                filePath{path},
+                readLogFile{read},
+                logDataModel{std::move(dataModel)},
+                tabBarItem{},
+                logFilePresenter{logFilePresenter}
+        { 
+            tabBarItem.name = filePath.stem();
+            tabBarItem.isOpen = isOpen;
+            tabBarItem.draw =[&]
+            {
+                logFilePresenter.update(
+                    filePath, 
+                    readLogFile, 
+                    *logDataModel);
+                readLogFile = false;
+            
+            };
+        }
         std::filesystem::path filePath;
         bool readLogFile;
         std::unique_ptr<ILogDataModel> logDataModel;
+        TabBarItem tabBarItem;
+        ILogFilePresenter& logFilePresenter;
     };
-    Impl(ILogFilePresenter& logFilePresenter, ILogDataModelFactory& logDataModelFactory, ITabBar& tabBar);
+    Impl(ILogFilePresenter& logFilePresenter, 
+        ILogDataModelFactory& logDataModelFactory, 
+        ITabBar& tabBar, 
+        std::unique_ptr<IEvent<const std::string&>> tabsOpenedEvent);
     ~Impl() = default;
 
     void addTabBarItem(const std::string& name, bool open, const std::filesystem::path& filePath);
+    void removeUnselectedTabs(const std::vector<std::filesystem::path>& selectedFiles);
 
     std::filesystem::path folderPath;
     ITabBar& tabBar;
     ILogDataModelFactory& logDataModelFactory;
-    std::unordered_map<std::string, std::unique_ptr<LogFileData>> tabLogFilePath;
-    std::vector<TabBarItem> tabBarItems;
-
+    std::unordered_map<std::string, std::unique_ptr<LogFileTab>> logFileTabs;
+    std::unique_ptr<IEvent<const std::string&>> tabsOpened;
     ILogFilePresenter& logFilePresenter;
 };
 
-LogFileTabsPresenter::Impl::Impl(ILogFilePresenter& logFilePresenter, ILogDataModelFactory& logDataModelFactory, ITabBar& tabBar) :
-    folderPath{},
-    tabBar{tabBar},
-    logDataModelFactory{logDataModelFactory},
-    logFilePresenter{logFilePresenter}
+LogFileTabsPresenter::Impl::Impl(ILogFilePresenter& logFilePresenter, 
+    ILogDataModelFactory& logDataModelFactory, 
+    ITabBar& tabBar,
+    std::unique_ptr<IEvent<const std::string&>> tabsOpenedEvent) :
+        folderPath{},
+        tabBar{tabBar},
+        logDataModelFactory{logDataModelFactory},
+        logFilePresenter{logFilePresenter},
+        tabsOpened{std::move(tabsOpenedEvent)}
 {
 }
 
-void LogFileTabsPresenter::Impl::addTabBarItem(const std::string& name, bool open, const std::filesystem::path& filePath)
+void LogFileTabsPresenter::Impl::addTabBarItem(
+    const std::string& name, 
+    bool open, 
+    const std::filesystem::path& filePath)
 {
-    tabLogFilePath.insert({name, std::make_unique<LogFileData>(filePath, true, logDataModelFactory.createLogFilePresenter(name))});
-    tabBarItems.emplace_back(TabBarItem{name, open, [&, name]
+    if(logFileTabs.find(name) ==  logFileTabs.end())
     {
-        if(tabLogFilePath.find(name) != tabLogFilePath.end())
-        {
-            logFilePresenter.update(
-                tabLogFilePath[name]->filePath, 
-                tabLogFilePath[name]->readLogFile, 
-                *tabLogFilePath[name]->logDataModel);
-            tabLogFilePath[name]->readLogFile = false;
-        }
-    }});
+        auto& tabBarItem = logFileTabs.insert({name, std::make_unique<LogFileTab>(filePath, 
+            true,
+            open,
+            logDataModelFactory.createLogDataModel(name),
+            logFilePresenter)}).first->second->tabBarItem;
+        tabsOpened->registerDelegate([&](const std::string& name){
+            if(tabBarItem.name == name)
+            {
+                tabBarItem.isOpen = true;
+            }
+        });
+    }
 }
 
-LogFileTabsPresenter::LogFileTabsPresenter(ILogFilePresenter& logFilePresenter, ILogDataModelFactory& logDataModelFactory, ITabBar& tabBar) :
-    p{std::make_unique<Impl>(logFilePresenter, logDataModelFactory, tabBar)}
+void LogFileTabsPresenter::Impl::removeUnselectedTabs(const std::vector<std::filesystem::path>& selectedFiles)
+{
+    for (auto it = logFileTabs.cbegin(); it != logFileTabs.cend();) 
+    {
+        if(std::find(selectedFiles.begin(), selectedFiles.end(), it->second->filePath) == selectedFiles.end())
+        {
+            logFileTabs.erase(it++);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+LogFileTabsPresenter::LogFileTabsPresenter(ILogFilePresenter& logFilePresenter, 
+    ILogDataModelFactory& logDataModelFactory, 
+    ITabBar& tabBar,
+    std::unique_ptr<IEvent<const std::string&>> tabsOpenedEvent) :
+        p{std::make_unique<Impl>(logFilePresenter, logDataModelFactory, tabBar, std::move(tabsOpenedEvent))}
 {
 }
 
 LogFileTabsPresenter::~LogFileTabsPresenter() = default;
 
-void LogFileTabsPresenter::update(const std::filesystem::path& folderPath)
+void LogFileTabsPresenter::update(const std::vector<std::filesystem::path>& filePaths)
 {
-    bool folderPathChanged = false;
-    if(p->folderPath != folderPath)
+    p->removeUnselectedTabs(filePaths);
+
+    for (const auto& entry : filePaths)
     {
-        folderPathChanged = true;
-        p->folderPath = folderPath;
-
-        p->tabLogFilePath.clear();
-        p->tabBarItems.clear();
-
-        for (const auto& entry : std::filesystem::directory_iterator(p->folderPath))
-        {
-            if(entry.is_regular_file())
-            {
-                auto tabName = entry.path().stem();
-                p->addTabBarItem(tabName, true, entry);
-            }
-        }
+        auto tabName = entry.stem();
+        p->addTabBarItem(tabName, false, entry);
     }
 
-    if(!p->folderPath.empty())
+    std::vector<std::reference_wrapper<TabBarItem>> tabBarItems;
+    for(const auto& logFileTab : p->logFileTabs)
     {
-        p->tabBar.drawTabBar(p->tabBarItems);
+        tabBarItems.push_back(logFileTab.second->tabBarItem);
     }
+
+    if(!tabBarItems.empty())
+    {
+        p->tabBar.drawTabBar(tabBarItems);
+    }
+}
+
+IEvent<const std::string&>& LogFileTabsPresenter::getTabsOpenedEvent()
+{
+    return *p->tabsOpened;
 }
 
 }

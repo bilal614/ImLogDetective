@@ -10,7 +10,7 @@ namespace TestLogAnalyzerTool {
 class LogDataModelFactoryMock : public LogAnalyzerTool::ILogDataModelFactory 
 {
 public:
-    MOCK_METHOD(std::unique_ptr<LogAnalyzerTool::ILogDataModel>, createLogFilePresenter, (const std::string&));
+    MOCK_METHOD(std::unique_ptr<LogAnalyzerTool::ILogDataModel>, createLogDataModel, (const std::string&));
 };
 
 }

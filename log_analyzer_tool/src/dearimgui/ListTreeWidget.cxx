@@ -33,13 +33,13 @@ ListTreeWidget::ListTreeWidget() :
 
 ListTreeWidget::~ListTreeWidget() = default;
 
-void ListTreeWidget::addNode(const std::string& nodeId)
+void ListTreeWidget::addNode(const std::string& nodeId, std::function<void()> nodeClickedCallback)
 {
     p->nodeList.emplace_back(nodeId);
     ImGui::TreeNodeEx(nodeId.c_str(), p->nodeFlags);
     if (ImGui::IsItemClicked())
     {
-        //TODO in future introduce event loop for running actions/tasks on separate thread not UI thread
+        nodeClickedCallback();
     }
 }
 

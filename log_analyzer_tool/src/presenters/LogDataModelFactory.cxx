@@ -5,7 +5,7 @@
 namespace LogAnalyzerTool
 {
 
-std::unique_ptr<ILogDataModel> LogDataModelFactory::createLogFilePresenter(const std::string& source)
+std::unique_ptr<ILogDataModel> LogDataModelFactory::createLogDataModel(const std::string& source)
 {
     return std::make_unique<LogDataModel>(source);
 }

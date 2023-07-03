@@ -9,12 +9,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR})
 
 find_package(OpenGL REQUIRED)
-find_package(PkgConfig REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
+find_package(PkgConfig REQUIRED)
 
-pkg_check_modules(GLFW3 REQUIRED glfw3)
+if(${PKG_CONFIG_FOUND})
+    pkg_check_modules(GLFW3 REQUIRED glfw3)
+endif()
 
-if(OPENGL_FOUND AND PKG_CONFIG_FOUND AND GLFW3_FOUND)
+if(OPENGL_FOUND AND GLFW3_FOUND)
 
     include_directories(
         ${OPENGL_INCLUDE_DIRS}
@@ -49,11 +51,19 @@ if(OPENGL_FOUND AND PKG_CONFIG_FOUND AND GLFW3_FOUND)
         -pthread
     )
 
-    #log_analyzer_tool
-    include(${PROJECT_ROOT}/log_analyzer_tool/log_analyzer_tool.cmake)
+    add_subdirectory(${PROJECT_ROOT}/log_analyzer_tool)
 
-    #include test_log_analyzer_tool
-    include(${PROJECT_ROOT}/log_analyzer_tool/test_log_analyzer_tool.cmake)
+    #log_fetching_tool
+    #include(${PROJECT_ROOT}/log_fetching_tool/log_fetching_tool.cmake)
+
+    #include test_log_fetching_tool
+    #include(${PROJECT_ROOT}/log_fetching_tool/test_log_fetching_tool.cmake)
+
+    #log_scp_wrapper
+    add_subdirectory(${PROJECT_ROOT}/log_scp_wrapper)
+
+    #include test_log_scp_wrapper
+    #include(${PROJECT_ROOT}/log_scp_wrapper/test_log_scp_wrapper.cmake)
 
     #test app
     add_executable(test_app

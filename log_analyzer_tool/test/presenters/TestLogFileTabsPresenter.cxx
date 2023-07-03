@@ -1,19 +1,22 @@
 #include "LogAnalyzerToolDefs.h"
 #include "dearimgui/ITabBar.h"
 #include "presenters/LogFileTabsPresenter.h"
-#include "mocks/LogFilePresenterMock.h"
-#include "mocks/LogDataModelFactoryMock.h"
-#include "mocks/TabBarMock.h"
+#include "EventMock.h"
+#include "LogFilePresenterMock.h"
+#include "LogDataModelFactoryMock.h"
+#include "TabBarMock.h"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include <filesystem>
 #include <fstream>
+#include <functional>
 #include <gmock/gmock-more-actions.h>
 #include <gmock/gmock-spec-builders.h>
 
 namespace TestLogAnalyzerTool
 {
 
+using namespace ::testing;
 using ::testing::StrictMock;
 
 class TestLogFileTabsPresenter : public ::testing::Test {
@@ -24,7 +27,7 @@ protected:
     LogFilePresenterMock logFilePresenterMock;
     TabBarMock tabBarMock;
     std::filesystem::path filePath;
-    std::vector<std::string> dummyTempFileNames;
+    std::vector<std::filesystem::path> dummyTempFilePaths;
 
     LogAnalyzerTool::LogFileTabsPresenter logFileTabsPresenter;
 
@@ -39,11 +42,11 @@ TestLogFileTabsPresenter::TestLogFileTabsPresenter() :
     logFilePresenterMock{},
     tabBarMock{},
     filePath{},
-    dummyTempFileNames{"foo", "bar", "bla"},
-    logFileTabsPresenter{logFilePresenterMock, logDataModelFactoryMock, tabBarMock}
+    logFileTabsPresenter{logFilePresenterMock, 
+        logDataModelFactoryMock,
+        tabBarMock, 
+        std::move(std::make_unique<EventMock<const std::string&>>())}
 {
-    std::sort(dummyTempFileNames.begin(),dummyTempFileNames.end(),
-        [&](std::string lhs, std::string rhs) {return lhs > rhs;});
 }
 
 void TestLogFileTabsPresenter::SetUp()
@@ -51,10 +54,12 @@ void TestLogFileTabsPresenter::SetUp()
     auto tempTestFolder = std::filesystem::temp_directory_path() / "TestLogFileTabsPresenter";
     std::filesystem::remove_all(tempTestFolder);
     std::filesystem::create_directory(tempTestFolder);
-    for(const auto& fileName : dummyTempFileNames)
+    for(const auto& fileName : {"foo", "bar", "bla"})
     {
-        std::ofstream tmpFile (tempTestFolder / fileName);
+        auto filePath = tempTestFolder / fileName;
+        std::ofstream tmpFile (filePath);
         tmpFile.close();
+        dummyTempFilePaths.push_back(filePath);
     }
 
     filePath = tempTestFolder;
@@ -67,23 +72,27 @@ void TestLogFileTabsPresenter::TearDown()
 
 TEST_F(TestLogFileTabsPresenter, test_LogFileTabsPresenter_update) {
 
-    for(const auto& fileName : dummyTempFileNames)
+    auto& tabsOpenedEvent = dynamic_cast<EventMock<const std::string&>&>(logFileTabsPresenter.getTabsOpenedEvent());
+    for(const auto& filePath : dummyTempFilePaths)
     {
-        EXPECT_CALL(logDataModelFactoryMock, createLogFilePresenter(fileName));
+        EXPECT_CALL(logDataModelFactoryMock, createLogDataModel(filePath.stem().string()));
+        EXPECT_CALL(tabsOpenedEvent, registerDelegate(::testing::_));
     }
-    std::vector<LogAnalyzerTool::TabBarItem> data;
+    std::vector<std::reference_wrapper<LogAnalyzerTool::TabBarItem>> data;
 
     EXPECT_CALL(tabBarMock, drawTabBar(::testing::_)).WillOnce(DoAll(::testing::SaveArg<0>(&data)));
 
-    logFileTabsPresenter.update(filePath);
+    logFileTabsPresenter.update(dummyTempFilePaths);
 
-    EXPECT_EQ(data.size(), dummyTempFileNames.size());
+    EXPECT_EQ(data.size(), dummyTempFilePaths.size());
 
-    size_t index = 0;
-    for(const auto& name : dummyTempFileNames)
+    for(const auto& filePath : dummyTempFilePaths)
     {
-        EXPECT_EQ(data[index].name, name);
-        EXPECT_TRUE(data[index++].isOpen);
+        auto it = std::find_if(data.begin(), data.end(), [&](std::reference_wrapper<LogAnalyzerTool::TabBarItem> item){
+            return item.get().name == filePath.stem().string();
+        });
+        EXPECT_NE(data.end(), it);
+        EXPECT_FALSE(it->get().isOpen);
     }
 }
 

@@ -1,32 +1,31 @@
 #include "LogAnalyzerToolDefs.h"
-#include "event_handling/EventLoop.h"
 #include "presenters/LogFilePresenter.h"
-#include "mocks/ImGuiTextFilterWrapperMock.h"
-#include "mocks/LogDataModelMock.h"
-#include "mocks/LogFileParserMock.h"
-#include "mocks/LogFilterViewMock.h"
-#include "mocks/LogViewMock.h"
-#include "mocks/ScopedImGuiWindowMock.h"
-#include "mocks/WindowFactoryMock.h"
+#include "EventLoopMock.h"
+#include "ImGuiTextFilterWrapperMock.h"
+#include "LogDataModelMock.h"
+#include "LogFileParserMock.h"
+#include "LogFilterViewMock.h"
+#include "LogViewMock.h"
+#include "ScopedImGuiWindowMock.h"
+#include "WindowFactoryMock.h"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include <filesystem>
 #include <memory>
 #include <unordered_map>
 
-#include "imgui.h"//Unfortunately needed for ImVec2 struct
-
 namespace TestLogAnalyzerTool
 {
 
+using namespace ::testing;
 using ::testing::StrictMock;
+using namespace LogAnalyzerTool;
 
 class TestLogFilePresenter : public ::testing::Test {
 protected:
     ::testing::InSequence seq;
 
-    LogAnalyzerTool::EventLoop eventLoop;
-
+    EventLoopMock eventLoopMock;
     ImGuiTextFilterWrapperMock imGuiTextFilterWrapperMock;
     LogDataModelMock logDataModelMock;
     LogFileParserMock logFileParserMock;
@@ -47,7 +46,7 @@ protected:
 
 TestLogFilePresenter::TestLogFilePresenter() :
     logFilePresenter{windowFactoryMock,
-        eventLoop,
+        eventLoopMock,
         logFilterViewMock,
         logViewMock,
         logFileParserMock,
@@ -69,10 +68,12 @@ TestLogFilePresenter::TestLogFilePresenter() :
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
+    std::function<void()> postedReadDataFunction;
+
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
-    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
     
@@ -97,14 +98,19 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_err
         LogAnalyzerTool::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
+
+    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    postedReadDataFunction();
 }
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_info_warning_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
+    std::function<void()> postedReadDataFunction;
+
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
-    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 
@@ -127,14 +133,19 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_info_warning_error_che
         LogAnalyzerTool::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
+
+    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    postedReadDataFunction();
 }
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_warning_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
+    std::function<void()> postedReadDataFunction;
+
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
-    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 
@@ -155,14 +166,19 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_warning_error_checked)
         LogAnalyzerTool::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
+
+    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    postedReadDataFunction();
 }
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_error_checked) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
+    std::function<void()> postedReadDataFunction;
+
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
-    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 
@@ -181,13 +197,16 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_error_checked) {
         LogAnalyzerTool::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
+
+    EXPECT_CALL(logFileParserMock, readLogFileData(::testing::_, ::testing::_)).Times(1);
+    postedReadDataFunction();
 }
 
 TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_error_checked_reading_log_file_off) {
 
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFilterChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
-    EXPECT_CALL(windowFactoryMock, createChildWindow(LogAnalyzerTool::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
+    EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
 
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
     

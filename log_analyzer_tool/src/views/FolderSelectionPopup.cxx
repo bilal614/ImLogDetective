@@ -68,7 +68,6 @@ void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, I
             p->popUpOpen = false;
             ImGui::CloseCurrentPopup();
         }
-
         ImGui::EndPopup();
     }
 }

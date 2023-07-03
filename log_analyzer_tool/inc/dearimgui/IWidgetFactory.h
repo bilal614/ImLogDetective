@@ -11,6 +11,7 @@ class IWidgetFactory : public ITextWidgetFactory, public IWindowFactory, public 
 {
 public:
     virtual ~IWidgetFactory() = default;
+    virtual void onSameLine() = 0;
 };
 
 }

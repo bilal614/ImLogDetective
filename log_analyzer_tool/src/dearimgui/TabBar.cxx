@@ -29,15 +29,16 @@ TabBar::TabBar(const std::string& tabBarName) :
 
 TabBar::~TabBar() = default;
 
-void TabBar::drawTabBar(std::vector<TabBarItem>& tabItemsToDraw)
+void TabBar::drawTabBar(std::vector<std::reference_wrapper<TabBarItem>> tabItemsToDraw)
 {
     if (ImGui::BeginTabBar(p->name.c_str(), p->tabBarFlags))
     {
-        for(auto& tabItem : tabItemsToDraw)
+        for(auto tabItem : tabItemsToDraw)
         {
-            if (tabItem.isOpen && ImGui::BeginTabItem(tabItem.name.c_str(), &tabItem.isOpen, p->tabItemFlags))
+            auto& item = tabItem.get();
+            if (item.isOpen && ImGui::BeginTabItem(item.name.c_str(), &item.isOpen, p->tabItemFlags))
             {
-                tabItem.draw();
+                item.draw();
 
                 ImGui::EndTabItem();
             }

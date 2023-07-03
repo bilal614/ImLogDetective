@@ -4,13 +4,13 @@
 #include "dearimgui/IMainViewPort.h"
 #include "presenters/ILogFilePresenter.h"
 #include "presenters/IMainPresenter.h"
-#include "views/IFolderSelectionMenuBar.h"
+#include "views/ISelectionMenuBar.h"
 #include "views/ILogView.h"
 
 namespace LogAnalyzerTool
 {
 class IFileListPresenter;
-class IFolderSelectionMenuBar;
+class ISelectionMenuBar;
 class IFolderSelectionPopup;
 class IMainViewPort;
 class IWindowFactory;
@@ -21,7 +21,7 @@ class MainPresenter : public IMainPresenter
 public:
     MainPresenter(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        IFolderSelectionMenuBar& folderSelectionMenuBar,
+        ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter);

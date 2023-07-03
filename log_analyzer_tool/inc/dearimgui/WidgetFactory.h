@@ -8,7 +8,6 @@
 
 namespace LogAnalyzerTool
 {
-
 class IMainViewPort;
 
 class WidgetFactory : public IWidgetFactory
@@ -29,6 +28,9 @@ public:
 
     //List tree widget
     std::unique_ptr<IListTreeWidget> createListTreeWidget() override;
+
+    //Layout manipulation
+    void onSameLine() override;
 
 private:
     struct Impl;

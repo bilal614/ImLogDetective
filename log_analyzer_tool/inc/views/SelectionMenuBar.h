@@ -1,0 +1,24 @@
+#pragma once
+
+#include "views/ISelectionMenuBar.h"
+#include <memory>
+
+namespace LogAnalyzerTool
+{
+
+class SelectionMenuBar : public ISelectionMenuBar
+{
+public:
+    SelectionMenuBar();
+    ~SelectionMenuBar();
+    void drawSelectionMenuBar() override;
+    bool selectFolderClicked() override;
+    void selectionFolderClosed() override;
+    float getInputScaleFactor() override;
+private:
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
+};
+
+}

@@ -9,7 +9,7 @@ namespace LogAnalyzerTool
 class LogDataModelFactory : public ILogDataModelFactory
 {
 public:
-    std::unique_ptr<ILogDataModel> createLogFilePresenter(const std::string& source) override;
+    std::unique_ptr<ILogDataModel> createLogDataModel(const std::string& source) override;
 
 };
 

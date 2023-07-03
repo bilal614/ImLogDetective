@@ -18,7 +18,7 @@ class TestEventLoop : public ::testing::Test {
 public:
     ::testing::InSequence seq;
 
-    std::unique_ptr<LogAnalyzerTool::IEventLoop<LogAnalyzerTool::EventLoop>> eventLoop;
+    std::unique_ptr<LogAnalyzerTool::IEventLoop> eventLoop;
     void SetUp() override;
     void TearDown() override;
 
@@ -79,7 +79,7 @@ TEST_F(TestEventLoop, test_posting_on_fifo_eventloop) {
 
     //NOTE: std::function operator() does not use universal references as parameters. Prefer to pass ref parameters if 
     // you expect to use them as inout arguments
-    eventLoop->post<void, const int&, const float&, float&>({[&](const int& a, const float& b, float& c){
+    eventLoop->post<LogAnalyzerTool::EventLoop, void, const int&, const float&, float&>({[&](const int& a, const float& b, float& c){
         c = a*b;
         ASSERT_NE(testThreadId, std::this_thread::get_id());
         thirdCallback.set_value();

@@ -29,14 +29,14 @@ FileListView::FileListView(IListTreeFactory& listTreeFactory) :
 
 FileListView::~FileListView() = default;
 
-void FileListView::draw(const std::unordered_map<std::string, std::filesystem::path>& fileList)
+void FileListView::draw(const std::vector<std::string>& fileList)
 {
     if(!fileList.empty())
     {
         auto listTree = p->listTreeFactory.createListTreeWidget();
         for(auto& fileItem : fileList)
         {
-            listTree->addNode(fileItem.first);
+            listTree->addNode(fileItem, [&](){fileListCallback(fileItem);});
         }
     }
 }

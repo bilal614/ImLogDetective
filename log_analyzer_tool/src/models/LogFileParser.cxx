@@ -1,5 +1,6 @@
 #include "models/LogFileParser.h"
 #include "models/ILogDataModel.h"
+#include "models/IGzipFile.h"
 #include <memory>
 #include <fstream>
 #include <sstream>
@@ -9,34 +10,34 @@ namespace LogAnalyzerTool
 
 struct LogFileParser::Impl
 {
-    Impl();
+    Impl(IGzipFile& gzipFile);
     ~Impl() = default;
-    struct ScopeFileStream{
-        std::unique_ptr<std::ifstream> inputFile;
+    std::basic_istream<char>& getFileStream(const std::filesystem::path& filePath);
 
-        ScopeFileStream(const std::filesystem::path& filePath) :
-            inputFile{std::make_unique<std::ifstream>(filePath)}
-        {
-            if (!*inputFile) 
-            {
-                //report error
-            }
-        }
-
-        ~ScopeFileStream()
-        {
-            inputFile->close();
-        }
-    };
-
+    IGzipFile& gzipFile;
+    std::unique_ptr<std::basic_istream<char>> logStream;
 };
 
-LogFileParser::Impl::Impl()
+LogFileParser::Impl::Impl(IGzipFile& gzipFile) :
+    gzipFile{gzipFile}
 {
 }
 
-LogFileParser::LogFileParser() :
-    p{std::make_unique<Impl>()}
+std::basic_istream<char>& LogFileParser::Impl::getFileStream(const std::filesystem::path& filePath)
+{
+    if(gzipFile.isGzipFormat(filePath))
+    {
+        logStream = std::make_unique<std::stringstream>(gzipFile.decompress(filePath));
+    }
+    else
+    {
+        logStream = std::make_unique<std::ifstream>(filePath);
+    }
+    return *logStream;
+}
+
+LogFileParser::LogFileParser(IGzipFile& gzipFile) :
+    p{std::make_unique<Impl>(gzipFile)}
 {
 }
 
@@ -44,9 +45,9 @@ LogFileParser::~LogFileParser() = default;
 
 void LogFileParser::readLogFileData(const std::filesystem::path& filePath, ILogDataModel& logDataModel)
 {
-    Impl::ScopeFileStream logFile{filePath};
+    std::basic_istream<char>& logFileStream = p->getFileStream(filePath);
     std::string line;
-    while (std::getline(*logFile.inputFile, line))
+    while (std::getline(logFileStream, line))
     {
         if(line.size() > 0)
         {
@@ -54,6 +55,5 @@ void LogFileParser::readLogFileData(const std::filesystem::path& filePath, ILogD
         }
     }
 }
-
 
 }

@@ -19,7 +19,7 @@ class ITabBar
 {
 public:
     virtual ~ITabBar() = default;
-    virtual void drawTabBar(std::vector<TabBarItem>& tabItemsToDraw) = 0;
+    virtual void drawTabBar(std::vector<std::reference_wrapper<TabBarItem>> tabItemsToDraw) = 0;
 };
 
 }

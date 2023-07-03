@@ -69,9 +69,6 @@ EventLoop::~EventLoop()
     stop();
 }
 
-EventLoop::EventLoop(EventLoop&&) = default;
-EventLoop& EventLoop::operator=(EventLoop&&) = default;
-
 void EventLoop::post(const std::function<void()>& f)
 {
     std::lock_guard<std::mutex> lk(*p->mut);

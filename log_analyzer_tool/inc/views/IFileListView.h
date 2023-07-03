@@ -11,7 +11,8 @@ class IFileListView
 {
 public:
     virtual ~IFileListView() = default;
-    virtual void draw(const std::unordered_map<std::string, std::filesystem::path>& fileList) = 0;
+    virtual void draw(const std::vector<std::string>& fileList) = 0;
+    std::function<void(const std::string&)> fileListCallback;
 };
 
 }

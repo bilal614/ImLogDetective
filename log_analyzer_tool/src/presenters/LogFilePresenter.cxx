@@ -4,7 +4,7 @@
 #include "dearimgui/IWindowFactory.h"
 #include "models/ILogFileParser.h"
 #include "event_handling/Event.hpp"
-#include "event_handling/EventLoop.h"
+#include "event_handling/IEventLoop.h"
 #include "models/ILogDataModel.h"
 #include "presenters/LogFilePresenter.h"
 #include "views/ILogView.h"
@@ -17,7 +17,7 @@ namespace LogAnalyzerTool
 struct LogFilePresenter::Impl
 {
     Impl(IWindowFactory& windowFactory,
-        EventLoop& eventLoop,
+        IEventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,
@@ -26,7 +26,7 @@ struct LogFilePresenter::Impl
     void updateLogData(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel);
 
     IWindowFactory& windowFactory;
-    EventLoop& eventLoop;
+    IEventLoop& eventLoop;
     ILogFilterView& logFilterView;
     ILogView& logView;
     ILogFileParser& logFileParser;
@@ -35,7 +35,7 @@ struct LogFilePresenter::Impl
 
 LogFilePresenter::Impl::Impl(
     IWindowFactory& windowFactory,
-    EventLoop& eventLoop,
+    IEventLoop& eventLoop,
     ILogFilterView& logFilterView, 
     ILogView& logView,
     ILogFileParser& logFileParser,
@@ -56,7 +56,9 @@ void LogFilePresenter::Impl::updateLogData(
 {
     if(readLogFile)
     {
-        logFileParser.readLogFileData(filePath, logDataModel);
+        eventLoop.post([&](){
+            logFileParser.readLogFileData(filePath, logDataModel);
+        });
     }
 
     auto logData = logDataModel.getLogData();
@@ -87,7 +89,7 @@ void LogFilePresenter::Impl::updateLogData(
 
 LogFilePresenter::LogFilePresenter(
         IWindowFactory& windowFactory,
-        EventLoop& eventLoop,
+        IEventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,
@@ -100,10 +102,10 @@ LogFilePresenter::~LogFilePresenter() = default;
 
 void LogFilePresenter::update(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel)
 {
-    auto logFilterWindow = p->windowFactory.createChildWindow(LogFilterChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
+    auto logFilterWindow = p->windowFactory.createChildWindow(WindowDefs::LogFilterChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
     p->logFilterView.drawFilterCheckBoxes();
     {
-        auto logFileContentWindow = p->windowFactory.createChildWindow(LogFileContentChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
+        auto logFileContentWindow = p->windowFactory.createChildWindow(WindowDefs::LogFileContentChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
         p->updateLogData(filePath, readLogFile, logDataModel);
     }
 }

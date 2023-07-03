@@ -6,10 +6,12 @@
 namespace LogAnalyzerTool
 {
 
+class IGzipFile;
+
 class LogFileParser : public ILogFileParser
 {
 public:
-    LogFileParser();
+    LogFileParser(IGzipFile& gzipFile);
     ~LogFileParser();
     void readLogFileData(const std::filesystem::path& filePath, ILogDataModel& logDataModel) override;
 private:

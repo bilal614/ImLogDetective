@@ -13,9 +13,14 @@ class ITabBar;
 class LogFileTabsPresenter : public ILogFileTabsPresenter
 {
 public:
-    LogFileTabsPresenter(ILogFilePresenter& logFilePresenter, ILogDataModelFactory& logFilePresenterFactory, ITabBar& tabBar);
+    LogFileTabsPresenter(
+        ILogFilePresenter&, 
+        ILogDataModelFactory&, 
+        ITabBar&,
+        std::unique_ptr<IEvent<const std::string&>>);
     ~LogFileTabsPresenter();
-    void update(const std::filesystem::path& folderPath) override;
+    void update(const std::vector<std::filesystem::path>& filePaths) override;
+    IEvent<const std::string&>& getTabsOpenedEvent() override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

@@ -13,7 +13,7 @@ namespace LogAnalyzerTool
 
 struct WidgetFactory::Impl
 {
-    Impl(const IMainViewPort& mainViewPort);
+    Impl(IWidgetFactory& widgetFactory, const IMainViewPort& mainViewPort);
     ~Impl() = default;
     std::unique_ptr<IScopedImGuiWindow> addWindow();
 
@@ -23,10 +23,11 @@ struct WidgetFactory::Impl
     ImGuiWindowFlags childWindowFlags;
 
     std::unordered_map<TextColor, ImVec4> colorMap;
-
+    IWidgetFactory& parent;
 };
 
-WidgetFactory::Impl::Impl(const IMainViewPort& mainWindow) :
+WidgetFactory::Impl::Impl(IWidgetFactory& widgetFactory, const IMainViewPort& mainWindow) :
+    parent{widgetFactory},
     mainViewPort{mainWindow},
     openCloseWidgetPresent{nullptr},
     mainWindowFlags{0},
@@ -48,7 +49,9 @@ WidgetFactory::Impl::Impl(const IMainViewPort& mainWindow) :
 
 std::unique_ptr<IScopedImGuiWindow> WidgetFactory::Impl::addWindow()
 {
-    return std::make_unique<ScopedImGuiWindow>(LogAnalyzerToolApplicationName, 
+    return std::make_unique<ScopedImGuiWindow>(
+        parent,
+        WindowDefs::LogAnalyzerToolApplicationName, 
         mainViewPort.getAreaSize(), 
         mainViewPort.getViewportPosition(), 
         openCloseWidgetPresent.get(), 
@@ -57,7 +60,7 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::Impl::addWindow()
 }
 
 WidgetFactory::WidgetFactory(const IMainViewPort& mainWindow) :
-    p{std::make_unique<Impl>(mainWindow)}
+    p{std::make_unique<Impl>(*this, mainWindow)}
 {
 
 }
@@ -75,6 +78,7 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::createChildWindow(
     const ImVec2& size)
 {
     return std::make_unique<ScopedImGuiWindow>(
+        p->parent,
         windowName, 
         size, 
         position, 
@@ -101,6 +105,11 @@ void WidgetFactory::createTextColored(std::string_view text, const TextColor& co
 std::unique_ptr<IListTreeWidget> WidgetFactory::createListTreeWidget()
 {
     return std::make_unique<ListTreeWidget>();
+}
+
+void WidgetFactory::onSameLine()
+{
+    ImGui::SameLine();
 }
 
 }

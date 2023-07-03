@@ -19,6 +19,7 @@ struct IScopedImGuiWindow
     virtual WindowType getWindowType() = 0;
     virtual ImVec2 getWindowPosition() = 0;
     virtual ImVec2 getWindowSize() = 0;
+    virtual void onSameLine() = 0;
 };
 
 }

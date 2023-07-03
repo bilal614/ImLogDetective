@@ -1,14 +1,13 @@
 #pragma once
 
 #include <memory>
-#include "event_handling/IEventLoop.h"
 #include "presenters/ILogFilePresenter.h"
 #include "views/ILogView.h"
 
 namespace LogAnalyzerTool
 {
 
-class EventLoop;
+class IEventLoop;
 class ILogDataModel;
 class ILogFileParser;
 class ILogFilterView;
@@ -21,7 +20,7 @@ class LogFilePresenter : public ILogFilePresenter
 public:
     LogFilePresenter(
         IWindowFactory& windowFactory,
-        EventLoop& eventLoop,
+        IEventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,

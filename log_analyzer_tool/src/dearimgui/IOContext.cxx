@@ -20,7 +20,6 @@ IOContext::Impl::Impl() :
 IOContext::IOContext() :
     p{std::make_unique<Impl>()}
 {
-
 }
 
 IOContext::~IOContext() = default;
@@ -30,5 +29,9 @@ void IOContext::unsetIniFile()
     p->io.IniFilename = nullptr;
 }
 
+void IOContext::setFontScale(const float scaleFactor)
+{
+    p->io.FontGlobalScale = scaleFactor;
+}
 
 }

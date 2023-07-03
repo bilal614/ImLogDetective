@@ -1,21 +1,42 @@
 #include "dearimgui/MainViewPort.h"
+#include "LogAnalyzerToolDefs.h"
+#include "dearimgui/IIOContext.h"
 #include "imgui.h"
 
 namespace LogAnalyzerTool
 {
+
 struct MainViewPort::Impl
 {
-    Impl();
+    bool scaleFactorHasChanged(const float newScaleFactor);
+    bool scaleFactorWithinLimits(const float scaleFactor);
+
+    Impl(IIOContext& ioContext);
     const ImGuiViewport* imGuiViewport;
+    IIOContext& ioContext;
+    float viewportScaleFactor;
 };
 
-MainViewPort::Impl::Impl() :
-    imGuiViewport{ImGui::GetMainViewport()}
+MainViewPort::Impl::Impl(IIOContext& ioContext) :
+    imGuiViewport{ImGui::GetMainViewport()},
+    ioContext{ioContext},
+    viewportScaleFactor{Bounds::ScaleFactorLowerBound}
 {
 }
 
-MainViewPort::MainViewPort() :
-    p{std::make_unique<Impl>()}
+bool MainViewPort::Impl::scaleFactorHasChanged(const float newScaleFactor)
+{
+    return newScaleFactor > (viewportScaleFactor + Bounds::ScaleFactorChangeSensitivity) || 
+        newScaleFactor < (viewportScaleFactor - Bounds::ScaleFactorChangeSensitivity);
+}
+
+bool MainViewPort::Impl::scaleFactorWithinLimits(const float scaleFactor)
+{
+    return scaleFactor >= Bounds::ScaleFactorLowerBound && scaleFactor <= Bounds::ScaleFactorUpperBound;
+}
+
+MainViewPort::MainViewPort(IIOContext& ioContext) :
+    p{std::make_unique<Impl>(ioContext)}
 {
 }
 
@@ -23,8 +44,6 @@ MainViewPort::~MainViewPort() = default;
 
 ImVec2 MainViewPort::getAreaSize() const
 {
-    // return ImGui::GetWindowSize();
-
     if(p->imGuiViewport != nullptr)
     {
         return p->imGuiViewport->Size;
@@ -43,7 +62,6 @@ ImVec2 MainViewPort::getWorkAreaSize() const
 
 ImVec2 MainViewPort::getViewportPosition() const
 {
-    //return ImGui::GetWindowPos();
     if(p->imGuiViewport != nullptr)
     {
         return p->imGuiViewport->Pos;
@@ -54,6 +72,15 @@ ImVec2 MainViewPort::getViewportPosition() const
 ImVec2 MainViewPort::getViewportCenter() const
 {
     return p->imGuiViewport->GetCenter();
+}
+
+void MainViewPort::setViewportScale(const float scaleFactor)
+{
+    if(p->scaleFactorHasChanged(scaleFactor) && p->scaleFactorWithinLimits(scaleFactor))
+    {
+        p->viewportScaleFactor = scaleFactor;
+        p->ioContext.setFontScale(p->viewportScaleFactor );
+    }
 }
 
 }

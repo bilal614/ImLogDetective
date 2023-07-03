@@ -7,16 +7,16 @@
 namespace LogAnalyzerTool
 {
 
-class EventLoop : public IEventLoop<EventLoop>
+class EventLoop : public IEventLoop
 {
 public:
     EventLoop();
     ~EventLoop();
-    EventLoop(EventLoop&&);
-    EventLoop& operator=(EventLoop&&);
 
     EventLoop(const EventLoop&) = delete;
     EventLoop& operator=(const EventLoop&) = delete;
+    EventLoop(EventLoop&&) = delete;
+    EventLoop& operator=(EventLoop&&) = delete;
 
     void post(const std::function<void()>&) final;
 

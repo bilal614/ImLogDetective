@@ -11,7 +11,7 @@ class TabBar : public ITabBar
 public:
     TabBar(const std::string& tabBarName);
     ~TabBar();
-    void drawTabBar(std::vector<TabBarItem>& tabItemsToDraw) override;
+    void drawTabBar(std::vector<std::reference_wrapper<TabBarItem>> tabItemsToDraw) override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

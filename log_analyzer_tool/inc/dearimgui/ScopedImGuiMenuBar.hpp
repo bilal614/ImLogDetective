@@ -11,17 +11,24 @@
 namespace LogAnalyzerTool
 {
 
+
 struct ScopedImGuiMenuBar
 {
-    ScopedImGuiMenuBar(std::initializer_list<std::pair<std::string, bool&>> menuItems) 
+    ScopedImGuiMenuBar(std::initializer_list<std::pair<std::string, bool&>> menuItems, float& scaleFactor)
     {
         if (ImGui::BeginMenuBar())
         {
-            for(auto& menuItem : menuItems)
+            if (ImGui::BeginMenu("Menu"))
             {
-                if (ImGui::MenuItem(menuItem.first.c_str(), NULL, &menuItem.second))
+                for(auto& menuItem : menuItems)
                 {
+                    if (ImGui::MenuItem(menuItem.first.c_str(), NULL, &menuItem.second))
+                    {
+                    }
                 }
+
+                ImGui::SliderFloat("Scale", &scaleFactor, 0.0f, 100.0f);
+                ImGui::EndMenu();
             }
         }
     }

@@ -6,7 +6,7 @@
 #include "dearimgui/IWindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
 #include "dearimgui/IScopedImGuiWindow.h"
-#include "imgui.h" // Unfortunately needed because of ImVec2
+#include "imgui.h"
 
 namespace LogAnalyzerTool
 {
@@ -15,44 +15,81 @@ struct MainPresenter::Impl
 {
     Impl(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        IFolderSelectionMenuBar& folderSelectionMenuBar,
+        ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter);
     ~Impl() = default;
 
+    void showFolderSelectionPopup();
+    void showLogFilterWindow(const ImVec2& mainWindowSize, 
+        const ImVec2& mainWindowPos);
+    void showMainContentWindow(const ImVec2& mainWindowSize, 
+        const ImVec2& mainWindowPos);
+
     IWindowFactory& windowFactory;
     IMainViewPort& mainViewPort;
     IFileListPresenter& fileListPresenter;
-    IFolderSelectionMenuBar& folderSelectionMenuBar;
+    ISelectionMenuBar& selectionMenuBar;
     IFolderSelectionPopup& folderSelectionPopup;
     ILogFileTabsPresenter& logFileTabsPresenter;
 };
 
 MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        IFolderSelectionMenuBar& folderSelectionMenuBar,
+        ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter) :
     mainViewPort{mainViewPort},
     folderSelectionPopup{folderSelectionPopup},
-    folderSelectionMenuBar{folderSelectionMenuBar},
+    selectionMenuBar{selectionMenuBar},
     windowFactory{windowFactory},
     logFileTabsPresenter{logFileTabsPresenter},
     fileListPresenter{fileListPresenter}
 {
 }
 
+void MainPresenter::Impl::showFolderSelectionPopup()
+{
+    auto popupSize = mainViewPort.getWorkAreaSize();
+    popupSize.x *= Bounds::PopupWindowRelativeToMain_X;
+    popupSize.y *= Bounds::PopupWindowRelativeToMain_Y;
+    folderSelectionPopup.drawFolderSelectionModalPopup(mainViewPort.getViewportCenter(), popupSize);
+    if(!folderSelectionPopup.popupOpen())
+    {
+        selectionMenuBar.selectionFolderClosed();
+    }
+}
+
+void MainPresenter::Impl::showLogFilterWindow(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
+{
+    //FileListViewPresenter
+    ImVec2 fileListBoxPosition{mainWindowPos.x*0.1f, 0.0};
+    ImVec2 fileListBoxSize{mainWindowSize.x*0.1f, mainWindowSize.y*0.93f};
+    auto logFilterWindow = windowFactory.createChildWindow(WindowDefs::FileListWindow, fileListBoxPosition, fileListBoxSize);
+    {
+        fileListPresenter.update(folderSelectionPopup.getSelectedFolder());
+    }
+}
+
+void MainPresenter::Impl::showMainContentWindow(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
+{
+    ImVec2 mainContentBoxPosition{mainWindowPos.x*0.10f, mainWindowPos.y};
+    ImVec2 mainContentBoxSize{mainWindowSize.x*0.89f, mainWindowSize.y*0.93f};
+    auto mainContentChildWindow=windowFactory.createChildWindow(WindowDefs::LogsWindow, mainContentBoxPosition, mainContentBoxSize);
+    logFileTabsPresenter.update(fileListPresenter.getSelectedFiles());
+}
+
 MainPresenter::MainPresenter(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        IFolderSelectionMenuBar& folderSelectionMenuBar,
+        ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter) : 
     p {std::make_unique<Impl>(windowFactory,
         mainViewPort,
-        folderSelectionMenuBar,
+        selectionMenuBar,
         folderSelectionPopup,
         logFileTabsPresenter,
         fileListPresenter)}
@@ -65,40 +102,20 @@ void MainPresenter::update()
 {
     //TODO Move Layout logic elsewhere
     // Create\Draw GUI widgets here in sequential order
+    p->mainViewPort.setViewportScale(Bounds::ScaleFactorLowerBound + p->selectionMenuBar.getInputScaleFactor()/100.f);
     auto mainWindow = p->windowFactory.createWindow();
-    p->folderSelectionMenuBar.drawFolderSelectionMenuBar();
-    if(p->folderSelectionMenuBar.selectedFolderClicked())
+    p->selectionMenuBar.drawSelectionMenuBar();
+    if(p->selectionMenuBar.selectFolderClicked())
     {
-        auto popupSize = p->mainViewPort.getWorkAreaSize();
-        popupSize.x = popupSize.x*0.25;
-        popupSize.y = popupSize.y*0.25;
-        p->folderSelectionPopup.drawFolderSelectionModalPopup(p->mainViewPort.getViewportCenter(), popupSize);
-        if(!p->folderSelectionPopup.popupOpen())
-        {
-            p->folderSelectionMenuBar.selectionFolderClosed();
-        }
+        p->showFolderSelectionPopup();
     }
 
     auto mainWindowSize = mainWindow->getWindowSize();
     auto mainWindowPosition = mainWindow->getWindowPosition();
 
-    {
-        //FileListViewPresenter
-        ImVec2 fileListBoxPosition{mainWindowPosition.x*0.1f, 0.0};
-        ImVec2 fileListBoxSize{mainWindowSize.x*0.1f, 0.0};
-        //TODO provide vector of file paths to logFileTabsPresenter.update i.o. folder
-        auto logFilterWindow = p->windowFactory.createChildWindow(FileListWindow, fileListBoxPosition, fileListBoxSize);
-        {
-            p->fileListPresenter.update(p->folderSelectionPopup.getSelectedFolder());
-        }
-    }
-    ImGui::SameLine();
-    {
-        ImVec2 mainContentBoxPosition{mainWindowPosition.x*0.10f, mainWindowPosition.y};
-        ImVec2 mainContentBoxSize{mainWindowSize.x*0.89f, 0.0};
-        auto mainContentChildWindow=p->windowFactory.createChildWindow(LogsWindow, mainContentBoxPosition, mainContentBoxSize);
-        p->logFileTabsPresenter.update(p->folderSelectionPopup.getSelectedFolder());
-    }
+    p->showLogFilterWindow(mainWindowSize, mainWindowPosition);
+    mainWindow->onSameLine();
+    p->showMainContentWindow(mainWindowSize, mainWindowPosition);
 }
 
 }

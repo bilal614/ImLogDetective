@@ -4,7 +4,9 @@
 #include "dearimgui/IWindowFactory.h"
 #include "dearimgui/ITabBar.h"
 #include "event_handling/EventLoop.h"
+#include "event_handling/Event.hpp"
 #include "LogAnalyzerToolDefs.h"
+#include "models/GzipFile.h"
 #include "models/LogFileParser.h"
 #include "presenters/FileListPresenter.h"
 #include "presenters/LogFilePresenter.h"
@@ -12,7 +14,7 @@
 #include "presenters/LogFileTabsPresenter.h"
 #include "presenters/MainPresenter.h"
 #include "views/FileListView.h"
-#include "views/FolderSelectionMenuBar.h"
+#include "views/SelectionMenuBar.h"
 #include "views/FolderSelectionPopup.h"
 #include "views/LogView.h"
 #include "views/LogFilterView.h"
@@ -47,15 +49,16 @@ struct GlfwBackendBinding::Impl
     std::string glShaderLanguageVersion;
     GLFWwindow* window;
     std::unique_ptr<IMainViewPort> mainViewPort;
-    std::unique_ptr<IOContext> ioContext;
-    std::unique_ptr<EventLoop> eventLoop;
+    std::unique_ptr<IIOContext> ioContext;
+    std::unique_ptr<IEventLoop> eventLoop;
     std::unique_ptr<IWidgetFactory> widgetFactory;
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
-    std::unique_ptr<IFolderSelectionMenuBar> folderSelectionMenuBar;
+    std::unique_ptr<ISelectionMenuBar> selectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
     std::unique_ptr<IFileListView> fileListView;
     std::unique_ptr<ILogFilterView> logFilterView;
     std::unique_ptr<ILogView> logView;
+    std::unique_ptr<GzipFile> gzipFile;
     std::unique_ptr<ILogFileParser> logFileParser;
     std::unique_ptr<IFileListPresenter> fileListPresenter;
     std::unique_ptr<ILogFilePresenter> logFilePresenter;
@@ -96,7 +99,7 @@ GlfwBackendBinding::Impl::Impl() :
     auto screenWidth = glfwGetVideoMode(primaryMonitor)->width;
     auto screenHeight = glfwGetVideoMode(primaryMonitor)->height;
     // Create window with graphics context
-    window = glfwCreateWindow(screenWidth, screenHeight, LogAnalyzerToolApplicationName.c_str(), NULL, NULL);
+    window = glfwCreateWindow(screenWidth, screenHeight, WindowDefs::LogAnalyzerToolApplicationName.c_str(), NULL, NULL);
     if (window != NULL)
     {
         glfwMakeContextCurrent(window);
@@ -106,8 +109,6 @@ GlfwBackendBinding::Impl::Impl() :
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
@@ -120,17 +121,18 @@ GlfwBackendBinding::Impl::Impl() :
     }
     ioContext = std::make_unique<IOContext>();
     ioContext->unsetIniFile();
-    mainViewPort = std::make_unique<MainViewPort>();
+    mainViewPort = std::make_unique<MainViewPort>(*ioContext);
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort);
     eventLoop = std::make_unique<EventLoop>();
-    folderSelectionMenuBar = std::make_unique<FolderSelectionMenuBar>();
+    selectionMenuBar = std::make_unique<SelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>();
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
     logView = std::make_unique<LogView>(dynamic_cast<ITextWidgetFactory&>(*widgetFactory));
     fileListView = std::make_unique<FileListView>(dynamic_cast<IListTreeFactory&>(*widgetFactory));
-    logFileParser = std::make_unique<LogFileParser>();
+    gzipFile = std::make_unique<GzipFile>();
+    logFileParser = std::make_unique<LogFileParser>(*gzipFile);
     logFilePresenter = std::make_unique<LogFilePresenter>(
         dynamic_cast<IWindowFactory&>(*widgetFactory), 
         *eventLoop, 
@@ -138,12 +140,12 @@ GlfwBackendBinding::Impl::Impl() :
         *logView,
         *logFileParser,
         *textFilterWrapper);
-    fileListPresenter = std::make_unique<FileListPresenter>(*fileListView);
     logDataModelFactory = std::make_unique<LogDataModelFactory>();
-    logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar);
+    logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar, std::make_unique<Event<const std::string&>>());
+    fileListPresenter = std::make_unique<FileListPresenter>(*logFileTabsPresenter, *fileListView);
     mainPresenter = std::make_unique<MainPresenter>(dynamic_cast<IWindowFactory&>(*widgetFactory),
         *mainViewPort,
-        *folderSelectionMenuBar,
+        *selectionMenuBar,
         *folderSelectionPopup,
         *logFileTabsPresenter,
         *fileListPresenter);

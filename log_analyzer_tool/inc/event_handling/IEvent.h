@@ -5,16 +5,14 @@
 namespace LogAnalyzerTool
 {
 
+template<typename ...A>
 class IEvent
 {
 public:
     virtual ~IEvent() = default;
-    
-    virtual void registerDelegate(const std::function<void()>&) = 0;
-
+    virtual void registerDelegate(const std::function<void(A...)>&) = 0;
     virtual void clearDelegates() = 0;
-
-    virtual void operator()() = 0;
+    virtual void operator()(A&&... args) = 0;
 };
 
 }
