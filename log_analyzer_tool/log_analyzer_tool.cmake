@@ -18,6 +18,7 @@ if(${ZLIB_FOUND})
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FileListView.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/SelectionMenuBar.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionPopup.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/LogAnalyzerToolDefs.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/LogFilterView.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/LogView.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/presenters/MainPresenter.cxx

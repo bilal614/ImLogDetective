@@ -2,22 +2,22 @@
 
 #include <string>
 
-
 namespace LogAnalyzerTool
 {
     namespace WindowDefs {
-        const std::string LogAnalyzerToolApplicationName {"LoggingAnalyzerTool"};
-        const std::string FileListWindow {"FileListWindow"};
-        const std::string LogsWindow{"LogsWindow"};
-        const std::string LogFilterChildWindow {"LogFilterWindow"};
-        const std::string LogFileContentChildWindow {"LogFileContentWindow"};
+        extern const char* LogAnalyzerToolApplicationName;
+        extern const char* FileListWindow;
+        extern const char* LogsWindow;
+        extern const char* LogFilterChildWindow;
+        extern const char* LogFileContentChildWindow;
     }
 
     namespace MenuBarOptions {
-        const std::string SelectFolder{"Select Folder"};
-        const std::string FetchRemoteLogs{"Fetch Remote Logs"};
-        const std::string ConfigureHiglighting{"Configure Highlighting"};
+        extern const char* SelectFolder;
+        extern const char* FetchRemoteLogs;
+        extern const char* ConfigureHiglighting;
     }
+
     namespace Bounds{
 
         constexpr float PopupWindowRelativeToMain_X = 0.25f;
@@ -28,7 +28,11 @@ namespace LogAnalyzerTool
     }
 
     namespace SelectFolderPopup {
-        const std::string Name{"Select Folder"};
+        extern const char* Name;
+    }
+
+    namespace ErrorMessage {
+        extern const char* InvalidDirectory;
     }
 
 }

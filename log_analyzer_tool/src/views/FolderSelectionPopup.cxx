@@ -75,8 +75,7 @@ void FolderSelectionPopup::Impl::processPopupInput(bool closeButtonClicked, bool
     }
     if(invalidFolderSelected)
     {
-        auto errorMessage = "Not a valid directory path.";
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", errorMessage);
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", ErrorMessage::InvalidDirectory);
     }
 }
 
@@ -92,9 +91,9 @@ void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, I
     p->modalPopup.open(popupPosition, popupSize, SelectFolderPopup::Name);
     p->popUpOpen = true;
 
-    if (ImGui::BeginPopupModal(SelectFolderPopup::Name.c_str(), NULL, ImGuiWindowFlags_NoDecoration))
+    if (ImGui::BeginPopupModal(SelectFolderPopup::Name, NULL, ImGuiWindowFlags_NoDecoration))
     {
-        ImGui::InputText(SelectFolderPopup::Name.c_str(), p->folderPath.data(), MaxFolderPath);
+        ImGui::InputText(SelectFolderPopup::Name, p->folderPath.data(), MaxFolderPath);
         auto okButtonClicked = ImGui::Button("OK");
         ImGui::SameLine();
         auto closeButtonClicked = ImGui::Button("Close");

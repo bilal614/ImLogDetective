@@ -101,7 +101,7 @@ GlfwBackendBinding::Impl::Impl() :
     auto screenWidth = glfwGetVideoMode(primaryMonitor)->width;
     auto screenHeight = glfwGetVideoMode(primaryMonitor)->height;
     // Create window with graphics context
-    window = glfwCreateWindow(screenWidth, screenHeight, WindowDefs::LogAnalyzerToolApplicationName.c_str(), NULL, NULL);
+    window = glfwCreateWindow(screenWidth, screenHeight, WindowDefs::LogAnalyzerToolApplicationName, NULL, NULL);
     if (window != NULL)
     {
         glfwMakeContextCurrent(window);
