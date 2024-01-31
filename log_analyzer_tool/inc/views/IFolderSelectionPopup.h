@@ -1,6 +1,7 @@
 #pragma once
 
-#include <string>
+#include <filesystem>
+#include <utility>
 
 struct ImVec2;
 
@@ -12,9 +13,8 @@ class IFolderSelectionPopup
 public:
     virtual ~IFolderSelectionPopup() = default;
     virtual void drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize) = 0;
-    virtual std::string getSelectedFolder() = 0;
+    virtual std::pair<bool, std::filesystem::path> getSelectedFolder() = 0;
     virtual bool popupOpen() = 0;
-    virtual bool currentFolderSelectionDone() = 0;
 
 };
 

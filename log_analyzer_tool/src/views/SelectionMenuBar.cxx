@@ -1,6 +1,6 @@
 #include "views/SelectionMenuBar.h"
 #include "dearimgui/ScopedImGuiMenuBar.hpp"
-
+#include "LogAnalyzerToolDefs.h"
 
 namespace LogAnalyzerTool
 {
@@ -12,6 +12,7 @@ struct SelectionMenuBar::Impl
 
     bool folderSelectionClicked;
     bool fetchRemoteLogsClicked;
+    bool configureHighlightingClicked;
     float scaleFactor;
     std::unique_ptr<ScopedImGuiMenuBar> menuBar;
 };
@@ -19,6 +20,7 @@ struct SelectionMenuBar::Impl
 SelectionMenuBar::Impl::Impl() :
     folderSelectionClicked{false},
     fetchRemoteLogsClicked{false},
+    configureHighlightingClicked{false},
     menuBar{nullptr}
 {
 }
@@ -33,8 +35,9 @@ SelectionMenuBar::~SelectionMenuBar() = default;
 void SelectionMenuBar::drawSelectionMenuBar()
 {
     ScopedImGuiMenuBar({
-        {"Select Folder", std::ref(p->folderSelectionClicked)},
-        {"Fetch Remote Logs", std::ref(p->fetchRemoteLogsClicked)}
+        {MenuBarOptions::SelectFolder, std::ref(p->folderSelectionClicked)},
+        {MenuBarOptions::FetchRemoteLogs, std::ref(p->fetchRemoteLogsClicked)},
+        {MenuBarOptions::ConfigureHiglighting, std::ref(p->configureHighlightingClicked)}
     }, p->scaleFactor);
 
 }

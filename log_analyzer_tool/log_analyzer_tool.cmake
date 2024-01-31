@@ -10,6 +10,7 @@ if(${ZLIB_FOUND})
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/GlfwBackendBinding.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ListTreeWidget.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/MainViewPort.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ModalPopup.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TabBar.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/WidgetFactory.cxx

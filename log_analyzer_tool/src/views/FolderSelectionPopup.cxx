@@ -1,9 +1,10 @@
 #include "views/FolderSelectionPopup.h"
+#include "dearimgui/IModalPopup.h"
+#include "LogAnalyzerToolDefs.h"
 #include <cstring>
 #include <filesystem>
 
 #include "imgui.h"
-
 
 namespace {
     constexpr size_t MaxFolderPath{2048};
@@ -19,24 +20,68 @@ namespace LogAnalyzerTool
 
 struct FolderSelectionPopup::Impl
 {
-    Impl();
+    Impl(IModalPopup& modalPopup);
     ~Impl() = default;
+    bool validateSelectedFolder(const std::filesystem::path& path);
+    void processPopupInput(
+        bool closeButtonClicked, 
+        bool okButtonClicked);
+    void closePopup();
+
     std::filesystem::path selectedFolderPath;
     std::string folderPath;
     bool popUpOpen;
-    bool folderSelectionDone;
+    bool invalidFolderSelected;
+    IModalPopup& modalPopup;
 };
 
-FolderSelectionPopup::Impl::Impl() :
-    folderPath{'\0'},
+FolderSelectionPopup::Impl::Impl(IModalPopup& modalPopup) :
+    folderPath(MaxFolderPath, '\0'),
     popUpOpen{false},
-    folderSelectionDone{false}
+    invalidFolderSelected{false},
+    modalPopup{modalPopup}
 {
-    folderPath.reserve(MaxFolderPath);
 }
 
-FolderSelectionPopup::FolderSelectionPopup() :
-    p{std::make_unique<Impl>()}
+bool FolderSelectionPopup::Impl::validateSelectedFolder(const std::filesystem::path& path)
+{
+    return std::filesystem::is_directory(path);
+}
+
+void FolderSelectionPopup::Impl::closePopup()
+{
+    popUpOpen = false;
+    invalidFolderSelected = false;
+    modalPopup.close();
+}
+
+void FolderSelectionPopup::Impl::processPopupInput(bool closeButtonClicked, bool okButtonClicked)
+{
+    if (closeButtonClicked)
+    {
+        closePopup();
+        return;
+    }
+
+    if(okButtonClicked)
+    { 
+        selectedFolderPath = std::filesystem::path{folderPath};
+        if(invalidFolderSelected = !validateSelectedFolder(std::filesystem::path{folderPath}); !invalidFolderSelected)
+        {
+            selectedFolderPath = std::filesystem::path{toString(folderPath.data())};
+            closePopup();
+            return;
+        }
+    }
+    if(invalidFolderSelected)
+    {
+        auto errorMessage = "Not a valid directory path.";
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", errorMessage);
+    }
+}
+
+FolderSelectionPopup::FolderSelectionPopup(IModalPopup& modalPopup) :
+    p{std::make_unique<Impl>(modalPopup)}
 {
 }
 
@@ -44,50 +89,28 @@ FolderSelectionPopup::~FolderSelectionPopup() = default;
 
 void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize)
 {
-    ImGui::OpenPopup("Select Folder");
+    p->modalPopup.open(popupPosition, popupSize, SelectFolderPopup::Name);
     p->popUpOpen = true;
-    p->folderSelectionDone = false;
 
-    ImGui::SetNextWindowPos(popupPosition, ImGuiCond_Appearing, ImVec2(0.5f, 0.25f));
-    ImGui::SetNextWindowSize(popupSize, ImGuiCond_FirstUseEver);
-
-    if (ImGui::BeginPopupModal("Select Folder", NULL, ImGuiWindowFlags_NoDecoration))
+    if (ImGui::BeginPopupModal(SelectFolderPopup::Name.c_str(), NULL, ImGuiWindowFlags_NoDecoration))
     {
-        ImGui::InputText("Select Folder", p->folderPath.data(), MaxFolderPath);
-        if (ImGui::Button("OK"))
-        {
-            auto filePath = toString(p->folderPath.data());
-            p->selectedFolderPath = filePath;
-            p->popUpOpen = false;
-            p->folderSelectionDone = true;
-            ImGui::CloseCurrentPopup();
-        }
+        ImGui::InputText(SelectFolderPopup::Name.c_str(), p->folderPath.data(), MaxFolderPath);
+        auto okButtonClicked = ImGui::Button("OK");
         ImGui::SameLine();
-        if (ImGui::Button("Close"))
-        {
-            p->popUpOpen = false;
-            ImGui::CloseCurrentPopup();
-        }
+        auto closeButtonClicked = ImGui::Button("Close");
+        p->processPopupInput(closeButtonClicked, okButtonClicked);
         ImGui::EndPopup();
     }
 }
 
-std::string FolderSelectionPopup::getSelectedFolder()
+std::pair<bool, std::filesystem::path> FolderSelectionPopup::getSelectedFolder()
 {
-    //TODO validate selected folder path
-    return p->selectedFolderPath.string();
+    return {p->validateSelectedFolder(p->selectedFolderPath), p->selectedFolderPath};
 }
 
 bool FolderSelectionPopup::popupOpen()
 {
     return p->popUpOpen;
-}
-
-bool FolderSelectionPopup::currentFolderSelectionDone()
-{
-    bool currentFolderSelection = p->folderSelectionDone;
-    p->folderSelectionDone = false;
-    return currentFolderSelection;
 }
 
 }

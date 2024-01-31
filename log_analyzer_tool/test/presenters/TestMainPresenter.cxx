@@ -111,7 +111,7 @@ void TestMainPresenter::checkChildWindows(
     EXPECT_CALL(guiWindowMock, getWindowSize()).WillOnce(Return(mainWindowSize));
     EXPECT_CALL(guiWindowMock, getWindowPosition()).WillOnce(Return(mainWindowPos));
     EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::FileListWindow, _, _));
-    EXPECT_CALL(folderSelectionPopupMock, getSelectedFolder()).WillOnce(Return(testFolderPath));
+    EXPECT_CALL(folderSelectionPopupMock, getSelectedFolder()).WillOnce(Return(ValidFolderPath{true, testFolderPath}));
     EXPECT_CALL(fileListPresenterMock, update(::testing::Eq(testFolderPath)));
     EXPECT_CALL(guiWindowMock, onSameLine());
     EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogsWindow, _, _));

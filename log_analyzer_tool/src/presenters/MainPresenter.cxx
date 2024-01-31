@@ -64,12 +64,14 @@ void MainPresenter::Impl::showFolderSelectionPopup()
 
 void MainPresenter::Impl::showLogFilterWindow(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
 {
-    //FileListViewPresenter
     ImVec2 fileListBoxPosition{mainWindowPos.x*0.1f, 0.0};
     ImVec2 fileListBoxSize{mainWindowSize.x*0.1f, mainWindowSize.y*0.93f};
     auto logFilterWindow = windowFactory.createChildWindow(WindowDefs::FileListWindow, fileListBoxPosition, fileListBoxSize);
     {
-        fileListPresenter.update(folderSelectionPopup.getSelectedFolder());
+        if(auto folderSelection = folderSelectionPopup.getSelectedFolder(); folderSelection.first)
+        {
+            fileListPresenter.update(folderSelection.second);
+        }
     }
 }
 
@@ -100,7 +102,6 @@ MainPresenter::~MainPresenter() = default;
 
 void MainPresenter::update()
 {
-    //TODO Move Layout logic elsewhere
     // Create\Draw GUI widgets here in sequential order
     p->mainViewPort.setViewportScale(Bounds::ScaleFactorLowerBound + p->selectionMenuBar.getInputScaleFactor()/100.f);
     auto mainWindow = p->windowFactory.createWindow();
