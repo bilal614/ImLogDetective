@@ -19,6 +19,8 @@ namespace LogAnalyzerTool
 
     namespace SelectFolderPopup {
         const char* Name{"Select Folder"};
+        const char* OkBtn{"OK"};
+        const char* CloseBtn{"Close"};
     }
 
     namespace ErrorMessage {

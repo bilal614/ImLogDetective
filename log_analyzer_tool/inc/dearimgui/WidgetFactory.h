@@ -32,6 +32,14 @@ public:
     //Layout manipulation
     void onSameLine() override;
 
+    //ModalPopup widgets
+    void open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name) override;
+    void beginLayout(const std::string& name) override;
+    bool createButtonGroup(std::vector<PopupButton>& buttons) override;
+    bool createInputTextBox(const std::string& label, std::string& input) override;
+    void endLayout() override;
+    void close() override;
+
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

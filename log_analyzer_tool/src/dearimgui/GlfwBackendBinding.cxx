@@ -2,7 +2,6 @@
 #include "dearimgui/GlfwBackendBinding.h"
 #include "dearimgui/IOContext.h"
 #include "dearimgui/MainViewPort.h"
-#include "dearimgui/ModalPopup.h"
 #include "dearimgui/WidgetFactory.h"
 #include "dearimgui/ImGuiTextFilterWrapper.h"
 #include "dearimgui/TabBar.h"
@@ -54,7 +53,6 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IEventLoop> eventLoop;
     std::unique_ptr<IWidgetFactory> widgetFactory;
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
-    std::unique_ptr<IModalPopup> modalPopup;
     std::unique_ptr<ISelectionMenuBar> selectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
     std::unique_ptr<IFileListView> fileListView;
@@ -127,8 +125,7 @@ GlfwBackendBinding::Impl::Impl() :
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort);
     eventLoop = std::make_unique<EventLoop>();
     selectionMenuBar = std::make_unique<SelectionMenuBar>();
-    modalPopup = std::make_unique<ModalPopup>();
-    folderSelectionPopup = std::make_unique<FolderSelectionPopup>(*modalPopup);
+    folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");

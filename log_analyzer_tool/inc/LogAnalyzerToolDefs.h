@@ -25,10 +25,13 @@ namespace LogAnalyzerTool
         constexpr float ScaleFactorUpperBound = 2.0f;
         constexpr float ScaleFactorLowerBound = 1.0f;
         constexpr float ScaleFactorChangeSensitivity = 0.05f;
+        constexpr size_t MaxInputLength{4096};
     }
 
     namespace SelectFolderPopup {
         extern const char* Name;
+        extern const char* OkBtn;
+        extern const char* CloseBtn;
     }
 
     namespace ErrorMessage {

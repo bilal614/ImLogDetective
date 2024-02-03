@@ -1,5 +1,5 @@
 #include "views/FolderSelectionPopup.h"
-#include "dearimgui/IModalPopup.h"
+#include "dearimgui/IModalPopupFactory.h"
 #include "LogAnalyzerToolDefs.h"
 #include <cstring>
 #include <filesystem>
@@ -7,7 +7,6 @@
 #include "imgui.h"
 
 namespace {
-    constexpr size_t MaxFolderPath{2048};
 
     std::string toString(const char* data)
     {
@@ -20,7 +19,7 @@ namespace LogAnalyzerTool
 
 struct FolderSelectionPopup::Impl
 {
-    Impl(IModalPopup& modalPopup);
+    Impl(IModalPopupFactory& modalPopupFactory);
     ~Impl() = default;
     bool validateSelectedFolder(const std::filesystem::path& path);
     void processPopupInput(
@@ -32,14 +31,14 @@ struct FolderSelectionPopup::Impl
     std::string folderPath;
     bool popUpOpen;
     bool invalidFolderSelected;
-    IModalPopup& modalPopup;
+    IModalPopupFactory& modalPopupFactory;
 };
 
-FolderSelectionPopup::Impl::Impl(IModalPopup& modalPopup) :
-    folderPath(MaxFolderPath, '\0'),
+FolderSelectionPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
+    folderPath(Bounds::MaxInputLength, '\0'),
     popUpOpen{false},
     invalidFolderSelected{false},
-    modalPopup{modalPopup}
+    modalPopupFactory{modalPopupFactory}
 {
 }
 
@@ -52,10 +51,10 @@ void FolderSelectionPopup::Impl::closePopup()
 {
     popUpOpen = false;
     invalidFolderSelected = false;
-    modalPopup.close();
+    modalPopupFactory.close();
 }
 
-void FolderSelectionPopup::Impl::processPopupInput(bool closeButtonClicked, bool okButtonClicked)
+void FolderSelectionPopup::Impl::processPopupInput(bool okButtonClicked, bool closeButtonClicked)
 {
     if (closeButtonClicked)
     {
@@ -79,8 +78,8 @@ void FolderSelectionPopup::Impl::processPopupInput(bool closeButtonClicked, bool
     }
 }
 
-FolderSelectionPopup::FolderSelectionPopup(IModalPopup& modalPopup) :
-    p{std::make_unique<Impl>(modalPopup)}
+FolderSelectionPopup::FolderSelectionPopup(IModalPopupFactory& modalPopupFactory) :
+    p{std::make_unique<Impl>(modalPopupFactory)}
 {
 }
 
@@ -88,18 +87,17 @@ FolderSelectionPopup::~FolderSelectionPopup() = default;
 
 void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize)
 {
-    p->modalPopup.open(popupPosition, popupSize, SelectFolderPopup::Name);
+    p->modalPopupFactory.open(popupPosition, popupSize, SelectFolderPopup::Name);
     p->popUpOpen = true;
 
-    if (ImGui::BeginPopupModal(SelectFolderPopup::Name, NULL, ImGuiWindowFlags_NoDecoration))
-    {
-        ImGui::InputText(SelectFolderPopup::Name, p->folderPath.data(), MaxFolderPath);
-        auto okButtonClicked = ImGui::Button("OK");
-        ImGui::SameLine();
-        auto closeButtonClicked = ImGui::Button("Close");
-        p->processPopupInput(closeButtonClicked, okButtonClicked);
-        ImGui::EndPopup();
-    }
+    p->modalPopupFactory.beginLayout(SelectFolderPopup::Name);
+    p->modalPopupFactory.createInputTextBox(SelectFolderPopup::Name, p->folderPath);
+
+    std::vector<PopupButton> popupButtons = {PopupButton{SelectFolderPopup::OkBtn}, PopupButton{SelectFolderPopup::CloseBtn}};
+    p->modalPopupFactory.createButtonGroup(popupButtons);
+
+    p->processPopupInput(popupButtons[0].clicked, popupButtons[1].clicked);
+    p->modalPopupFactory.endLayout();
 }
 
 std::pair<bool, std::filesystem::path> FolderSelectionPopup::getSelectedFolder()

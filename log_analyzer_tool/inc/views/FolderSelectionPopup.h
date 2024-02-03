@@ -7,12 +7,12 @@
 namespace LogAnalyzerTool
 {
 
-class IModalPopup;
+class IModalPopupFactory;
 
 class FolderSelectionPopup : public IFolderSelectionPopup
 {
 public:
-    FolderSelectionPopup(IModalPopup& modalPopup);
+    FolderSelectionPopup(IModalPopupFactory& modalPopup);
     ~FolderSelectionPopup();
     void drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize) override;
     std::pair<bool, std::filesystem::path> getSelectedFolder() override;

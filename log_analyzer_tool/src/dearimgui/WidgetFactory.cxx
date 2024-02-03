@@ -8,6 +8,8 @@
 
 #include <unordered_map>
 
+#include <iostream>
+
 namespace LogAnalyzerTool
 {
 
@@ -16,11 +18,17 @@ struct WidgetFactory::Impl
     Impl(IWidgetFactory& widgetFactory, const IMainViewPort& mainViewPort);
     ~Impl() = default;
     std::unique_ptr<IScopedImGuiWindow> addWindow();
+    
 
     const IMainViewPort& mainViewPort;
     std::unique_ptr<bool> openCloseWidgetPresent;
     ImGuiWindowFlags mainWindowFlags;
     ImGuiWindowFlags childWindowFlags;
+
+    //ModalPopup state
+    bool modalPopupWindowOpened;
+    bool modalPopupLayout;
+    void createPopupButton(const std::string& button, bool& clicked);
 
     std::unordered_map<TextColor, ImVec4> colorMap;
     IWidgetFactory& parent;
@@ -57,6 +65,11 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::Impl::addWindow()
         openCloseWidgetPresent.get(), 
         mainWindowFlags,
         WindowType::MainWindow);
+}
+
+void WidgetFactory::Impl::createPopupButton(const std::string& button, bool& clicked)
+{
+    clicked = ImGui::Button(button.c_str());
 }
 
 WidgetFactory::WidgetFactory(const IMainViewPort& mainWindow) :
@@ -110,6 +123,63 @@ std::unique_ptr<IListTreeWidget> WidgetFactory::createListTreeWidget()
 void WidgetFactory::onSameLine()
 {
     ImGui::SameLine();
+}
+
+void WidgetFactory::open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name)
+{
+    ImGui::OpenPopup(name.c_str());
+    ImGui::SetNextWindowPos(popupPosition, ImGuiCond_Appearing, ImVec2(0.5f, 0.25f));
+    ImGui::SetNextWindowSize(popupSize, ImGuiCond_FirstUseEver);
+    p->modalPopupWindowOpened = true;
+}
+
+void WidgetFactory::beginLayout(const std::string& name)
+{
+    p->modalPopupLayout = ImGui::BeginPopupModal(SelectFolderPopup::Name, NULL, ImGuiWindowFlags_NoDecoration);
+}
+
+bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
+{
+    if(p->modalPopupLayout)
+    {
+        for(auto it = buttons.begin(); it != buttons.end(); ++it)
+        {
+            p->createPopupButton(it->name, it->clicked);
+            if(it  != --buttons.end())
+            {
+                onSameLine();
+            }
+        }
+        return true;
+    }
+    std::cerr << "Missing call to beginLayout" << std::endl;
+    return false;
+}
+
+bool WidgetFactory::createInputTextBox(const std::string& label, std::string& input)
+{
+    if(p->modalPopupLayout)
+    {
+        ImGui::InputText(SelectFolderPopup::Name, input.data(), Bounds::MaxInputLength);
+        return true;
+    }
+    std::cerr << "Missing call to beginLayout" << std::endl;
+    return false;
+}
+
+void WidgetFactory::endLayout()
+{
+    if(p->modalPopupLayout)
+    {
+        ImGui::EndPopup();
+        p->modalPopupLayout = false;
+    }
+}
+
+void WidgetFactory::close()
+{
+    ImGui::CloseCurrentPopup();
+    p->modalPopupWindowOpened = false;
 }
 
 }
