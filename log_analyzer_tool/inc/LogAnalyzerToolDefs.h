@@ -19,7 +19,6 @@ namespace LogAnalyzerTool
     }
 
     namespace Bounds{
-
         constexpr float PopupWindowRelativeToMain_X = 0.25f;
         constexpr float PopupWindowRelativeToMain_Y = 0.125f;
         constexpr float ScaleFactorUpperBound = 2.0f;

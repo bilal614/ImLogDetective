@@ -18,6 +18,7 @@ if(GTest_FOUND)
         ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestLogFileTabsPresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestMainPresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/src/TestUtility.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/views/TestFolderSelectionPopup.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/main.cxx
     )
 

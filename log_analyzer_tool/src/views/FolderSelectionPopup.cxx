@@ -74,7 +74,7 @@ void FolderSelectionPopup::Impl::processPopupInput(bool okButtonClicked, bool cl
     }
     if(invalidFolderSelected)
     {
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", ErrorMessage::InvalidDirectory);
+        modalPopupFactory.showErrorText(ErrorMessage::InvalidDirectory);
     }
 }
 

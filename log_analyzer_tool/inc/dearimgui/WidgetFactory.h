@@ -37,6 +37,7 @@ public:
     void beginLayout(const std::string& name) override;
     bool createButtonGroup(std::vector<PopupButton>& buttons) override;
     bool createInputTextBox(const std::string& label, std::string& input) override;
+    bool showErrorText(const std::string& errorMessage) override;
     void endLayout() override;
     void close() override;
 

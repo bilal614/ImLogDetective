@@ -1,8 +1,11 @@
 #pragma once
+#include "gmock/gmock.h"
 #include <filesystem>
 
 namespace TestLogAnalyzerTool
 {
+
+MATCHER_P(imvec2_equal, a, "") { return arg.x == a.x && arg.y == a.y; };
 
 class TestUtility {
 

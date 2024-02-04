@@ -10,14 +10,13 @@
 #include "MainViewPortMock.h"
 #include "ScopedImGuiWindowMock.h"
 #include "SelectionMenuBarMock.h"
+#include "TestUtility.h"
 #include "WindowFactoryMock.h"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include <filesystem>
 #include <memory>
 #include <unordered_map>
-
-MATCHER_P(imvec2_equal, a, "") { return arg.x == a.x && arg.y == a.y; };
 
 namespace TestLogAnalyzerTool
 {

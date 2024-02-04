@@ -167,6 +167,16 @@ bool WidgetFactory::createInputTextBox(const std::string& label, std::string& in
     return false;
 }
 
+bool WidgetFactory::showErrorText(const std::string& errorMessage)
+{
+    if(p->modalPopupLayout)
+    {
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", errorMessage.c_str());
+        return true;
+    }
+    return false;
+}
+
 void WidgetFactory::endLayout()
 {
     if(p->modalPopupLayout)
