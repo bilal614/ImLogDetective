@@ -28,6 +28,7 @@ public:
     virtual bool showErrorText(const std::string& errorMessage) = 0;
     virtual void endLayout() = 0;
     virtual void close() = 0;
+    virtual bool isPopupOpen() = 0;
 };
 
 }

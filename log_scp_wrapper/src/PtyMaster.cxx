@@ -12,8 +12,6 @@
 
 namespace LogScpWrapper
 {
-
-constexpr const char* sock_path {"/tmp/us_btb"};
 constexpr int buff_size = 2048;
 
 void onChildExit(int signum)
@@ -23,7 +21,6 @@ void onChildExit(int signum)
 
 struct PtyMaster::Impl
 {
-
     Impl(const ProcessStartInfo& processStartInfo);
     ~Impl() = default;
 
@@ -36,9 +33,7 @@ struct PtyMaster::Impl
 
     std::string name;
     int masterpt, slavept;
-
     char buff[buff_size];
-
 };
 
 PtyMaster::Impl::Impl(const ProcessStartInfo& processStartInfo) :

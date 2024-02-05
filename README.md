@@ -1,1 +1,1 @@
-This is a tool for viewing log files and logging data. It allows copying of logs from remote hosts and configuring text highlighting for ease of reading logging data.  
+This is a tool for viewing log files and logging data. It allows copying of logs from remote hosts and configuring text highlighting for ease of reading logging data. The tool is built using the popular dearimgui library for its UI. 

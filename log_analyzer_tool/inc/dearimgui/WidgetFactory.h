@@ -40,6 +40,7 @@ public:
     bool showErrorText(const std::string& errorMessage) override;
     void endLayout() override;
     void close() override;
+    bool isPopupOpen() override;
 
 private:
     struct Impl;

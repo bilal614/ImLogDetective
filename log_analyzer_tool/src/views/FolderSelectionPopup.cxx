@@ -29,14 +29,12 @@ struct FolderSelectionPopup::Impl
 
     std::filesystem::path selectedFolderPath;
     std::string folderPath;
-    bool popUpOpen;
     bool invalidFolderSelected;
     IModalPopupFactory& modalPopupFactory;
 };
 
 FolderSelectionPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
-    folderPath(Bounds::MaxInputLength, '\0'),
-    popUpOpen{false},
+    folderPath(Bounds::MaxTextboxInputLength, '\0'),
     invalidFolderSelected{false},
     modalPopupFactory{modalPopupFactory}
 {
@@ -49,7 +47,6 @@ bool FolderSelectionPopup::Impl::validateSelectedFolder(const std::filesystem::p
 
 void FolderSelectionPopup::Impl::closePopup()
 {
-    popUpOpen = false;
     invalidFolderSelected = false;
     modalPopupFactory.close();
 }
@@ -61,7 +58,6 @@ void FolderSelectionPopup::Impl::processPopupInput(bool okButtonClicked, bool cl
         closePopup();
         return;
     }
-
     if(okButtonClicked)
     { 
         selectedFolderPath = std::filesystem::path{folderPath};
@@ -88,8 +84,6 @@ FolderSelectionPopup::~FolderSelectionPopup() = default;
 void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize)
 {
     p->modalPopupFactory.open(popupPosition, popupSize, SelectFolderPopup::Name);
-    p->popUpOpen = true;
-
     p->modalPopupFactory.beginLayout(SelectFolderPopup::Name);
     p->modalPopupFactory.createInputTextBox(SelectFolderPopup::Name, p->folderPath);
 
@@ -107,7 +101,7 @@ std::pair<bool, std::filesystem::path> FolderSelectionPopup::getSelectedFolder()
 
 bool FolderSelectionPopup::popupOpen()
 {
-    return p->popUpOpen;
+    return p->modalPopupFactory.isPopupOpen();
 }
 
 }

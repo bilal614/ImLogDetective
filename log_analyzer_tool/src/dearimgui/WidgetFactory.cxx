@@ -160,7 +160,7 @@ bool WidgetFactory::createInputTextBox(const std::string& label, std::string& in
 {
     if(p->modalPopupLayout)
     {
-        ImGui::InputText(SelectFolderPopup::Name, input.data(), Bounds::MaxInputLength);
+        ImGui::InputText(SelectFolderPopup::Name, input.data(), Bounds::MaxTextboxInputLength);
         return true;
     }
     std::cerr << "Missing call to beginLayout" << std::endl;
@@ -190,6 +190,11 @@ void WidgetFactory::close()
 {
     ImGui::CloseCurrentPopup();
     p->modalPopupWindowOpened = false;
+}
+
+bool WidgetFactory::isPopupOpen()
+{
+    return p->modalPopupWindowOpened;
 }
 
 }
