@@ -1,5 +1,6 @@
 #include "LogAnalyzerToolDefs.h"
 #include "FileListPresenterMock.h"
+#include "CopyLogsPopupMock.h"
 #include "FolderSelectionPopupMock.h"
 #include "presenters/MainPresenter.h"
 #include "ImGuiTextFilterWrapperMock.h"
@@ -29,17 +30,20 @@ class TestMainPresenter : public ::testing::Test {
 protected:
     ::testing::InSequence seq;
 
-    MainViewPortMock mainViewPortMock;
-    ImGuiTextFilterWrapperMock imGuiTextFilterWrapperMock;
-    LogDataModelMock logDataModelMock;
-    LogFileParserMock logFileParserMock;
-    LogFilterViewMock logFilterViewMock;
-    FolderSelectionPopupMock folderSelectionPopupMock;
-    LogFileTabsPresenterMock logFileTabsPresenterMock;
-    FileListPresenterMock fileListPresenterMock;
-    SelectionMenuBarMock selectionMenuBarMock;
-    ScopedImGuiWindowMock scopedImGuiWindowMock;
-    WindowFactoryMock windowFactoryMock;
+    StrictMock<MainViewPortMock> mainViewPortMock;
+    StrictMock<ImGuiTextFilterWrapperMock> imGuiTextFilterWrapperMock;
+    StrictMock<LogDataModelMock> logDataModelMock;
+    StrictMock<LogFileParserMock> logFileParserMock;
+    StrictMock<LogFilterViewMock> logFilterViewMock;
+    StrictMock<FolderSelectionPopupMock> folderSelectionPopupMock;
+    StrictMock<CopyLogsPopupMock> copyLogsPopupMock;
+    StrictMock<LogFileTabsPresenterMock> logFileTabsPresenterMock;
+    StrictMock<FileListPresenterMock> fileListPresenterMock;
+    StrictMock<SelectionMenuBarMock> selectionMenuBarMock;
+    StrictMock<ScopedImGuiWindowMock> scopedImGuiWindowMock;
+    StrictMock<WindowFactoryMock> windowFactoryMock;
+
+    void SetUp() override;
 
     TestMainPresenter();
     ~TestMainPresenter() = default;
@@ -50,13 +54,22 @@ protected:
         const ImVec2& expectedWindowPos, 
         const ImVec2& expectedPopupSize,
         bool selectFolderClicked,
-        bool popupOpened);
+        bool selectFolderPopupOpened);
+    void checkCopyLogsModal(const ImVec2& expectedWindowSize, 
+        const ImVec2& expectedWindowPos, 
+        const ImVec2& expectedPopupSize,
+        bool copyRemoteLogsClicked,
+        bool copyRemoteLogsPopupOpened);
     void checkChildWindows(
         ScopedImGuiWindowMock& guiWindowMock,
         const ImVec2& mainWindowSize, 
         const ImVec2& mainWindowPos);
 
     std::filesystem::path testFolderPath;
+    float inputScaleFactor;
+    ImVec2 windowSize, windowPos, windowCenter;
+    ImVec2 expectedFolderSelectionWindowPopupSize;
+    ImVec2 expectedCopyLogsWindowPopupSize;
     LogAnalyzerTool::MainPresenter mainPresenter;
 };
 
@@ -65,10 +78,28 @@ TestMainPresenter::TestMainPresenter() :
         mainViewPortMock,
         selectionMenuBarMock,
         folderSelectionPopupMock,
+        copyLogsPopupMock,
         logFileTabsPresenterMock,
         fileListPresenterMock},
-    testFolderPath{"/test/folder/path"}
+    testFolderPath{"/test/folder/path"},
+    inputScaleFactor{0.0f}
 {
+}
+
+void TestMainPresenter::SetUp()
+{
+    auto inputScaleFactor = 0.0f;
+    windowSize = ImVec2{350.0f, 250.0f};
+    windowPos = ImVec2{0.0f, 0.0f};
+    windowCenter = ImVec2{175.0f, 125.0f};
+    
+    expectedFolderSelectionWindowPopupSize = windowSize;
+    expectedFolderSelectionWindowPopupSize.x *= Bounds::SmallPopupWindowRelativeToMain_X;
+    expectedFolderSelectionWindowPopupSize.y *= Bounds::SmallPopupWindowRelativeToMain_Y;
+
+    expectedCopyLogsWindowPopupSize = windowSize;
+    expectedCopyLogsWindowPopupSize.x *= Bounds::LargePopupWindowRelativeToMain_X;
+    expectedCopyLogsWindowPopupSize.y *= Bounds::LargePopupWindowRelativeToMain_Y;
 }
 
 ScopedImGuiWindowMock* TestMainPresenter::checkMainWindowAndMenuBarCreation(const float inputScaleFactor)
@@ -88,18 +119,30 @@ void TestMainPresenter::checkFolderMenuModal(
     const ImVec2& expectedWindowPos, 
     const ImVec2& expectedPopupSize,
     bool selectFolderClicked,
-    bool popupOpened)
+    bool selectFolderPopupOpened)
 {
     //Folder menu modal popup
     EXPECT_CALL(selectionMenuBarMock, selectFolderClicked()).WillOnce(Return(selectFolderClicked));
-    EXPECT_CALL(mainViewPortMock, getWorkAreaSize()).WillOnce(Return(expectedWindowSize));
-    EXPECT_CALL(mainViewPortMock, getViewportCenter()).WillOnce(Return(expectedWindowPos));
-    EXPECT_CALL(folderSelectionPopupMock, drawFolderSelectionModalPopup(_, imvec2_equal(expectedPopupSize)));
-    EXPECT_CALL(folderSelectionPopupMock, popupOpen()).WillOnce(Return(popupOpened));
-    if(!popupOpened)
+    if(selectFolderClicked)
     {
-        EXPECT_CALL(selectionMenuBarMock, selectionFolderClosed());
+        EXPECT_CALL(mainViewPortMock, getWorkAreaSize()).WillOnce(Return(expectedWindowSize));
+        EXPECT_CALL(mainViewPortMock, getViewportCenter()).WillOnce(Return(expectedWindowPos));
+        EXPECT_CALL(folderSelectionPopupMock, drawFolderSelectionModalPopup(_, imvec2_equal(expectedPopupSize)));
+        EXPECT_CALL(folderSelectionPopupMock, popupOpen()).WillOnce(Return(selectFolderPopupOpened));
+        if(!selectFolderPopupOpened)
+        {
+            EXPECT_CALL(selectionMenuBarMock, selectionFolderClosed());
+        }
     }
+}
+
+void TestMainPresenter::checkCopyLogsModal(const ImVec2& expectedWindowSize, 
+        const ImVec2& expectedWindowPos, 
+        const ImVec2& expectedPopupSize,
+        bool copyRemoteLogsClicked,
+        bool copyRemoteLogsPopupOpened)
+{
+    EXPECT_CALL(selectionMenuBarMock, copyRemoteLogsClicked()).WillOnce(Return(copyRemoteLogsClicked));
 }
 
 void TestMainPresenter::checkChildWindows(
@@ -120,13 +163,9 @@ void TestMainPresenter::checkChildWindows(
 
 TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation) {
 
-    //TODO: Use same default InputScaleFactor
-    auto inputScaleFactor = 0.0f;
-    ImVec2 windowSize{350.0f, 250.0f};
-    ImVec2 windowPos{0.0f, 0.0f};
-
     auto guiWindowMockRef = checkMainWindowAndMenuBarCreation(inputScaleFactor);
-    EXPECT_CALL(selectionMenuBarMock, selectFolderClicked()).WillOnce(Return(false));
+    checkFolderMenuModal(windowSize, windowCenter, expectedFolderSelectionWindowPopupSize, false, false);
+    checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
     mainPresenter.update();
@@ -134,17 +173,9 @@ TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation) {
 
 TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation_when_folder_selection_popup_clicked_and_opened) {
 
-    //TODO: Use same default InputScaleFactor
-    auto inputScaleFactor = 0.0f;
-    ImVec2 windowSize{350.0f, 250.0f};
-    ImVec2 windowPos{0.0f, 0.0f};
-    ImVec2 windowCenter{175.0f, 125.0f};
-    auto expectedPopupSize = windowSize;
-    expectedPopupSize.x *= Bounds::PopupWindowRelativeToMain_X;
-    expectedPopupSize.y *= Bounds::PopupWindowRelativeToMain_Y;
-
     auto guiWindowMockRef = checkMainWindowAndMenuBarCreation(inputScaleFactor);
-    checkFolderMenuModal(windowSize, windowCenter, expectedPopupSize, true, true);
+    checkFolderMenuModal(windowSize, windowCenter, expectedFolderSelectionWindowPopupSize, true, true);
+    checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
     mainPresenter.update();
@@ -152,23 +183,16 @@ TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation_when_folder_
 
 TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation_when_folder_selection_popup_clicked_opened_and_closed) {
 
-    //TODO: Use same default InputScaleFactor
-    auto inputScaleFactor = 0.0f;
-    ImVec2 windowSize{350.0f, 250.0f};
-    ImVec2 windowPos{0.0f, 0.0f};
-    ImVec2 windowCenter{175.0f, 125.0f};
-    auto expectedPopupSize = windowSize;
-    expectedPopupSize.x *= Bounds::PopupWindowRelativeToMain_X;
-    expectedPopupSize.y *= Bounds::PopupWindowRelativeToMain_Y;
-
     auto guiWindowMockRef = checkMainWindowAndMenuBarCreation(inputScaleFactor);
-    checkFolderMenuModal(windowSize, windowCenter, expectedPopupSize, true, true);
+    checkFolderMenuModal(windowSize, windowCenter, expectedFolderSelectionWindowPopupSize, true, true);
+    checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
     mainPresenter.update();
 
     guiWindowMockRef = checkMainWindowAndMenuBarCreation(inputScaleFactor);
-    checkFolderMenuModal(windowSize, windowCenter, expectedPopupSize, true, false);
+    checkFolderMenuModal(windowSize, windowCenter, expectedFolderSelectionWindowPopupSize, true, false);
+    checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
     mainPresenter.update();

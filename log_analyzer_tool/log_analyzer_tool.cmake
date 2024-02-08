@@ -14,6 +14,7 @@ if(${ZLIB_FOUND})
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/WidgetFactory.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/event_handling/EventLoop.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/views/CopyLogsPopup.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FileListView.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/SelectionMenuBar.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionPopup.cxx

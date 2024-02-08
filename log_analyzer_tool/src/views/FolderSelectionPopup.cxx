@@ -83,11 +83,11 @@ FolderSelectionPopup::~FolderSelectionPopup() = default;
 
 void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize)
 {
-    p->modalPopupFactory.open(popupPosition, popupSize, SelectFolderPopup::Name);
-    p->modalPopupFactory.beginLayout(SelectFolderPopup::Name);
-    p->modalPopupFactory.createInputTextBox(SelectFolderPopup::Name, p->folderPath);
+    p->modalPopupFactory.open(popupPosition, popupSize, SelectFolderDefs::Name);
+    p->modalPopupFactory.beginLayout(SelectFolderDefs::Name);
+    p->modalPopupFactory.createInputTextBox(SelectFolderDefs::Name, p->folderPath, SelectFolderDefs::TextBoxWidth);
 
-    std::vector<PopupButton> popupButtons = {PopupButton{SelectFolderPopup::OkBtn}, PopupButton{SelectFolderPopup::CloseBtn}};
+    std::vector<PopupButton> popupButtons = {PopupButton{SelectFolderDefs::OkBtn}, PopupButton{SelectFolderDefs::CloseBtn}};
     p->modalPopupFactory.createButtonGroup(popupButtons);
 
     p->processPopupInput(popupButtons[0].clicked, popupButtons[1].clicked);

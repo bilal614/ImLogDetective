@@ -12,11 +12,11 @@ if(GTest_FOUND)
 
 
     add_executable(${TEST_LOG_ANALYZER_TOOL}
-        ${LOG_ANALYZER_TOOL_DIR}/test/event_handling/TestEventLoop.cxx
-        ${LOG_ANALYZER_TOOL_DIR}/test/models/TestGzipFileParsers.cxx
-        ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestLogFilePresenter.cxx
-        ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestLogFileTabsPresenter.cxx
-        ${LOG_ANALYZER_TOOL_DIR}/test/presenters/TestMainPresenter.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/src/event_handling/TestEventLoop.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/src/models/TestGzipFileParsers.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/src/presenters/TestLogFilePresenter.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/src/presenters/TestLogFileTabsPresenter.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/test/src/presenters/TestMainPresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/src/TestUtility.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/views/TestFolderSelectionPopup.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/main.cxx

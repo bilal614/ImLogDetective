@@ -17,9 +17,15 @@ namespace LogAnalyzerTool
         const char* ConfigureHiglighting{"Configure Highlighting"};
     }
 
-    namespace SelectFolderPopup {
+    namespace SelectFolderDefs {
         const char* Name{"Select Folder"};
         const char* OkBtn{"OK"};
+        const char* CloseBtn{"Close"};
+    }
+
+    namespace CopyLogsDefs {
+        const char* Name{"Copy Remote Logs"};
+        const char* CopyBtn{"Copy"};
         const char* CloseBtn{"Close"};
     }
 

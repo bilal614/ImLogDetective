@@ -17,6 +17,17 @@ struct PopupButton {
     bool clicked;
 };
 
+struct PopupInputTextBox {
+    PopupInputTextBox(const std::string name, float width = 200) : 
+        name{name},
+        width{width},
+        input{}
+    {} 
+    std::string name;
+    float width;
+    std::string input;
+};
+
 class IModalPopupFactory
 {
 public:
@@ -24,7 +35,12 @@ public:
     virtual void open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name) = 0;
     virtual void beginLayout(const std::string& name) = 0; 
     virtual bool createButtonGroup(std::vector<PopupButton>& buttons) = 0;
-    virtual bool createInputTextBox(const std::string& label, std::string& input) = 0;
+    virtual bool createInputTextBox(const std::string& label, std::string& input, float width) = 0;
+    virtual bool createInputTextBoxGroup(
+        std::vector<PopupInputTextBox>& inputTextBoxes, 
+        const std::string& title,
+        bool horizontal,
+        bool collapsable=false) = 0;
     virtual bool showErrorText(const std::string& errorMessage) = 0;
     virtual void endLayout() = 0;
     virtual void close() = 0;

@@ -3,6 +3,7 @@
 #include "presenters/ILogFileTabsPresenter.h"
 #include "presenters/IFileListPresenter.h"
 #include "views/IFolderSelectionPopup.h"
+#include "views/ICopyLogsPopup.h"
 #include "dearimgui/IWindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
 #include "dearimgui/IScopedImGuiWindow.h"
@@ -17,14 +18,16 @@ struct MainPresenter::Impl
         IMainViewPort& mainViewPort,
         ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
+        ICopyLogsPopup& copyLogsPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter);
     ~Impl() = default;
 
     void showFolderSelectionPopup();
-    void showLogFilterWindow(const ImVec2& mainWindowSize, 
+    void showCopyRemoteLogsPopup();
+    void showLogFilterSidebar(const ImVec2& mainWindowSize, 
         const ImVec2& mainWindowPos);
-    void showMainContentWindow(const ImVec2& mainWindowSize, 
+    void showMainBody(const ImVec2& mainWindowSize, 
         const ImVec2& mainWindowPos);
 
     IWindowFactory& windowFactory;
@@ -32,6 +35,7 @@ struct MainPresenter::Impl
     IFileListPresenter& fileListPresenter;
     ISelectionMenuBar& selectionMenuBar;
     IFolderSelectionPopup& folderSelectionPopup;
+    ICopyLogsPopup& copyLogsPopup;
     ILogFileTabsPresenter& logFileTabsPresenter;
 };
 
@@ -39,10 +43,12 @@ MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
         ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
+        ICopyLogsPopup& copyLogsPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter) :
     mainViewPort{mainViewPort},
     folderSelectionPopup{folderSelectionPopup},
+    copyLogsPopup{copyLogsPopup},
     selectionMenuBar{selectionMenuBar},
     windowFactory{windowFactory},
     logFileTabsPresenter{logFileTabsPresenter},
@@ -53,8 +59,8 @@ MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
 void MainPresenter::Impl::showFolderSelectionPopup()
 {
     auto popupSize = mainViewPort.getWorkAreaSize();
-    popupSize.x *= Bounds::PopupWindowRelativeToMain_X;
-    popupSize.y *= Bounds::PopupWindowRelativeToMain_Y;
+    popupSize.x *= Bounds::SmallPopupWindowRelativeToMain_X;
+    popupSize.y *= Bounds::SmallPopupWindowRelativeToMain_Y;
     folderSelectionPopup.drawFolderSelectionModalPopup(mainViewPort.getViewportCenter(), popupSize);
     if(!folderSelectionPopup.popupOpen())
     {
@@ -62,10 +68,24 @@ void MainPresenter::Impl::showFolderSelectionPopup()
     }
 }
 
-void MainPresenter::Impl::showLogFilterWindow(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
+void MainPresenter::Impl::showCopyRemoteLogsPopup()
 {
-    ImVec2 fileListBoxPosition{mainWindowPos.x*0.1f, 0.0};
-    ImVec2 fileListBoxSize{mainWindowSize.x*0.1f, mainWindowSize.y*0.93f};
+    auto popupSize = mainViewPort.getWorkAreaSize();
+    popupSize.x *= Bounds::LargePopupWindowRelativeToMain_X;
+    popupSize.y *= Bounds::LargePopupWindowRelativeToMain_Y;
+    copyLogsPopup.drawCopyLogsPopup(mainViewPort.getViewportCenter(), popupSize);
+    if(!copyLogsPopup.popupOpen())
+    {
+        selectionMenuBar.copyRemoteLogsClosed();
+    }
+}
+
+void MainPresenter::Impl::showLogFilterSidebar(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
+{
+    ImVec2 fileListBoxPosition{mainWindowPos.x, mainWindowPos.y};
+    ImVec2 fileListBoxSize{
+        mainWindowSize.x*Bounds::SidebarRelativeToMainWinSize_X, 
+        mainWindowSize.y*Bounds::MainContentRelativeToMainWinSize_Y};
     auto logFilterWindow = windowFactory.createChildWindow(WindowDefs::FileListWindow, fileListBoxPosition, fileListBoxSize);
     {
         if(auto folderSelection = folderSelectionPopup.getSelectedFolder(); folderSelection.first)
@@ -75,11 +95,18 @@ void MainPresenter::Impl::showLogFilterWindow(const ImVec2& mainWindowSize, cons
     }
 }
 
-void MainPresenter::Impl::showMainContentWindow(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
+void MainPresenter::Impl::showMainBody(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
 {
-    ImVec2 mainContentBoxPosition{mainWindowPos.x*0.10f, mainWindowPos.y};
-    ImVec2 mainContentBoxSize{mainWindowSize.x*0.89f, mainWindowSize.y*0.93f};
-    auto mainContentChildWindow=windowFactory.createChildWindow(WindowDefs::LogsWindow, mainContentBoxPosition, mainContentBoxSize);
+    ImVec2 mainContentBoxPosition{
+        mainWindowPos.x*Bounds::MainBodyRelativeToMainWinPos_X,
+        mainWindowPos.y};
+    ImVec2 mainContentBoxSize{
+        mainWindowSize.x*Bounds::MainBodyRelativeToMainWinSize_X, 
+        mainWindowSize.y*Bounds::MainContentRelativeToMainWinSize_Y};
+    auto mainContentChildWindow=windowFactory.createChildWindow(
+        WindowDefs::LogsWindow,
+        mainContentBoxPosition,
+        mainContentBoxSize);
     logFileTabsPresenter.update(fileListPresenter.getSelectedFiles());
 }
 
@@ -87,12 +114,14 @@ MainPresenter::MainPresenter(IWindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
         ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
+        ICopyLogsPopup& copyLogsPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter) : 
     p {std::make_unique<Impl>(windowFactory,
         mainViewPort,
         selectionMenuBar,
         folderSelectionPopup,
+        copyLogsPopup,
         logFileTabsPresenter,
         fileListPresenter)}
 {
@@ -110,13 +139,17 @@ void MainPresenter::update()
     {
         p->showFolderSelectionPopup();
     }
+    if(p->selectionMenuBar.copyRemoteLogsClicked())
+    {
+        p->showCopyRemoteLogsPopup();
+    }
 
     auto mainWindowSize = mainWindow->getWindowSize();
     auto mainWindowPosition = mainWindow->getWindowPosition();
 
-    p->showLogFilterWindow(mainWindowSize, mainWindowPosition);
+    p->showLogFilterSidebar(mainWindowSize, mainWindowPosition);
     mainWindow->onSameLine();
-    p->showMainContentWindow(mainWindowSize, mainWindowPosition);
+    p->showMainBody(mainWindowSize, mainWindowPosition);
 }
 
 }

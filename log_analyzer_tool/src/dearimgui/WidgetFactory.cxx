@@ -29,6 +29,8 @@ struct WidgetFactory::Impl
     bool modalPopupWindowOpened;
     bool modalPopupLayout;
     void createPopupButton(const std::string& button, bool& clicked);
+    void createInputTextBox(const std::string& label, std::string& input, float width);
+    void drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal = true);
 
     std::unordered_map<TextColor, ImVec4> colorMap;
     IWidgetFactory& parent;
@@ -72,10 +74,32 @@ void WidgetFactory::Impl::createPopupButton(const std::string& button, bool& cli
     clicked = ImGui::Button(button.c_str());
 }
 
+void WidgetFactory::Impl::createInputTextBox(const std::string& label, std::string& input, float width)
+{
+    ImGui::PushItemWidth(width);
+    ImGui::InputText(label.c_str(), input.data(), Bounds::MaxTextboxInputLength);
+    ImGui::PopItemWidth();
+}
+
+void WidgetFactory::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal)
+{
+    for(auto it = inputTextBoxes.begin(); it != inputTextBoxes.end(); ++it)
+    {
+        createInputTextBox(it->name, it->input, it->width);
+        if(!horizontal)
+        {
+            continue;
+        }
+        if(it  != --inputTextBoxes.end())
+        {
+            ImGui::SameLine();
+        }
+    }
+}
+
 WidgetFactory::WidgetFactory(const IMainViewPort& mainWindow) :
     p{std::make_unique<Impl>(*this, mainWindow)}
 {
-
 }
 
 WidgetFactory::~WidgetFactory() = default;
@@ -129,13 +153,13 @@ void WidgetFactory::open(ImVec2 popupPosition, ImVec2 popupSize, const std::stri
 {
     ImGui::OpenPopup(name.c_str());
     ImGui::SetNextWindowPos(popupPosition, ImGuiCond_Appearing, ImVec2(0.5f, 0.25f));
-    ImGui::SetNextWindowSize(popupSize, ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(popupSize, ImGuiCond_Appearing);
     p->modalPopupWindowOpened = true;
 }
 
 void WidgetFactory::beginLayout(const std::string& name)
 {
-    p->modalPopupLayout = ImGui::BeginPopupModal(SelectFolderPopup::Name, NULL, ImGuiWindowFlags_NoDecoration);
+    p->modalPopupLayout = ImGui::BeginPopupModal(name.c_str(), NULL, ImGuiWindowFlags_NoDecoration);
 }
 
 bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
@@ -156,11 +180,35 @@ bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
     return false;
 }
 
-bool WidgetFactory::createInputTextBox(const std::string& label, std::string& input)
+bool WidgetFactory::createInputTextBox(const std::string& label, std::string& input, float width)
 {
     if(p->modalPopupLayout)
     {
-        ImGui::InputText(SelectFolderPopup::Name, input.data(), Bounds::MaxTextboxInputLength);
+        p->createInputTextBox(label, input, width);
+        return true;
+    }
+    std::cerr << "Missing call to beginLayout" << std::endl;
+    return false;
+}
+
+bool WidgetFactory::createInputTextBoxGroup(
+    std::vector<PopupInputTextBox>& inputTextBoxes,
+    const std::string& title, 
+    bool horizontal,
+    bool collapsable)
+{
+    if(p->modalPopupLayout)
+    {
+        if(collapsable)
+        {
+            if (ImGui::CollapsingHeader(title.c_str(), ImGuiTreeNodeFlags_None))
+            {
+                p->drawInputTexBoxesGroup(inputTextBoxes, horizontal);
+            }
+            return true;
+        }
+        ImGui::TextUnformatted(title.c_str());
+        p->drawInputTexBoxesGroup(inputTextBoxes, horizontal);
         return true;
     }
     std::cerr << "Missing call to beginLayout" << std::endl;

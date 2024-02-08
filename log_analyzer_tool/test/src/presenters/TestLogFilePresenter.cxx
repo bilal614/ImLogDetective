@@ -25,14 +25,14 @@ class TestLogFilePresenter : public ::testing::Test {
 protected:
     ::testing::InSequence seq;
 
-    EventLoopMock eventLoopMock;
-    ImGuiTextFilterWrapperMock imGuiTextFilterWrapperMock;
-    LogDataModelMock logDataModelMock;
-    LogFileParserMock logFileParserMock;
-    LogFilterViewMock logFilterViewMock;
-    LogViewMock logViewMock;
-    ScopedImGuiWindowMock scopedImGuiWindowMock;
-    WindowFactoryMock windowFactoryMock;
+    StrictMock<EventLoopMock> eventLoopMock;
+    StrictMock<ImGuiTextFilterWrapperMock> imGuiTextFilterWrapperMock;
+    StrictMock<LogDataModelMock> logDataModelMock;
+    StrictMock<LogFileParserMock> logFileParserMock;
+    StrictMock<LogFilterViewMock> logFilterViewMock;
+    StrictMock<LogViewMock> logViewMock;
+    StrictMock<ScopedImGuiWindowMock> scopedImGuiWindowMock;
+    StrictMock<WindowFactoryMock> windowFactoryMock;
 
     std::filesystem::path filePath;
     std::unordered_map<LogAnalyzerTool::LogLevel, std::string> dummyLogLines;

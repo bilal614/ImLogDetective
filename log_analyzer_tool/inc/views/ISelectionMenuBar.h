@@ -11,6 +11,8 @@ public:
     virtual bool selectFolderClicked() = 0;
     virtual void selectionFolderClosed() = 0;
     virtual float getInputScaleFactor() = 0;
+    virtual bool copyRemoteLogsClicked() = 0;
+    virtual void copyRemoteLogsClosed() = 0;
 
 };
 

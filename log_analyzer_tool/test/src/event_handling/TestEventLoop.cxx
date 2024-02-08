@@ -3,16 +3,11 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include <chrono>
-#include <cstdint>
 #include <future>
-#include <gmock/gmock-more-actions.h>
-#include <gmock/gmock-spec-builders.h>
 #include <thread>
 
 namespace TestLogAnalyzerTool
 {
-
-using ::testing::StrictMock;
 
 class TestEventLoop : public ::testing::Test {
 public:

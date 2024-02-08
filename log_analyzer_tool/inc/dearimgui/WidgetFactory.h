@@ -36,7 +36,11 @@ public:
     void open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name) override;
     void beginLayout(const std::string& name) override;
     bool createButtonGroup(std::vector<PopupButton>& buttons) override;
-    bool createInputTextBox(const std::string& label, std::string& input) override;
+    bool createInputTextBox(const std::string& label, std::string& input, float width) override;
+    bool createInputTextBoxGroup(std::vector<PopupInputTextBox>& inputTextBoxes,
+        const std::string& title, 
+        bool horizontal,
+        bool collapsable) override;
     bool showErrorText(const std::string& errorMessage) override;
     void endLayout() override;
     void close() override;

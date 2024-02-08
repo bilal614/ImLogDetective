@@ -1,4 +1,3 @@
-# CMake entry point
 cmake_minimum_required (VERSION 3.16)
 project(IMGUI_LOG_ANALYZER_TOOL C CXX)
 
@@ -61,9 +60,6 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
 
     #log_scp_wrapper
     add_subdirectory(${PROJECT_ROOT}/log_scp_wrapper)
-
-    #include test_log_scp_wrapper
-    #include(${PROJECT_ROOT}/log_scp_wrapper/test_log_scp_wrapper.cmake)
 
     #test app
     add_executable(test_app

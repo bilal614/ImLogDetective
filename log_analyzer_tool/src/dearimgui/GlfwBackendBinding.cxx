@@ -21,6 +21,7 @@
 #include "views/FileListView.h"
 #include "views/SelectionMenuBar.h"
 #include "views/FolderSelectionPopup.h"
+#include "views/CopyLogsPopup.h"
 #include "views/LogView.h"
 #include "views/LogFilterView.h"
 #include <iostream>
@@ -55,6 +56,7 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
     std::unique_ptr<ISelectionMenuBar> selectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
+    std::unique_ptr<ICopyLogsPopup> copyLogsPopup;
     std::unique_ptr<IFileListView> fileListView;
     std::unique_ptr<ILogFilterView> logFilterView;
     std::unique_ptr<ILogView> logView;
@@ -126,6 +128,7 @@ GlfwBackendBinding::Impl::Impl() :
     eventLoop = std::make_unique<EventLoop>();
     selectionMenuBar = std::make_unique<SelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
+    copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
@@ -147,6 +150,7 @@ GlfwBackendBinding::Impl::Impl() :
         *mainViewPort,
         *selectionMenuBar,
         *folderSelectionPopup,
+        *copyLogsPopup,
         *logFileTabsPresenter,
         *fileListPresenter);
 

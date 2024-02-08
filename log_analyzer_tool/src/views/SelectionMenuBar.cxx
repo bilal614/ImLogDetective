@@ -57,4 +57,14 @@ float SelectionMenuBar::getInputScaleFactor()
     return p->scaleFactor;
 }
 
+bool SelectionMenuBar::copyRemoteLogsClicked()
+{
+    return p->fetchRemoteLogsClicked;
+}
+
+void SelectionMenuBar::copyRemoteLogsClosed()
+{
+    p->fetchRemoteLogsClicked = false;
+}
+
 }

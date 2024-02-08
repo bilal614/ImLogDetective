@@ -1,14 +1,9 @@
 #include "gtest/gtest.h"
-#include "gmock/gmock.h"
 #include <filesystem>
 #include "models/GzipFile.h"
 #include "TestUtility.h"
 namespace TestLogAnalyzerTool
 {
-
-using namespace ::testing;
-using ::testing::StrictMock;
-
 
 TEST(TestGzipFileParser, test_gzip_file_parser) 
 {
@@ -32,6 +27,5 @@ TEST(TestGzipFileParser, test_gzip_file_parser)
         ++lineCount;
     }
 }
-
 
 }

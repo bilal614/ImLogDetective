@@ -23,9 +23,9 @@ class TestLogFileTabsPresenter : public ::testing::Test {
 protected:
     ::testing::InSequence seq;
 
-    LogDataModelFactoryMock logDataModelFactoryMock;
-    LogFilePresenterMock logFilePresenterMock;
-    TabBarMock tabBarMock;
+    StrictMock<LogDataModelFactoryMock> logDataModelFactoryMock;
+    StrictMock<LogFilePresenterMock> logFilePresenterMock;
+    StrictMock<TabBarMock> tabBarMock;
     std::filesystem::path filePath;
     std::vector<std::filesystem::path> dummyTempFilePaths;
 
