@@ -1,7 +1,7 @@
 #pragma once
 
 #include "views/ILogView.h"
-#include "dearimgui/ITextWidgetFactory.h"
+#include "views/ITextWidgetFactory.h"
 #include "gmock/gmock.h"
 
 namespace TestLogAnalyzerTool {

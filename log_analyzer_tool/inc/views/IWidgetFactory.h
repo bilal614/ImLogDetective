@@ -1,9 +1,9 @@
 #pragma once
 
-#include "dearimgui/IListTreeFactory.h"
-#include "dearimgui/IModalPopupFactory.h"
-#include "dearimgui/ITextWidgetFactory.h"
-#include "dearimgui/IWindowFactory.h"
+#include "views/IListTreeFactory.h"
+#include "views/IModalPopupFactory.h"
+#include "views/ITextWidgetFactory.h"
+#include "views/IWindowFactory.h"
 
 namespace LogAnalyzerTool
 {

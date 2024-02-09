@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dearimgui/IMainViewPort.h"
-#include "dearimgui/IWidgetFactory.h"
+#include "views/IWidgetFactory.h"
 #include <memory>
 #include <string>
 
@@ -9,11 +9,12 @@
 namespace LogAnalyzerTool
 {
 class IMainViewPort;
+class IImGuiWidgetWrapper;
 
 class WidgetFactory : public IWidgetFactory
 {
 public:
-    WidgetFactory(const IMainViewPort& mainWindow);
+    WidgetFactory(const IMainViewPort& mainViewport, IImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~WidgetFactory();
     // Window creation specific functions
     std::unique_ptr<IScopedImGuiWindow> createWindow() override;

@@ -4,7 +4,7 @@
 #include "presenters/IFileListPresenter.h"
 #include "views/IFolderSelectionPopup.h"
 #include "views/ICopyLogsPopup.h"
-#include "dearimgui/IWindowFactory.h"
+#include "views/IWindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
 #include "dearimgui/IScopedImGuiWindow.h"
 #include "imgui.h"

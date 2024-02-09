@@ -2,7 +2,7 @@
 
 #include "views/ICopyLogsPopup.h"
 #include "gmock/gmock.h"
-#include "ImVec2.h"
+#include "ImVec.h"
 #include <utility>
 
 namespace TestLogAnalyzerTool {

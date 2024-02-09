@@ -1,5 +1,5 @@
 #include "views/LogView.h"
-#include "dearimgui/ITextWidgetFactory.h"
+#include "views/ITextWidgetFactory.h"
 
 namespace LogAnalyzerTool
 {

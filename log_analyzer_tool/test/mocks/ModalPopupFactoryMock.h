@@ -1,7 +1,7 @@
 #pragma once
 
-#include "dearimgui/IModalPopupFactory.h"
-#include "ImVec2.h"
+#include "views/IModalPopupFactory.h"
+#include "ImVec.h"
 #include "gmock/gmock.h"
 
 namespace TestLogAnalyzerTool {

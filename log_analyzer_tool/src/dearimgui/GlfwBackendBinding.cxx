@@ -2,11 +2,12 @@
 #include "dearimgui/GlfwBackendBinding.h"
 #include "dearimgui/IOContext.h"
 #include "dearimgui/MainViewPort.h"
-#include "dearimgui/WidgetFactory.h"
+#include "views/WidgetFactory.h"
 #include "dearimgui/ImGuiTextFilterWrapper.h"
+#include "dearimgui/ImGuiWidgetWrapper.h"
 #include "dearimgui/TabBar.h"
-#include "dearimgui/ITextWidgetFactory.h"
-#include "dearimgui/IWindowFactory.h"
+#include "views/ITextWidgetFactory.h"
+#include "views/IWindowFactory.h"
 #include "dearimgui/ITabBar.h"
 #include "event_handling/EventLoop.h"
 #include "event_handling/Event.hpp"
@@ -52,6 +53,7 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IMainViewPort> mainViewPort;
     std::unique_ptr<IIOContext> ioContext;
     std::unique_ptr<IEventLoop> eventLoop;
+    std::unique_ptr<IImGuiWidgetWrapper> imGuiWidgetWrapper;
     std::unique_ptr<IWidgetFactory> widgetFactory;
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
     std::unique_ptr<ISelectionMenuBar> selectionMenuBar;
@@ -124,7 +126,8 @@ GlfwBackendBinding::Impl::Impl() :
     ioContext = std::make_unique<IOContext>();
     ioContext->unsetIniFile();
     mainViewPort = std::make_unique<MainViewPort>(*ioContext);
-    widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort);
+    imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapper>();
+    widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort, *imGuiWidgetWrapper);
     eventLoop = std::make_unique<EventLoop>();
     selectionMenuBar = std::make_unique<SelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));

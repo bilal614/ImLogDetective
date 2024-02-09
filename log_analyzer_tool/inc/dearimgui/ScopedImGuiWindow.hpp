@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dearimgui/IScopedImGuiWindow.h"
-#include "dearimgui/IWidgetFactory.h"
+#include "views/IWidgetFactory.h"
 #include "imgui.h"
 #include <string>
 

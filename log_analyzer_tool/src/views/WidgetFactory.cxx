@@ -1,10 +1,10 @@
-#include "dearimgui/IMainViewPort.h"
+#include "views/WidgetFactory.h"
 #include "LogAnalyzerToolDefs.h"
+#include "dearimgui/IMainViewPort.h"
 #include "dearimgui/IScopedImGuiWindow.h"
+#include "dearimgui/IImGuiWidgetWrapper.h"
 #include "dearimgui/ListTreeWidget.h"
 #include "dearimgui/ScopedImGuiWindow.hpp"
-#include "dearimgui/WidgetFactory.h"
-#include "imgui.h"
 
 #include <unordered_map>
 
@@ -15,7 +15,9 @@ namespace LogAnalyzerTool
 
 struct WidgetFactory::Impl
 {
-    Impl(IWidgetFactory& widgetFactory, const IMainViewPort& mainViewPort);
+    Impl(IWidgetFactory& widgetFactory, 
+        const IMainViewPort& mainViewPort,
+        IImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~Impl() = default;
     std::unique_ptr<IScopedImGuiWindow> addWindow();
     
@@ -34,21 +36,25 @@ struct WidgetFactory::Impl
 
     std::unordered_map<TextColor, ImVec4> colorMap;
     IWidgetFactory& parent;
+    IImGuiWidgetWrapper& imGuiWidgetWrapper;
 };
 
-WidgetFactory::Impl::Impl(IWidgetFactory& widgetFactory, const IMainViewPort& mainWindow) :
-    parent{widgetFactory},
-    mainViewPort{mainWindow},
-    openCloseWidgetPresent{nullptr},
-    mainWindowFlags{0},
-    childWindowFlags{0},
-    colorMap{
-        {TextColor::Red, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)},
-        {TextColor::Orange, ImVec4(1.0f, 0.5f, 0.0f, 1.0f)},
-        {TextColor::Yellow, ImVec4(1.0f, 1.0f, 0.0f, 1.0f)},
-        {TextColor::Green, ImVec4(0.0f, 1.0f, 0.0f, 1.0f)},
-        {TextColor::White, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
-    }
+WidgetFactory::Impl::Impl(IWidgetFactory& widgetFactory, 
+    const IMainViewPort& mainViewport, 
+    IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+        parent{widgetFactory},
+        imGuiWidgetWrapper{imGuiWidgetWrapper},
+        mainViewPort{mainViewport},
+        openCloseWidgetPresent{nullptr},
+        mainWindowFlags{0},
+        childWindowFlags{0},
+        colorMap{
+            {TextColor::Red, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)},
+            {TextColor::Orange, ImVec4(1.0f, 0.5f, 0.0f, 1.0f)},
+            {TextColor::Yellow, ImVec4(1.0f, 1.0f, 0.0f, 1.0f)},
+            {TextColor::Green, ImVec4(0.0f, 1.0f, 0.0f, 1.0f)},
+            {TextColor::White, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
+        }
 {
     mainWindowFlags = ImGuiWindowFlags_MenuBar |
                 ImGuiWindowFlags_NoMove | 
@@ -71,14 +77,14 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::Impl::addWindow()
 
 void WidgetFactory::Impl::createPopupButton(const std::string& button, bool& clicked)
 {
-    clicked = ImGui::Button(button.c_str());
+    clicked = imGuiWidgetWrapper.button(button);
 }
 
 void WidgetFactory::Impl::createInputTextBox(const std::string& label, std::string& input, float width)
 {
-    ImGui::PushItemWidth(width);
-    ImGui::InputText(label.c_str(), input.data(), Bounds::MaxTextboxInputLength);
-    ImGui::PopItemWidth();
+    imGuiWidgetWrapper.pushItemWidth(width);
+    imGuiWidgetWrapper.inputText(label, input.data());
+    imGuiWidgetWrapper.popItemWidth();
 }
 
 void WidgetFactory::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal)
@@ -92,13 +98,13 @@ void WidgetFactory::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextBox>&
         }
         if(it  != --inputTextBoxes.end())
         {
-            ImGui::SameLine();
+            imGuiWidgetWrapper.sameLine();
         }
     }
 }
 
-WidgetFactory::WidgetFactory(const IMainViewPort& mainWindow) :
-    p{std::make_unique<Impl>(*this, mainWindow)}
+WidgetFactory::WidgetFactory(const IMainViewPort& mainViewport, IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+    p{std::make_unique<Impl>(*this, mainViewport, imGuiWidgetWrapper)}
 {
 }
 
@@ -127,7 +133,7 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::createChildWindow(
 
 void WidgetFactory::createUnformattedText(const std::string& text)
 {
-    ImGui::TextUnformatted(text.c_str());
+    p->imGuiWidgetWrapper.textUnformatted(text);
 }
 
 void WidgetFactory::createTextColored(std::string_view text, const TextColor& color)
@@ -135,7 +141,7 @@ void WidgetFactory::createTextColored(std::string_view text, const TextColor& co
     auto textColor = p->colorMap.find(color);
     if(textColor != p->colorMap.end())
     {
-        ImGui::TextColored(textColor->second, "%s", text.data());
+        p->imGuiWidgetWrapper.textColored(textColor->second, text.data());
     }
 }
 
@@ -146,20 +152,20 @@ std::unique_ptr<IListTreeWidget> WidgetFactory::createListTreeWidget()
 
 void WidgetFactory::onSameLine()
 {
-    ImGui::SameLine();
+    p->imGuiWidgetWrapper.sameLine();
 }
 
 void WidgetFactory::open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name)
 {
-    ImGui::OpenPopup(name.c_str());
-    ImGui::SetNextWindowPos(popupPosition, ImGuiCond_Appearing, ImVec2(0.5f, 0.25f));
-    ImGui::SetNextWindowSize(popupSize, ImGuiCond_Appearing);
+    p->imGuiWidgetWrapper.openPopup(name);
+    p->imGuiWidgetWrapper.setNextWindowPos(popupPosition);
+    p->imGuiWidgetWrapper.setNextWindowSize(popupSize);
     p->modalPopupWindowOpened = true;
 }
 
 void WidgetFactory::beginLayout(const std::string& name)
 {
-    p->modalPopupLayout = ImGui::BeginPopupModal(name.c_str(), NULL, ImGuiWindowFlags_NoDecoration);
+    p->modalPopupLayout = p->imGuiWidgetWrapper.beginPopupModal(name);
 }
 
 bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
@@ -201,13 +207,13 @@ bool WidgetFactory::createInputTextBoxGroup(
     {
         if(collapsable)
         {
-            if (ImGui::CollapsingHeader(title.c_str(), ImGuiTreeNodeFlags_None))
+            if (p->imGuiWidgetWrapper.collapsingHeader(title))
             {
                 p->drawInputTexBoxesGroup(inputTextBoxes, horizontal);
             }
             return true;
         }
-        ImGui::TextUnformatted(title.c_str());
+        p->imGuiWidgetWrapper.textUnformatted(title);
         p->drawInputTexBoxesGroup(inputTextBoxes, horizontal);
         return true;
     }
@@ -219,7 +225,7 @@ bool WidgetFactory::showErrorText(const std::string& errorMessage)
 {
     if(p->modalPopupLayout)
     {
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", errorMessage.c_str());
+        p->imGuiWidgetWrapper.textColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), errorMessage);
         return true;
     }
     return false;
@@ -229,14 +235,14 @@ void WidgetFactory::endLayout()
 {
     if(p->modalPopupLayout)
     {
-        ImGui::EndPopup();
+        p->imGuiWidgetWrapper.endPopup();
         p->modalPopupLayout = false;
     }
 }
 
 void WidgetFactory::close()
 {
-    ImGui::CloseCurrentPopup();
+    p->imGuiWidgetWrapper.closeCurrentPopup();
     p->modalPopupWindowOpened = false;
 }
 

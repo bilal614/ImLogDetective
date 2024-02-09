@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dearimgui/IWindowFactory.h"
+#include "views/IWindowFactory.h"
 #include "gmock/gmock.h"
 
 namespace TestLogAnalyzerTool {

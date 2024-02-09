@@ -8,16 +8,17 @@ if(${ZLIB_FOUND})
     add_library(${LOG_ANALYZER_TOOL_LIB} STATIC
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/IOContext.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/GlfwBackendBinding.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ImGuiWidgetWrapper.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ListTreeWidget.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/MainViewPort.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TabBar.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
-        ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/WidgetFactory.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/event_handling/EventLoop.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/CopyLogsPopup.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FileListView.cxx
-        ${LOG_ANALYZER_TOOL_DIR}/src/views/SelectionMenuBar.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionPopup.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/views/SelectionMenuBar.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/views/WidgetFactory.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/LogAnalyzerToolDefs.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/LogFilterView.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/LogView.cxx

@@ -1,5 +1,5 @@
 #include "views/CopyLogsPopup.h"
-#include "dearimgui/IModalPopupFactory.h"
+#include "views/IModalPopupFactory.h"
 #include "LogAnalyzerToolDefs.h"
 #include <cstring>
 #include <filesystem>
