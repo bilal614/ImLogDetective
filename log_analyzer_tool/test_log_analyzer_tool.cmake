@@ -1,6 +1,5 @@
 set(TEST_LOG_ANALYZER_TOOL test_log_analyzer_tool)
-set(LOG_ANALYZER_TOOL_DIR ${PROJECT_SOURCE_DIR}/log_analyzer_tool)
-set(TEST_LOG_ANALYZER_TOOL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/log_analyzer_tool/test/inc ${PROJECT_SOURCE_DIR}/log_analyzer_tool/test/mocks)
+set(TEST_LOG_ANALYZER_TOOL_INCLUDE_DIR ${LOG_ANALYZER_TOOL_DIR}/test/inc ${LOG_ANALYZER_TOOL_DIR}/test/mocks)
 
 enable_testing()
 find_package(GTest REQUIRED)

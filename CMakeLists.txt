@@ -50,6 +50,15 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
         -pthread
     )
 
+    # Definitions for log_scp_wrapper 
+    set(LOG_SCP_WRAPPER_LIB log_scp_wrapper)
+    set(LOG_SCP_WRAPPER_DIR ${PROJECT_SOURCE_DIR}/log_scp_wrapper)
+    set(LOG_SCP_WRAPPER_INCLUDE_DIR ${LOG_SCP_WRAPPER_DIR}/inc/)
+
+    #log_scp_wrapper
+    add_subdirectory(${PROJECT_ROOT}/log_scp_wrapper)
+
+    #log_analyzer_tool
     add_subdirectory(${PROJECT_ROOT}/log_analyzer_tool)
 
     #log_fetching_tool
@@ -58,8 +67,6 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     #include test_log_fetching_tool
     #include(${PROJECT_ROOT}/log_fetching_tool/test_log_fetching_tool.cmake)
 
-    #log_scp_wrapper
-    add_subdirectory(${PROJECT_ROOT}/log_scp_wrapper)
 
     #test app
     add_executable(test_app

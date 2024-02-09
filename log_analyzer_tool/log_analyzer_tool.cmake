@@ -1,6 +1,3 @@
-set(LOG_ANALYZER_TOOL log_analyzer_tool)
-set(LOG_ANALYZER_TOOL_LIB log_analyzer_tool_lib)
-set(LOG_ANALYZER_TOOL_DIR ${PROJECT_SOURCE_DIR}/log_analyzer_tool)
 
 find_package(ZLIB REQUIRED)
 
@@ -35,6 +32,7 @@ if(${ZLIB_FOUND})
     target_include_directories(${LOG_ANALYZER_TOOL_LIB} PRIVATE 
         ${PROJECT_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS}
+        ${LOG_SCP_WRAPPER_LIB}
     )
 
     target_include_directories(${LOG_ANALYZER_TOOL_LIB} PUBLIC 
@@ -44,6 +42,7 @@ if(${ZLIB_FOUND})
     target_link_libraries(${LOG_ANALYZER_TOOL_LIB} 
         ${PROJECT_LINK_LIBRARIES}
         ${ZLIB_LIBRARIES}
+        ${LOG_SCP_WRAPPER_LIB}
     )
 
     add_executable(${LOG_ANALYZER_TOOL}
