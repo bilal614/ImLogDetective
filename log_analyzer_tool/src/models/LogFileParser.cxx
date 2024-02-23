@@ -12,10 +12,9 @@ struct LogFileParser::Impl
 {
     Impl(IGzipFile& gzipFile);
     ~Impl() = default;
-    std::basic_istream<char>& getFileStream(const std::filesystem::path& filePath);
+    std::unique_ptr<std::basic_istream<char>> getFileStream(const std::filesystem::path& filePath);
 
     IGzipFile& gzipFile;
-    std::unique_ptr<std::basic_istream<char>> logStream;
 };
 
 LogFileParser::Impl::Impl(IGzipFile& gzipFile) :
@@ -23,8 +22,9 @@ LogFileParser::Impl::Impl(IGzipFile& gzipFile) :
 {
 }
 
-std::basic_istream<char>& LogFileParser::Impl::getFileStream(const std::filesystem::path& filePath)
+std::unique_ptr<std::basic_istream<char>> LogFileParser::Impl::getFileStream(const std::filesystem::path& filePath)
 {
+    std::unique_ptr<std::basic_istream<char>> logStream;
     if(gzipFile.isGzipFormat(filePath))
     {
         logStream = std::make_unique<std::stringstream>(gzipFile.decompress(filePath));
@@ -33,7 +33,7 @@ std::basic_istream<char>& LogFileParser::Impl::getFileStream(const std::filesyst
     {
         logStream = std::make_unique<std::ifstream>(filePath);
     }
-    return *logStream;
+    return logStream;
 }
 
 LogFileParser::LogFileParser(IGzipFile& gzipFile) :
@@ -45,9 +45,9 @@ LogFileParser::~LogFileParser() = default;
 
 void LogFileParser::readLogFileData(const std::filesystem::path& filePath, ILogDataModel& logDataModel)
 {
-    std::basic_istream<char>& logFileStream = p->getFileStream(filePath);
+    auto logFileStream = p->getFileStream(filePath);
     std::string line;
-    while (std::getline(logFileStream, line))
+    while (std::getline(*logFileStream, line))
     {
         if(line.size() > 0)
         {

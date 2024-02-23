@@ -19,6 +19,7 @@ struct FileListPresenter::Impl
     std::filesystem::path folderPath;
 
     std::unordered_map<std::string, std::filesystem::path> logFiles;
+    std::vector<std::string> logFilesList;
     ILogFileTabsPresenter& fileTabsPresenter;
 };
 
@@ -46,7 +47,8 @@ void FileListPresenter::update(const std::filesystem::path& folderPath)
     {
         folderPathChanged = true;
         p->folderPath = folderPath;
-        
+        p->logFiles.clear();
+        p->logFilesList.clear();
         for (const auto& entry : std::filesystem::directory_iterator(p->folderPath))
         {
             if(entry.is_regular_file())
@@ -55,13 +57,14 @@ void FileListPresenter::update(const std::filesystem::path& folderPath)
                 p->logFiles.insert({tabName, entry.path()});
             }
         }
+
+        std::transform(p->logFiles.cbegin(), p->logFiles.cend(), std::back_inserter(p->logFilesList), 
+            [&](const auto& logFile){
+                return logFile.first;
+            });
+        std::sort(p->logFilesList.begin(), p->logFilesList.end());
     }
-    std::vector<std::string> logFiles;
-    std::transform(p->logFiles.cbegin(), p->logFiles.cend(), std::back_inserter(logFiles), 
-        [&](const auto& logFile){
-            return logFile.first;
-        });
-    p->fileListView.draw(logFiles);
+    p->fileListView.draw(p->logFilesList);
 }
 
 std::vector<std::filesystem::path> FileListPresenter::getSelectedFiles()

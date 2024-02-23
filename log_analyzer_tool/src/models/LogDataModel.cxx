@@ -61,5 +61,4 @@ const std::vector<LogData>& LogDataModel::getLogData()
     return p->logData;
 }
 
-
 }
