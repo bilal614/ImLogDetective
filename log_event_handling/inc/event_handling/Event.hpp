@@ -1,6 +1,6 @@
 #pragma once
 
-#include "event_handling/IEvent.h"
+#include "IEvent.h"
 #include <vector>
 
 namespace LogAnalyzerTool

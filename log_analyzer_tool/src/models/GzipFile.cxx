@@ -21,7 +21,7 @@ namespace LogAnalyzerTool
 struct GzipFile::Impl
 {
     struct ScopedFile{
-    std::unique_ptr<FILE, std::function<void(FILE*)>> inputFile;
+        std::unique_ptr<FILE, std::function<void(FILE*)>> inputFile;
 
         ScopedFile(const std::filesystem::path& filePath) :
             inputFile{fopen(filePath.string().c_str(), "r"), [&](FILE* f){fclose(f);}}

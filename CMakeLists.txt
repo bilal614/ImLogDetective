@@ -50,10 +50,18 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
         -pthread
     )
 
-    # Definitions for log_scp_wrapper 
-    set(LOG_SCP_WRAPPER_LIB log_scp_wrapper)
+    # Definitions for log_scp_wrapper_lib
+    set(LOG_SCP_WRAPPER_LIB log_scp_wrapper_lib)
     set(LOG_SCP_WRAPPER_DIR ${PROJECT_SOURCE_DIR}/log_scp_wrapper)
     set(LOG_SCP_WRAPPER_INCLUDE_DIR ${LOG_SCP_WRAPPER_DIR}/inc/)
+
+    # Definitions for log_event_handling_lib 
+    set(LOG_EVENT_HANDLING_LIB log_event_handling_lib)
+    set(TEST_LOG_EVENT_HANDLING test_log_event_handling)
+    set(LOG_EVENT_HANDLING_DIR ${PROJECT_SOURCE_DIR}/log_event_handling)
+
+    #log_event_handling
+    add_subdirectory(${PROJECT_ROOT}/log_event_handling)
 
     #log_scp_wrapper
     add_subdirectory(${PROJECT_ROOT}/log_scp_wrapper)

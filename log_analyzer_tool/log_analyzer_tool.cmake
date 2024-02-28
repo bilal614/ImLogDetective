@@ -10,7 +10,6 @@ if(${ZLIB_FOUND})
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/MainViewPort.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/TabBar.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
-        ${LOG_ANALYZER_TOOL_DIR}/src/event_handling/EventLoop.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/CopyLogsPopup.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FileListView.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/views/FolderSelectionPopup.cxx
@@ -32,6 +31,7 @@ if(${ZLIB_FOUND})
     target_include_directories(${LOG_ANALYZER_TOOL_LIB} PRIVATE 
         ${PROJECT_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS}
+        ${LOG_EVENT_HANDLING_LIB}
         ${LOG_SCP_WRAPPER_LIB}
     )
 
@@ -42,6 +42,7 @@ if(${ZLIB_FOUND})
     target_link_libraries(${LOG_ANALYZER_TOOL_LIB} 
         ${PROJECT_LINK_LIBRARIES}
         ${ZLIB_LIBRARIES}
+        ${LOG_EVENT_HANDLING_LIB}
         ${LOG_SCP_WRAPPER_LIB}
     )
 

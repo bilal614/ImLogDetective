@@ -67,8 +67,11 @@ void LogFilePresenter::Impl::updateLogData(
     {
         if(textFilterWrapper.passFilter(data.logLine))
         {
-            if((data.level == LogLevel::Debug || data.level == LogLevel::Unknown) 
-                && logFilterView.getDebugChecked())
+            if(data.level == LogLevel::Unknown)
+            {
+                logView.drawLogLineText(data.logLine, TextColor::Yellow);
+            }
+            if(data.level == LogLevel::Debug && logFilterView.getDebugChecked())
             {
                 logView.drawLogLineText(data.logLine, TextColor::White);
             }

@@ -18,6 +18,8 @@ public:
     uint32_t getPid() final;
     std::string getUser() final;
     pty_child& getChild() final;
+    void writeLine(const std::string& input) final;
+    std::string read(size_t bytesToRead) final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

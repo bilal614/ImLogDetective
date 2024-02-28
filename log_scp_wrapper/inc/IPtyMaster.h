@@ -27,7 +27,6 @@ struct pty_child {
     }
     ~pty_child()
     {
-        //fcntl(from_child, F_GETFD);
     }
 
     void closeMasterChild()
@@ -53,6 +52,9 @@ public:
     virtual uint32_t getPid() = 0;
     virtual std::string getUser() = 0;
     virtual pty_child& getChild() = 0;
+    //Pty IO
+    virtual void writeLine(const std::string& input) = 0;
+    virtual std::string read(size_t bytesToRead) = 0;
 };
 
 }

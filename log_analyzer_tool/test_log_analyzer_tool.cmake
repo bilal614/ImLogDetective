@@ -10,7 +10,6 @@ if(GTest_FOUND)
     file(COPY_FILE ${LOG_ANALYZER_TOOL_DIR}/test/data/test.txt.gz ${CMAKE_CURRENT_BINARY_DIR}/test_data/test.txt.gz ONLY_IF_DIFFERENT)
 
     add_executable(${TEST_LOG_ANALYZER_TOOL}
-        ${LOG_ANALYZER_TOOL_DIR}/test/src/event_handling/TestEventLoop.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/src/models/TestGzipFileParsers.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/src/presenters/TestLogFilePresenter.cxx
         ${LOG_ANALYZER_TOOL_DIR}/test/src/presenters/TestLogFileTabsPresenter.cxx
