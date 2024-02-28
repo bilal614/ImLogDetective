@@ -52,7 +52,7 @@ struct GlfwBackendBinding::Impl
     GLFWwindow* window;
     std::unique_ptr<IMainViewPort> mainViewPort;
     std::unique_ptr<IIOContext> ioContext;
-    std::unique_ptr<IEventLoop> eventLoop;
+    std::unique_ptr<LogEventHandling::IEventLoop> eventLoop;
     std::unique_ptr<IImGuiWidgetWrapper> imGuiWidgetWrapper;
     std::unique_ptr<IWidgetFactory> widgetFactory;
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
@@ -128,10 +128,10 @@ GlfwBackendBinding::Impl::Impl() :
     mainViewPort = std::make_unique<MainViewPort>(*ioContext);
     imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapper>();
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort, *imGuiWidgetWrapper);
-    eventLoop = std::make_unique<EventLoop>();
+    eventLoop = std::make_unique<LogEventHandling::EventLoop>();
     selectionMenuBar = std::make_unique<SelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
-    copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
+    copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory), *eventLoop);
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
@@ -147,7 +147,7 @@ GlfwBackendBinding::Impl::Impl() :
         *logFileParser,
         *textFilterWrapper);
     logDataModelFactory = std::make_unique<LogDataModelFactory>();
-    logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar, std::make_unique<Event<const std::string&>>());
+    logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar, std::make_unique<LogEventHandling::Event<const std::string&>>());
     fileListPresenter = std::make_unique<FileListPresenter>(*logFileTabsPresenter, *fileListView);
     mainPresenter = std::make_unique<MainPresenter>(dynamic_cast<IWindowFactory&>(*widgetFactory),
         *mainViewPort,

@@ -3,7 +3,7 @@
 #include "IEvent.h"
 #include <vector>
 
-namespace LogAnalyzerTool
+namespace LogEventHandling
 {
 
 template<typename ...A>

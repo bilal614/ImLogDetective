@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace LogAnalyzerTool
+namespace LogEventHandling
 {
 
 template<typename ...A>

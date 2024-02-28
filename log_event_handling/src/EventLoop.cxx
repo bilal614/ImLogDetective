@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-namespace LogAnalyzerTool
+namespace LogEventHandling
 {
 
 struct EventLoop::Impl

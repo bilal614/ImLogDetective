@@ -17,10 +17,10 @@ public:
         ILogFilePresenter&, 
         ILogDataModelFactory&, 
         ITabBar&,
-        std::unique_ptr<IEvent<const std::string&>>);
+        std::unique_ptr<LogEventHandling::IEvent<const std::string&>>);
     ~LogFileTabsPresenter();
     void update(const std::vector<std::filesystem::path>& filePaths) override;
-    IEvent<const std::string&>& getTabsOpenedEvent() override;
+    LogEventHandling::IEvent<const std::string&>& getTabsOpenedEvent() override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

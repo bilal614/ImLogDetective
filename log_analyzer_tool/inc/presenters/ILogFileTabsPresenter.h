@@ -11,7 +11,7 @@ class ILogFileTabsPresenter
 public:
     virtual ~ILogFileTabsPresenter() = default;
     virtual void update(const std::vector<std::filesystem::path>& filePaths) = 0;
-    virtual IEvent<const std::string&>& getTabsOpenedEvent() = 0;
+    virtual LogEventHandling::IEvent<const std::string&>& getTabsOpenedEvent() = 0;
 };
 
 }

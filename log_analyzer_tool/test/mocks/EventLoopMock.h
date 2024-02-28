@@ -5,7 +5,7 @@
 
 namespace TestLogAnalyzerTool {
 
-class EventLoopMock : public LogAnalyzerTool::IEventLoop 
+class EventLoopMock : public LogEventHandling::IEventLoop 
 {
 public:
     MOCK_METHOD(void, post, (const std::function<void()>&));

@@ -4,7 +4,7 @@
 #include <functional>
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace LogEventHandling
 {
 
 class EventLoop : public IEventLoop

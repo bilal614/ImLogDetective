@@ -4,10 +4,14 @@
 #include "presenters/ILogFilePresenter.h"
 #include "views/ILogView.h"
 
+namespace LogEventHandling 
+{
+    class IEventLoop;
+}
+
 namespace LogAnalyzerTool
 {
 
-class IEventLoop;
 class ILogDataModel;
 class ILogFileParser;
 class ILogFilterView;
@@ -20,7 +24,7 @@ class LogFilePresenter : public ILogFilePresenter
 public:
     LogFilePresenter(
         IWindowFactory& windowFactory,
-        IEventLoop& eventLoop,
+        LogEventHandling::IEventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,

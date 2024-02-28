@@ -17,7 +17,7 @@ namespace LogAnalyzerTool
 struct LogFilePresenter::Impl
 {
     Impl(IWindowFactory& windowFactory,
-        IEventLoop& eventLoop,
+        LogEventHandling::IEventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,
@@ -26,7 +26,7 @@ struct LogFilePresenter::Impl
     void updateLogData(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel);
 
     IWindowFactory& windowFactory;
-    IEventLoop& eventLoop;
+    LogEventHandling::IEventLoop& eventLoop;
     ILogFilterView& logFilterView;
     ILogView& logView;
     ILogFileParser& logFileParser;
@@ -35,7 +35,7 @@ struct LogFilePresenter::Impl
 
 LogFilePresenter::Impl::Impl(
     IWindowFactory& windowFactory,
-    IEventLoop& eventLoop,
+    LogEventHandling::IEventLoop& eventLoop,
     ILogFilterView& logFilterView, 
     ILogView& logView,
     ILogFileParser& logFileParser,
@@ -93,7 +93,7 @@ void LogFilePresenter::Impl::updateLogData(
 
 LogFilePresenter::LogFilePresenter(
         IWindowFactory& windowFactory,
-        IEventLoop& eventLoop,
+        LogEventHandling::IEventLoop& eventLoop,
         ILogFilterView& logFilterView, 
         ILogView& logView,
         ILogFileParser& logFileParser,

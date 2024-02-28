@@ -6,7 +6,7 @@
 namespace TestLogAnalyzerTool {
 
 template<typename ...A>
-class EventMock : public LogAnalyzerTool::IEvent<A...>
+class EventMock : public LogEventHandling::IEvent<A...>
 {
 public:
     MOCK_METHOD(void, registerDelegate, (const std::function<void(A...)>&));

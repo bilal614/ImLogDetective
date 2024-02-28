@@ -11,7 +11,7 @@ class LogFileTabsPresenterMock : public LogAnalyzerTool::ILogFileTabsPresenter
 {
 public:
     MOCK_METHOD(void, update, (const std::vector<std::filesystem::path>& filePaths));
-    MOCK_METHOD(LogAnalyzerTool::IEvent<const std::string&>&, getTabsOpenedEvent, ());
+    MOCK_METHOD(LogEventHandling::IEvent<const std::string&>&, getTabsOpenedEvent, ());
 };
 
 }
