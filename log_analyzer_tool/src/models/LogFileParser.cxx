@@ -31,7 +31,7 @@ std::unique_ptr<std::basic_istream<char>> LogFileParser::Impl::getFileStream(con
     }
     else
     {
-        logStream = std::make_unique<std::ifstream>(filePath);
+        logStream = std::make_unique<std::fstream>(filePath);
     }
     return logStream;
 }

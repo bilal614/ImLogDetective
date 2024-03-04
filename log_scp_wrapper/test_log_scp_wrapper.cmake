@@ -10,6 +10,7 @@ find_package(GTest REQUIRED)
 if(GTest_FOUND AND LIBSSH2_FOUND)
     add_executable(${TEST_LOG_SCP_WRAPPER}
         ${TEST_LOG_SCP_WRAPPER_DIR}/TestPtyMaster.cxx
+        ${TEST_LOG_SCP_WRAPPER_DIR}/TestScpExecutor.cxx
         ${TEST_LOG_SCP_WRAPPER_DIR}/main.cxx
     )
 

@@ -6,7 +6,7 @@
 #include <future>
 #include <poll.h>
 
-namespace TestLogFetchingTool
+namespace TestLogScpWrapper
 {
 
 using namespace ::testing;
