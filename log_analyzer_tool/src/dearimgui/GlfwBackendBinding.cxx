@@ -12,6 +12,7 @@
 #include "event_handling/EventLoop.h"
 #include "event_handling/Event.hpp"
 #include "LogAnalyzerToolDefs.h"
+#include "log_scp_wrapper/ScpExecutor.h"
 #include "models/GzipFile.h"
 #include "models/LogFileParser.h"
 #include "presenters/FileListPresenter.h"
@@ -70,6 +71,7 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<ILogDataModelFactory> logDataModelFactory;
     std::unique_ptr<ITabBar> tabBar;
     std::unique_ptr<MainPresenter> mainPresenter;
+    std::unique_ptr<LogScpWrapper::IScpExecutor> scpExecutor;
 };
 
 GlfwBackendBinding::Impl::~Impl()

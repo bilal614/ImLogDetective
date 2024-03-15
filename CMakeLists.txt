@@ -3,7 +3,7 @@ project(IMGUI_LOG_ANALYZER_TOOL C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR})
 
@@ -37,12 +37,12 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
         ${PROJECT_SOURCE_DIR}/imgui
     )
     
-    SET(PROJECT_INCLUDE_DIRS 
+    set(PROJECT_INCLUDE_DIRS 
         ${PROJECT_SOURCE_DIR}/imgui
         ${PROJECT_SOURCE_DIR}/imgui/backends
     )
 
-    SET (PROJECT_LINK_LIBRARIES imgui_glfw_opengl
+    set(PROJECT_LINK_LIBRARIES imgui_glfw_opengl
         ${OPENGL_LIBRARIES}
         ${GLFW3_LIBRARIES}
         ${CMAKE_DL_LIBS} #link to dl lib for dynamic loading
@@ -59,6 +59,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     set(LOG_EVENT_HANDLING_LIB log_event_handling_lib)
     set(TEST_LOG_EVENT_HANDLING test_log_event_handling)
     set(LOG_EVENT_HANDLING_DIR ${PROJECT_SOURCE_DIR}/log_event_handling)
+    set(TEST_LOG_EVENT_HANDLING_DIR ${LOG_EVENT_HANDLING_DIR}/test/mocks)
 
     #log_event_handling
     add_subdirectory(${PROJECT_ROOT}/log_event_handling)

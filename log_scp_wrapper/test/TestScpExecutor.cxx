@@ -1,7 +1,9 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-
-#include "ScpExecutor.h"
+#include "log_scp_wrapper/AuthenticationWorkFlow.h"
+#include "log_scp_wrapper/RemoteHost.h"
+#include "log_scp_wrapper/ScpExecutor.h"
+#include "event_handling/EventLoop.h"
 #include <fstream>
 #include <future>
 #include <poll.h>
@@ -21,19 +23,27 @@ protected:
     void SetUp() final;
     void TearDown() final;
 
+    LogEventHandling::EventLoop eventLoop;
+    LogScpWrapper::AuthenticationWorkFlow authenticationWorkFlow;
     LogScpWrapper::ScpExecutor scpExecutor;
     const std::filesystem::path testDirPath;
     const std::filesystem::path testRelativePath;
-    const std::filesystem::path testKeyFile1, testKeyFile2, testKeyFile3;
+    const std::filesystem::path testKeyFile1, testKeyFile2, invalidKeyFile;
+    const std::string remoteHost1, remoteHost2, invalidRemoteHost;
 };
 
 TestScpExecutor::TestScpExecutor() :
-    scpExecutor{},
+    eventLoop{},
+    authenticationWorkFlow{},
+    scpExecutor{eventLoop, authenticationWorkFlow},
     testDirPath{"./tst"},
     testRelativePath{"./tst/dir/path"},
     testKeyFile1{testDirPath/"keyFile1"},
     testKeyFile2{testDirPath/"keyFile2"},
-    testKeyFile3{testDirPath/"keyFile3"}
+    invalidKeyFile{testDirPath/"invalidKeyFile"},
+    remoteHost1{"foo@192.168.1.1"},
+    remoteHost2{"bar@192.168.1.2"},
+    invalidRemoteHost{"bla-192.168.1.3"}
 {
 }
 
@@ -58,16 +68,18 @@ void TestScpExecutor::SetUp()
         EXPECT_TRUE(std::filesystem::exists(testKeyFile2));
     }
     {
-        std::ofstream strm{testKeyFile3};
+        std::ofstream strm{invalidKeyFile};
         strm << "----begin asjkdlasjd----" << std::endl;
         strm << "non-compliant_key_headers" << std::endl;
         strm << "-----foo end-----" << std::endl;
-        EXPECT_TRUE(std::filesystem::exists(testKeyFile3));
+        EXPECT_TRUE(std::filesystem::exists(invalidKeyFile));
     }
+    eventLoop.start();
 }
 
 void TestScpExecutor::TearDown() 
 {
+    eventLoop.stop();
     std::filesystem::remove_all(testDirPath);
 }
 
@@ -86,15 +98,15 @@ TEST_F(TestScpExecutor, test_ScpExecutor_setSourceRemoteHostPath_with_valid_inpu
 
     const std::string remoteHostPath {"my_user@127.0.1:/fake/remote/path"};
     const std::string expectedUser{"my_user"};
-    const std::string expectedHost{"127.0.1"};
+    const std::string expectedIp{"127.0.1"};
     const std::filesystem::path expectedRemotePath{"/fake/remote/path"};
 
     EXPECT_TRUE(scpExecutor.setSourceRemoteHostPath(remoteHostPath));
 
     auto sourceRemoteHostPath = scpExecutor.getSourceRemoteHostPath();
 
-    EXPECT_EQ(sourceRemoteHostPath.user, expectedUser);
-    EXPECT_EQ(sourceRemoteHostPath.host, expectedHost);
+    EXPECT_EQ(sourceRemoteHostPath.host.user, expectedUser);
+    EXPECT_EQ(sourceRemoteHostPath.host.ip, expectedIp);
     EXPECT_EQ(sourceRemoteHostPath.sourcePath, expectedRemotePath);
 }
 
@@ -118,13 +130,32 @@ TEST_F(TestScpExecutor, test_ScpExecutor_addIdentityFile_add_existing_identity_f
     
     EXPECT_TRUE(scpExecutor.addIdentityFile(testKeyFile1));
     EXPECT_TRUE(scpExecutor.addIdentityFile(testKeyFile2));
-    EXPECT_FALSE(scpExecutor.addIdentityFile(testKeyFile3));
+    EXPECT_FALSE(scpExecutor.addIdentityFile(invalidKeyFile));
 
     auto identityFiles = scpExecutor.getIdentityFiles();
 
     EXPECT_EQ(identityFiles.size(), expectedNumberOfValidKeysAdded);
     EXPECT_EQ(identityFiles[0], testKeyFile1);
     EXPECT_EQ(identityFiles[1], testKeyFile2);
+}
+
+TEST_F(TestScpExecutor, test_ScpExecutor_addJumpHost_only_valid_jump_hosts_will_be_added) {
+
+    const size_t expectedNumberOfValidKeysAdded = 2;
+    const std::string user1{"foo"}, user2{"bar"};
+    const std::string ip1{"192.168.1.1"}, ip2{"192.168.1.2"};
+
+    EXPECT_TRUE(scpExecutor.addJumpHost(remoteHost1));
+    EXPECT_TRUE(scpExecutor.addJumpHost(remoteHost2));
+    EXPECT_FALSE(scpExecutor.addJumpHost(invalidRemoteHost));
+
+    auto identityFiles = scpExecutor.getJumpHosts();
+
+    EXPECT_EQ(identityFiles.size(), expectedNumberOfValidKeysAdded);
+    EXPECT_EQ(identityFiles[0].ip, ip1);
+    EXPECT_EQ(identityFiles[0].user, user1);
+    EXPECT_EQ(identityFiles[1].ip, ip2);
+    EXPECT_EQ(identityFiles[1].user, user2);
 }
 
 }

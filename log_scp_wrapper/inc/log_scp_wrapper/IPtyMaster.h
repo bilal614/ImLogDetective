@@ -14,17 +14,17 @@ namespace LogScpWrapper
 {
 
 struct pty_child {
-    pid_t child_pid;
+    pid_t pid;
     int master_fd;
     bool master_fd_closed;
 
     pty_child() :
-        child_pid{-1},
+        pid{-1},
         master_fd{-1},
         master_fd_closed{false}
     {
-
     }
+
     ~pty_child()
     {
     }
@@ -55,6 +55,7 @@ public:
     //Pty IO
     virtual void writeLine(const std::string& input) = 0;
     virtual std::string read(size_t bytesToRead) = 0;
+    virtual std::string read() = 0;
 };
 
 }

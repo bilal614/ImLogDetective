@@ -20,6 +20,7 @@ public:
     pty_child& getChild() final;
     void writeLine(const std::string& input) final;
     std::string read(size_t bytesToRead) final;
+    std::string read() final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

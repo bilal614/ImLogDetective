@@ -23,6 +23,7 @@ if(GTest_FOUND)
         ${LOG_ANALYZER_TOOL_LIB}
         ${TEST_LOG_ANALYZER_TOOL_INCLUDE_DIR}
         ${PROJECT_INCLUDE_DIRS}
+        ${TEST_LOG_EVENT_HANDLING_DIR}
     )
 
     target_link_libraries(${TEST_LOG_ANALYZER_TOOL} 

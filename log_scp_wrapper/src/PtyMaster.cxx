@@ -1,14 +1,15 @@
-#include "PtyMaster.h"
+#include "log_scp_wrapper/PtyMaster.h"
 #include <algorithm>
 #include <iostream>
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/ioctl.h>
 #include <sys/un.h>
+#include <sys/wait.h>
 
 namespace {
-    constexpr size_t RW_MAX_BUFF = 2048;
-    constexpr size_t DEFAULT_AWAIT_SECONDS = 5;
+    constexpr size_t RW_MAX_BUFF = 4096;
+    constexpr size_t DEFAULT_AWAIT_SECONDS = 20;
     char NEW_LINE = '\n';
 }
 
@@ -97,6 +98,14 @@ bool PtyMaster::Impl::awaitDataOnFd()
     {
         return true;
     }
+    if(retval == 0)
+    {
+        std::cerr << "TIMEOUT EXPIRED" << std::endl;
+    }
+    if(retval < 0)
+    {
+        perror("select() failed");
+    }
     return false;
 }
 
@@ -159,7 +168,7 @@ int PtyMaster::Impl::ptyFork(pty_child& childinfo) {
     // We are the parent
     slavept=open(name.c_str(), O_RDWR|O_NOCTTY );
 
-    childinfo.child_pid = p;
+    childinfo.pid = p;
     childinfo.master_fd = masterpt;
 
     return 0;
@@ -185,7 +194,7 @@ void PtyMaster::waitForExit()
 
 bool PtyMaster::kill()
 {
-    if(::kill(p->forked_child.child_pid ,SIGINT) == -1)
+    if(::kill(p->forked_child.pid ,SIGINT) == -1)
     {
         std::cerr << strerror(errno) << std::endl;
         return false;
@@ -236,6 +245,11 @@ std::string PtyMaster::read(size_t bytesToRead)
         return p->sanitizeNewLineCharacters(p->rd_buf);
     }
     return std::string{};
+}
+
+std::string PtyMaster::read()
+{
+    return read(RW_MAX_BUFF);
 }
 
 }
