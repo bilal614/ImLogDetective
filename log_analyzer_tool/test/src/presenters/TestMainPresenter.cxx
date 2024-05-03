@@ -1,8 +1,8 @@
 #include "LogAnalyzerToolDefs.h"
 #include "FileListPresenterMock.h"
-#include "CopyLogsPopupMock.h"
 #include "FolderSelectionPopupMock.h"
 #include "presenters/MainPresenter.h"
+#include "CopyLogsPresenterMock.h"
 #include "ImGuiTextFilterWrapperMock.h"
 #include "LogDataModelMock.h"
 #include "LogFileParserMock.h"
@@ -36,7 +36,7 @@ protected:
     StrictMock<LogFileParserMock> logFileParserMock;
     StrictMock<LogFilterViewMock> logFilterViewMock;
     StrictMock<FolderSelectionPopupMock> folderSelectionPopupMock;
-    StrictMock<CopyLogsPopupMock> copyLogsPopupMock;
+    StrictMock<CopyLogsPresenterMock> copyLogsPresenterMock;
     StrictMock<LogFileTabsPresenterMock> logFileTabsPresenterMock;
     StrictMock<FileListPresenterMock> fileListPresenterMock;
     StrictMock<SelectionMenuBarMock> selectionMenuBarMock;
@@ -78,9 +78,9 @@ TestMainPresenter::TestMainPresenter() :
         mainViewPortMock,
         selectionMenuBarMock,
         folderSelectionPopupMock,
-        copyLogsPopupMock,
         logFileTabsPresenterMock,
-        fileListPresenterMock},
+        fileListPresenterMock,
+        copyLogsPresenterMock},
     testFolderPath{"/test/folder/path"},
     inputScaleFactor{0.0f}
 {
@@ -143,6 +143,12 @@ void TestMainPresenter::checkCopyLogsModal(const ImVec2& expectedWindowSize,
         bool copyRemoteLogsPopupOpened)
 {
     EXPECT_CALL(selectionMenuBarMock, copyRemoteLogsClicked()).WillOnce(Return(copyRemoteLogsClicked));
+
+    EXPECT_CALL(mainViewPortMock, getWorkAreaSize());
+    EXPECT_CALL(mainViewPortMock, getViewportCenter());
+    EXPECT_CALL(copyLogsPresenterMock, update(_, _, _));
+    EXPECT_CALL(copyLogsPresenterMock, isClosed()).WillOnce(Return(false));
+    EXPECT_CALL(copyLogsPresenterMock, monitorCopyLogs());
 }
 
 void TestMainPresenter::checkChildWindows(

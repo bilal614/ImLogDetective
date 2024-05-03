@@ -4,6 +4,12 @@
 
 namespace LogAnalyzerTool
 {
+    namespace Common {
+        extern const char* OkBtn;
+        extern const char* CloseBtn;
+        extern const char* CopyBtn;
+    }
+
     namespace WindowDefs {
         extern const char* LogAnalyzerToolApplicationName;
         extern const char* FileListWindow;
@@ -38,16 +44,21 @@ namespace LogAnalyzerTool
 
     namespace SelectFolderDefs {
         extern const char* Name;
-        extern const char* OkBtn;
-        extern const char* CloseBtn;
-        constexpr float TextBoxWidth = 400;
+        constexpr float TextBoxWidth = 400.0f;
     }
 
     namespace CopyLogsDefs {
         extern const char* Name;
-        extern const char* CopyBtn;
-        extern const char* CloseBtn;
-        constexpr float TextBoxWidth = 350;
+        extern const char* EnterPass;
+        constexpr float TextBoxWidth = 350.0f;
+    }
+
+    namespace ProtectedInputDefs{
+        extern const char* Name;
+        extern const char* Prompt;
+        constexpr float TextBoxWidth = 250.0f;
+        constexpr float PopupWidth = 350.0f;
+        constexpr float PopupHeight = 200.0f;
     }
 
     namespace ErrorMessage {

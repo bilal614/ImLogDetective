@@ -29,9 +29,11 @@ struct WidgetFactory::Impl
 
     //ModalPopup state
     bool modalPopupWindowOpened;
-    bool modalPopupLayout;
+    std::unordered_map<std::string, bool>  modalPopupLayout;
+    std::string currentPopUp;
     void createPopupButton(const std::string& button, bool& clicked);
     void createInputTextBox(const std::string& label, std::string& input, float width);
+    void createProtectedInputTextBox(const std::string& label, std::string& input, float width);
     void drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal = true);
 
     std::unordered_map<TextColor, ImVec4> colorMap;
@@ -83,7 +85,14 @@ void WidgetFactory::Impl::createPopupButton(const std::string& button, bool& cli
 void WidgetFactory::Impl::createInputTextBox(const std::string& label, std::string& input, float width)
 {
     imGuiWidgetWrapper.pushItemWidth(width);
-    imGuiWidgetWrapper.inputText(label, input.data());
+    imGuiWidgetWrapper.inputText(label, input.data(), width);
+    imGuiWidgetWrapper.popItemWidth();
+}
+
+void WidgetFactory::Impl::createProtectedInputTextBox(const std::string& label, std::string& input, float width)
+{
+    imGuiWidgetWrapper.pushItemWidth(width);
+    imGuiWidgetWrapper.inputPassword(label, input.data(), width);
     imGuiWidgetWrapper.popItemWidth();
 }
 
@@ -165,12 +174,13 @@ void WidgetFactory::open(ImVec2 popupPosition, ImVec2 popupSize, const std::stri
 
 void WidgetFactory::beginLayout(const std::string& name)
 {
-    p->modalPopupLayout = p->imGuiWidgetWrapper.beginPopupModal(name);
+    p->currentPopUp = name;
+    p->modalPopupLayout[p->currentPopUp] = p->imGuiWidgetWrapper.beginPopupModal(p->currentPopUp);
 }
 
 bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
 {
-    if(p->modalPopupLayout)
+    if(p->modalPopupLayout[p->currentPopUp])
     {
         for(auto it = buttons.begin(); it != buttons.end(); ++it)
         {
@@ -188,9 +198,20 @@ bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
 
 bool WidgetFactory::createInputTextBox(const std::string& label, std::string& input, float width)
 {
-    if(p->modalPopupLayout)
+    if(p->modalPopupLayout[p->currentPopUp])
     {
         p->createInputTextBox(label, input, width);
+        return true;
+    }
+    std::cerr << "Missing call to beginLayout" << std::endl;
+    return false;
+}
+
+bool WidgetFactory::createProtectedInputTextBox(const std::string& label, std::string& input, float width)
+{
+    if(p->modalPopupLayout[p->currentPopUp])
+    {
+        p->createProtectedInputTextBox(label, input, width);
         return true;
     }
     std::cerr << "Missing call to beginLayout" << std::endl;
@@ -203,7 +224,7 @@ bool WidgetFactory::createInputTextBoxGroup(
     bool horizontal,
     bool collapsable)
 {
-    if(p->modalPopupLayout)
+    if(p->modalPopupLayout[p->currentPopUp])
     {
         if(collapsable)
         {
@@ -223,7 +244,7 @@ bool WidgetFactory::createInputTextBoxGroup(
 
 bool WidgetFactory::showErrorText(const std::string& errorMessage)
 {
-    if(p->modalPopupLayout)
+    if(p->modalPopupLayout[p->currentPopUp])
     {
         p->imGuiWidgetWrapper.textColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), errorMessage);
         return true;
@@ -233,16 +254,17 @@ bool WidgetFactory::showErrorText(const std::string& errorMessage)
 
 void WidgetFactory::endLayout()
 {
-    if(p->modalPopupLayout)
+    if(p->modalPopupLayout[p->currentPopUp])
     {
         p->imGuiWidgetWrapper.endPopup();
-        p->modalPopupLayout = false;
+        p->modalPopupLayout[p->currentPopUp] = false;
     }
 }
 
 void WidgetFactory::close()
 {
     p->imGuiWidgetWrapper.closeCurrentPopup();
+    p->currentPopUp = std::string{};
     p->modalPopupWindowOpened = false;
 }
 

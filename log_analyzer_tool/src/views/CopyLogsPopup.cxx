@@ -17,16 +17,6 @@ namespace {
         return std::string(data, std::strlen(data));
     }
 
-    struct CopyLogs{
-        std::string srcHostPath;
-        std::string dstDirectory;
-        std::string jumpHostPath1;
-        std::string jumpHostPath2;
-        std::string jumpHostPath3;
-
-        std::filesystem::path identity_file_1;
-        std::filesystem::path identity_file_2;
-    };
 }
 
 namespace LogAnalyzerTool
@@ -36,49 +26,33 @@ struct CopyLogsPopup::Impl
 {
     Impl(IModalPopupFactory& modalPopupFactory, LogEventHandling::IEventLoop& eventLoop);
     ~Impl() = default;
-    void processPopupInput(
-        bool copyButtonClicked, 
-        bool closeButtonClicked,
-        const CopyLogs& copyLogs);
+
+    void resetInternalState();
 
     IModalPopupFactory& modalPopupFactory;
     LogEventHandling::IEventLoop& eventLoop;
+
+    bool copyClicked;
+    bool closeClicked;
+    bool opened;
+    CopyLogs copyLogsInput;
 };
 
 CopyLogsPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory, LogEventHandling::IEventLoop& eventLoop) :
     modalPopupFactory{modalPopupFactory},
-    eventLoop{eventLoop}
+    eventLoop{eventLoop},
+    copyClicked{false},
+    closeClicked{false},
+    opened{false}
 {
 }
 
-void CopyLogsPopup::Impl::processPopupInput(bool copyButtonClicked, bool closeButtonClicked, const CopyLogs& copyLogs)
+void CopyLogsPopup::Impl::resetInternalState()
 {
-    if (closeButtonClicked)
-    {
-        modalPopupFactory.close();
-        return;
-    }
-    if(copyButtonClicked)
-    {
-        eventLoop.post([&](){
-
-            //On eventloop
-
-            LogScpWrapper::ProcessStartInfo process_start_info {
-                .executable_path{"tr"},
-                .arguments{"tr", "a-z", "A-Z"},
-            };
-            
-            std::unique_ptr<LogScpWrapper::IPtyMaster> process{std::make_unique<LogScpWrapper::PtyMaster>(process_start_info)};
-
-            process->start();
-
-            auto& piped_child = process->getChild();
-
-        });
-        modalPopupFactory.close();
-        return;
-    }
+    copyLogsInput = CopyLogs{};
+    copyClicked = false;
+    closeClicked = false;
+    opened = false;
 }
 
 CopyLogsPopup::CopyLogsPopup(IModalPopupFactory& modalPopupFactory, LogEventHandling::IEventLoop& eventLoop) :
@@ -88,43 +62,73 @@ CopyLogsPopup::CopyLogsPopup(IModalPopupFactory& modalPopupFactory, LogEventHand
 
 CopyLogsPopup::~CopyLogsPopup() = default;
 
-void CopyLogsPopup::drawCopyLogsPopup(ImVec2 popupPosition, ImVec2 popupSize)
+void CopyLogsPopup::open(const ImVec2& popupPosition, const ImVec2& popupSize)
 {
     p->modalPopupFactory.open(popupPosition, popupSize, CopyLogsDefs::Name);
-    p->modalPopupFactory.beginLayout(CopyLogsDefs::Name);
-
-    std::vector<PopupButton> popupButtons{
-        PopupButton{CopyLogsDefs::CopyBtn},
-        PopupButton{CopyLogsDefs::CloseBtn}};
-    p->modalPopupFactory.createButtonGroup(popupButtons);
-
-    std::vector<PopupInputTextBox> popupSrcDestFolders{
-        PopupInputTextBox{"Source Host Path", CopyLogsDefs::TextBoxWidth},
-        PopupInputTextBox{"Destination Directory", CopyLogsDefs::TextBoxWidth}};
-    p->modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, "Directories", true);
-
-    std::vector<PopupInputTextBox> jumpHosts{
-        PopupInputTextBox{"Jump Host 1", CopyLogsDefs::TextBoxWidth},
-        PopupInputTextBox{"Jump Host 2", CopyLogsDefs::TextBoxWidth},
-        PopupInputTextBox{"Jump Host 3", CopyLogsDefs::TextBoxWidth}};
-    p->modalPopupFactory.createInputTextBoxGroup(jumpHosts, "Jump Hosts", false, true);
-    auto copyClicked = popupButtons[0].clicked;
-    auto closeClicked = popupButtons[1].clicked;
-    //TODO Implement input validation
-    CopyLogs copyLogs;
-    if(copyClicked)
-    {
-        copyLogs.srcHostPath = popupSrcDestFolders[0].input;
-        copyLogs.dstDirectory = popupSrcDestFolders[1].input;
-    }
-    p->processPopupInput(copyClicked, closeClicked, copyLogs);
-
-    p->modalPopupFactory.endLayout();
+    p->opened = true;
 }
 
-bool CopyLogsPopup::popupOpen()
+void CopyLogsPopup::draw()
+{
+    if(p->opened)
+    {
+        p->modalPopupFactory.beginLayout(CopyLogsDefs::Name);
+
+        std::vector<PopupButton> popupButtons{
+            PopupButton{Common::CopyBtn},
+            PopupButton{Common::CloseBtn}};
+        p->modalPopupFactory.createButtonGroup(popupButtons);
+
+        std::vector<PopupInputTextBox> popupSrcDestFolders{
+            PopupInputTextBox{"Source Host Path", p->copyLogsInput.srcHostPath, CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{"Destination Directory", p->copyLogsInput.dstDirectory, CopyLogsDefs::TextBoxWidth}};
+        p->modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, "Directories", true);
+
+        std::vector<PopupInputTextBox> jumpHosts{
+            PopupInputTextBox{"Jump Host 1", p->copyLogsInput.jumpHostPath1, CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{"Jump Host 2", p->copyLogsInput.jumpHostPath2, CopyLogsDefs::TextBoxWidth}};
+        p->modalPopupFactory.createInputTextBoxGroup(jumpHosts, "Jump Hosts", false, true);
+
+        std::vector<PopupInputTextBox> keyFiles{
+            PopupInputTextBox{"Key File Path 1", p->copyLogsInput.keyFile1, CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{"Key File Path 2", p->copyLogsInput.keyFile2, CopyLogsDefs::TextBoxWidth}};
+        p->modalPopupFactory.createInputTextBoxGroup(keyFiles, "Key File Paths", false, true);
+        
+        //TODO Implement input validation, in presenter
+        {
+            //update state from UI elements
+            p->copyClicked = popupButtons[0].clicked;
+            p->closeClicked = popupButtons[1].clicked;
+        }
+
+        p->modalPopupFactory.endLayout();
+    }
+}
+
+bool CopyLogsPopup::isOpen()
 {
     return p->modalPopupFactory.isPopupOpen();
+}
+
+bool CopyLogsPopup::okBtnClicked()
+{
+    return p->copyClicked;
+}
+
+bool CopyLogsPopup::closeBtnClicked()
+{
+    return p->closeClicked;
+}
+
+void CopyLogsPopup::close()
+{
+    p->resetInternalState();
+    p->modalPopupFactory.close();
+}
+
+CopyLogs CopyLogsPopup::getInput()
+{
+    return p->copyLogsInput;
 }
 
 }

@@ -79,7 +79,7 @@ void AuthenticationWorkFlow::addKeyFile(const std::filesystem::path& filePath)
     p->keyFiles.push_back(filePath);
 }
 
-AuthenticationRequest AuthenticationWorkFlow::validatePrompt(const std::string& prompt)
+AuthenticationRequest AuthenticationWorkFlow::validatePrompt(std::string prompt)
 {
     AuthenticationRequest request{PromptType::None, std::string{}};
 

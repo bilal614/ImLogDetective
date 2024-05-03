@@ -13,6 +13,8 @@
 #include <iostream>
 #include <regex>
 
+#include <thread>
+
 namespace {
     const std::regex KeyEncapsulationBoundaryHeaderBegin{"-----BEGIN.*-----"};
     const std::regex KeyEncapsulationBoundaryHeaderEnd{"-----END.*-----"};
@@ -35,16 +37,23 @@ struct ScpExecutor::Impl
         const std::filesystem::path& identityFilePath
     );
     ProcessStartInfo prepareProcessStartInfo();
-    bool hasDownloadStarted(const std::string& prompt);
+    bool hasDownloadStarted();
 
-    std::mutex mtx;
+    void setPrompt(const std::string& input);
+    std::string getPrompt();
+    void setAuthenticationRequest(const AuthenticationRequest& req);
+    AuthenticationRequest getAuthenticationRequest();
+
+    std::mutex mtx, mtx_prompt, mtx_request;
     RemoteHostPath remoteHostPath;
     std::filesystem::path destinationLocalPath;
     std::vector<std::filesystem::path> identityFilePaths;
     std::vector<RemoteHost> jumpHosts;
     LogEventHandling::IEventLoop& eventLoop;
     IAuthenticationWorkFlow& authenticationWorkFlow;
-    std::promise<bool> copyFinished;
+    std::unique_ptr<std::promise<bool>> copyWillBeFinished;
+    std::future<bool> copyHasFinished;
+    bool downloadHasFinished;
     std::condition_variable userInput;
     bool userInputRequired;
     std::unique_ptr<IPtyMaster> process;
@@ -62,7 +71,9 @@ ScpExecutor::Impl::Impl(LogEventHandling::IEventLoop& eventLoop,
         authenticationWorkFlow{authenticationWorkFlow},
         process{nullptr},
         userInputRequired{true},
-        request{}
+        request{},
+        copyWillBeFinished{nullptr},
+        downloadHasFinished{false}
 {
 }
 
@@ -137,8 +148,33 @@ ProcessStartInfo ScpExecutor::Impl::prepareProcessStartInfo()
     return process_start_info;
 }
 
-bool ScpExecutor::Impl::hasDownloadStarted(const std::string& prompt)
+void ScpExecutor::Impl::setPrompt(const std::string& input)
 {
+    //std::lock_guard<std::mutex> lk(mtx_prompt);
+    prompt = input;
+}
+
+std::string ScpExecutor::Impl::getPrompt()
+{
+    //std::lock_guard<std::mutex> lk(mtx_prompt);
+    return prompt;
+}
+
+void ScpExecutor::Impl::setAuthenticationRequest(const AuthenticationRequest& req)
+{
+    //std::lock_guard<std::mutex> lk(mtx_request);
+    request = req;
+}
+
+AuthenticationRequest ScpExecutor::Impl::getAuthenticationRequest()
+{
+    //std::lock_guard<std::mutex> lk(mtx_request);
+    return request;
+}
+
+bool ScpExecutor::Impl::hasDownloadStarted()
+{
+    auto prompt = getPrompt();
     std::smatch found_matches;
     if (std::regex_match(prompt, found_matches, DownloadStarted))
     {
@@ -247,34 +283,43 @@ std::vector<RemoteHost> ScpExecutor::getJumpHosts()
 void ScpExecutor::download()
 {
     p->eventLoop.post([this](){
-
+        std::cout << "ScpExecutor:: thread_id=" << std::this_thread::get_id() << std::endl;
         ProcessStartInfo process_start_info = p->prepareProcessStartInfo();
 
         p->process = std::make_unique<LogScpWrapper::PtyMaster>(process_start_info);
         p->process->start();
         auto& piped_child = p->process->getChild();
 
-        do 
         {
-            p->prompt = p->process->read();
+            std::lock_guard<std::mutex> lk(p->mtx);
+            p->copyWillBeFinished.reset();
+            p->copyWillBeFinished = std::make_unique<std::promise<bool>>();
+            p->downloadHasFinished = false;
+        }
+        do
+        {
+            p->setPrompt(p->process->read());
 
-            if(!p->hasDownloadStarted(p->prompt))
+            if(!p->hasDownloadStarted())
             {
-                std::unique_lock lk(p->mtx);
-                p->request = p->authenticationWorkFlow.validatePrompt(p->prompt);
-                if(p->request.prompt != PromptType::None)
+                p->setAuthenticationRequest(p->authenticationWorkFlow.validatePrompt(p->getPrompt()));
+                if(p->getAuthenticationRequest().prompt != PromptType::None)
                 {
+                    std::unique_lock lk(p->mtx);
+                    std::cout << "Awaiting user input" << std::endl;
                     p->userInputRequired = true;
                     p->userInput.wait(lk);
                 }
             } else {
-                std::cout << p->prompt << std::endl;
+                std::cout << p->getPrompt() << std::endl;
             }
-        } while(!p->prompt.empty());
+        } while(!p->getPrompt().empty());
 
         piped_child.closeMasterChild();
-
-        p->copyFinished.set_value(true);
+        {
+            std::lock_guard<std::mutex> lk(p->mtx);
+            p->copyWillBeFinished->set_value(true);
+        }
 
         p->process.reset();
 
@@ -283,20 +328,31 @@ void ScpExecutor::download()
 
 bool ScpExecutor::downloadStarted()
 {
-    return p->hasDownloadStarted(p->prompt);
+    return p->hasDownloadStarted();
 }
 
 bool ScpExecutor::downloadFinished()
 {
-    std::future<bool> copyIsFinished = p->copyFinished.get_future();
-
-    return copyIsFinished.get();
+    std::lock_guard<std::mutex> lk(p->mtx);
+    if(p->copyWillBeFinished)
+    {
+        if(!p->copyHasFinished.valid() && !p->downloadHasFinished)
+        {
+            p->copyHasFinished = p->copyWillBeFinished->get_future();
+        }
+        auto status = p->copyHasFinished.wait_for(std::chrono::milliseconds(0));
+        if(p->copyHasFinished.valid() && status == std::future_status::ready)
+        {
+            p->downloadHasFinished = p->copyHasFinished.get();
+            p->copyWillBeFinished.reset();
+        }
+    }
+    return p->downloadHasFinished;
 }
 
 AuthenticationRequest ScpExecutor::getAuthenticationRequest()
 {
-    std::lock_guard<std::mutex> lk(p->mtx);
-    return p->request;
+    return p->getAuthenticationRequest();
 }
 
 std::string ScpExecutor::prompt()
@@ -312,11 +368,14 @@ bool ScpExecutor::passRequired()
 
 void ScpExecutor::enterPass(const std::string& pass)
 {
-    std::lock_guard<std::mutex> lk(p->mtx);
+    //std::lock_guard<std::mutex> lk(p->mtx);
     p->process->writeLine(pass);
     p->process->read();
-    p->userInputRequired = false;
-    p->request = AuthenticationRequest{PromptType::None, std::string{}};
+    {
+        std::lock_guard<std::mutex> lk(p->mtx);
+        p->userInputRequired = false;
+    }
+    p->setAuthenticationRequest(AuthenticationRequest{PromptType::None, std::string{}});
     p->userInput.notify_one();
 }
 

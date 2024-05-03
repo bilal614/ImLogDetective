@@ -3,6 +3,12 @@
 
 namespace LogAnalyzerTool
 {
+    namespace Common {
+        const char* OkBtn{"OK"};
+        const char* CloseBtn{"Close"};
+        const char* CopyBtn{"Copy"};
+    }
+
     namespace WindowDefs {
         const char* LogAnalyzerToolApplicationName {"LoggingAnalyzerTool"};
         const char* FileListWindow {"FileListWindow"};
@@ -19,14 +25,16 @@ namespace LogAnalyzerTool
 
     namespace SelectFolderDefs {
         const char* Name{"Select Folder"};
-        const char* OkBtn{"OK"};
-        const char* CloseBtn{"Close"};
     }
 
     namespace CopyLogsDefs {
         const char* Name{"Copy Remote Logs"};
-        const char* CopyBtn{"Copy"};
-        const char* CloseBtn{"Close"};
+        const char* EnterPass{"Enter pass"};
+    }
+
+    namespace ProtectedInputDefs{
+        const char* Name{"Enter Pass"};
+        const char* Prompt{"Please enter password\\passphrase"};
     }
 
     namespace ErrorMessage {

@@ -1,31 +1,28 @@
 #pragma once
 
-#include "views/ICopyLogsPopup.h"
+#include "IProtectedInputPopup.h"
 #include <memory>
 #include <string>
 
+struct ImVec2;
 
-namespace LogEventHandling {
-    class IEventLoop;
-}
 namespace LogAnalyzerTool
 {
 
 class IModalPopupFactory;
-class IProtectedInputPopup;
 
-class CopyLogsPopup : public ICopyLogsPopup
+class ProtectedInputPopup : public IProtectedInputPopup
 {
 public:
-    CopyLogsPopup(IModalPopupFactory& modalPopup, LogEventHandling::IEventLoop& eventLoop);
-    ~CopyLogsPopup();
+    ProtectedInputPopup(IModalPopupFactory& modalPopupFactory);
+    ~ProtectedInputPopup();
     void open(const ImVec2& popupPosition, const ImVec2& popupSize) final;
     void draw() final;
     void close() final;
     bool isOpen() final;
     bool okBtnClicked() final;
     bool closeBtnClicked() final;
-    CopyLogs getInput() final;
+    std::string getInput() final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

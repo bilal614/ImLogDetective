@@ -11,7 +11,7 @@ namespace LogAnalyzerTool
 {
 class IFileListPresenter;
 class ISelectionMenuBar;
-class ICopyLogsPopup;
+class ICopyLogsPresenter;
 class IFolderSelectionPopup;
 class IMainViewPort;
 class IWindowFactory;
@@ -24,9 +24,9 @@ public:
         IMainViewPort& mainViewPort,
         ISelectionMenuBar& selectionMenuBar,
         IFolderSelectionPopup& folderSelectionPopup,
-        ICopyLogsPopup& copyLogsPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
-        IFileListPresenter& fileListPresenter);
+        IFileListPresenter& fileListPresenter,
+        ICopyLogsPresenter& copyLogsPresenter);
     ~MainPresenter();
     void update() override;
 private:

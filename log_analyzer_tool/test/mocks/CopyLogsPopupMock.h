@@ -13,7 +13,12 @@ class CopyLogsPopupMock : public LogAnalyzerTool::ICopyLogsPopup
 {
 public:
     MOCK_METHOD(void, drawCopyLogsPopup, (ImVec2, ImVec2));
-    MOCK_METHOD(bool, popupOpen, ());
+    MOCK_METHOD(bool, isPopupOpen, ());
+    MOCK_METHOD(void, closePopup, ());
+    MOCK_METHOD(bool, copyBtnClicked, ()); 
+    MOCK_METHOD(bool, closeBtnClicked, ());
+    MOCK_METHOD(LogAnalyzerTool::CopyLogs, getInput, ()); 
+
 };
 
 }

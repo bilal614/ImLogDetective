@@ -13,7 +13,8 @@ public:
     void closeCurrentPopup() ;
     bool collapsingHeader(const std::string& title);
     void endPopup();
-    bool inputText(const std::string& label, char* buf);
+    bool inputText(const std::string& label, char* buf, size_t boxLength);
+    bool inputPassword(const std::string& label, char* buf, size_t boxLength);
     void openPopup(const std::string& name);
     void popItemWidth();
     void pushItemWidth(float width);

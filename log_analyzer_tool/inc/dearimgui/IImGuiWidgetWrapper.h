@@ -16,7 +16,8 @@ public:
     virtual void closeCurrentPopup() = 0;
     virtual bool collapsingHeader(const std::string& title) = 0;
     virtual void endPopup() = 0;
-    virtual bool inputText(const std::string& label, char* buf) = 0;
+    virtual bool inputText(const std::string& label, char* buf, size_t boxLength) = 0;
+    virtual bool inputPassword(const std::string& label, char* buf, size_t boxLength) = 0;
     virtual void openPopup(const std::string& name) = 0;
     virtual void popItemWidth() = 0;
     virtual void pushItemWidth(float width) = 0;

@@ -30,9 +30,17 @@ void ImGuiWidgetWrapper::endPopup()
     ImGui::EndPopup();
 }
 
-bool ImGuiWidgetWrapper::inputText(const std::string& label, char* buf)
+bool ImGuiWidgetWrapper::inputText(const std::string& label, char* buf, size_t boxLength)
 {
-    return ImGui::InputText(label.c_str(), buf, Bounds::MaxTextboxInputLength);
+    return ImGui::InputText(label.c_str(), buf, 
+        boxLength < Bounds::MaxTextboxInputLength ? boxLength : Bounds::MaxTextboxInputLength);
+}
+
+bool ImGuiWidgetWrapper::inputPassword(const std::string& label, char* buf, size_t boxLength)
+{
+    return ImGui::InputText(label.c_str(), buf, 
+        boxLength < Bounds::MaxTextboxInputLength ? boxLength : Bounds::MaxTextboxInputLength, 
+        ImGuiInputTextFlags_Password);
 }
 
 void ImGuiWidgetWrapper::openPopup(const std::string& name)

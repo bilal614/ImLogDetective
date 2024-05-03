@@ -50,7 +50,7 @@ TEST_F(TestFolderSelectionPopup, test_folder_selection_popup_when_invalid_direct
     ImVec2 popupWindowSize{350.0f, 250.0f};
     ImVec2 popupWindowPos{0.0f, 0.0f};
     std::string invalidFolderPath{"/foobar/bar/foo"};
-    std::vector<PopupButton> popupButtons{PopupButton{SelectFolderDefs::OkBtn}, PopupButton{SelectFolderDefs::CloseBtn}};
+    std::vector<PopupButton> popupButtons{PopupButton{Common::OkBtn}, PopupButton{Common::CloseBtn}};
     popupButtons[0].clicked = true;
 
     EXPECT_CALL(modalPopupFactoryMock, open(imvec2_equal(popupWindowPos), imvec2_equal(popupWindowSize), SelectFolderDefs::Name));

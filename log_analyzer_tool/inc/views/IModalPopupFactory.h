@@ -18,14 +18,14 @@ struct PopupButton {
 };
 
 struct PopupInputTextBox {
-    PopupInputTextBox(const std::string name, float width = 200) : 
+    PopupInputTextBox(const std::string name, std::string& input, float width = 200) : 
         name{name},
         width{width},
-        input{}
-    {} 
+        input{input}
+    {}
     std::string name;
     float width;
-    std::string input;
+    std::string& input;
 };
 
 class IModalPopupFactory
@@ -36,6 +36,7 @@ public:
     virtual void beginLayout(const std::string& name) = 0; 
     virtual bool createButtonGroup(std::vector<PopupButton>& buttons) = 0;
     virtual bool createInputTextBox(const std::string& label, std::string& input, float width) = 0;
+    virtual bool createProtectedInputTextBox(const std::string& label, std::string& input, float width) = 0;
     virtual bool createInputTextBoxGroup(
         std::vector<PopupInputTextBox>& inputTextBoxes, 
         const std::string& title,

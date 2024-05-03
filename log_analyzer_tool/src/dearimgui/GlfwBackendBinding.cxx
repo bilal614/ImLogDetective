@@ -12,9 +12,11 @@
 #include "event_handling/EventLoop.h"
 #include "event_handling/Event.hpp"
 #include "LogAnalyzerToolDefs.h"
+#include "log_scp_wrapper/AuthenticationWorkFlow.h"
 #include "log_scp_wrapper/ScpExecutor.h"
 #include "models/GzipFile.h"
 #include "models/LogFileParser.h"
+#include "presenters/CopyLogsPresenter.h"
 #include "presenters/FileListPresenter.h"
 #include "presenters/LogFilePresenter.h"
 #include "presenters/LogDataModelFactory.h"
@@ -24,6 +26,7 @@
 #include "views/SelectionMenuBar.h"
 #include "views/FolderSelectionPopup.h"
 #include "views/CopyLogsPopup.h"
+#include "views/ProtectedInputPopup.h"
 #include "views/LogView.h"
 #include "views/LogFilterView.h"
 #include <iostream>
@@ -60,11 +63,13 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<ISelectionMenuBar> selectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
     std::unique_ptr<ICopyLogsPopup> copyLogsPopup;
+    std::unique_ptr<IProtectedInputPopup> protectedInputPopup;
     std::unique_ptr<IFileListView> fileListView;
     std::unique_ptr<ILogFilterView> logFilterView;
     std::unique_ptr<ILogView> logView;
     std::unique_ptr<GzipFile> gzipFile;
     std::unique_ptr<ILogFileParser> logFileParser;
+    std::unique_ptr<ICopyLogsPresenter> copyLogsPresenter;
     std::unique_ptr<IFileListPresenter> fileListPresenter;
     std::unique_ptr<ILogFilePresenter> logFilePresenter;
     std::unique_ptr<ILogFileTabsPresenter> logFileTabsPresenter;
@@ -72,6 +77,7 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<ITabBar> tabBar;
     std::unique_ptr<MainPresenter> mainPresenter;
     std::unique_ptr<LogScpWrapper::IScpExecutor> scpExecutor;
+    LogScpWrapper::AuthenticationWorkFlow authenticationWorkFlow;
 };
 
 GlfwBackendBinding::Impl::~Impl()
@@ -131,9 +137,11 @@ GlfwBackendBinding::Impl::Impl() :
     imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapper>();
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort, *imGuiWidgetWrapper);
     eventLoop = std::make_unique<LogEventHandling::EventLoop>();
+    scpExecutor = std::make_unique<LogScpWrapper::ScpExecutor>(*eventLoop, authenticationWorkFlow);
     selectionMenuBar = std::make_unique<SelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory), *eventLoop);
+    protectedInputPopup = std::make_unique<ProtectedInputPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
@@ -141,6 +149,7 @@ GlfwBackendBinding::Impl::Impl() :
     fileListView = std::make_unique<FileListView>(dynamic_cast<IListTreeFactory&>(*widgetFactory));
     gzipFile = std::make_unique<GzipFile>();
     logFileParser = std::make_unique<LogFileParser>(*gzipFile);
+    copyLogsPresenter = std::make_unique<CopyLogsPresenter>(*copyLogsPopup, *protectedInputPopup, *scpExecutor);
     logFilePresenter = std::make_unique<LogFilePresenter>(
         dynamic_cast<IWindowFactory&>(*widgetFactory), 
         *eventLoop, 
@@ -155,9 +164,9 @@ GlfwBackendBinding::Impl::Impl() :
         *mainViewPort,
         *selectionMenuBar,
         *folderSelectionPopup,
-        *copyLogsPopup,
         *logFileTabsPresenter,
-        *fileListPresenter);
+        *fileListPresenter,
+        *copyLogsPresenter);
 
 }
 

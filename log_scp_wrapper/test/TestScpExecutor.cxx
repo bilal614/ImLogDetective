@@ -149,13 +149,13 @@ TEST_F(TestScpExecutor, test_ScpExecutor_addJumpHost_only_valid_jump_hosts_will_
     EXPECT_TRUE(scpExecutor.addJumpHost(remoteHost2));
     EXPECT_FALSE(scpExecutor.addJumpHost(invalidRemoteHost));
 
-    auto identityFiles = scpExecutor.getJumpHosts();
+    auto jumpHosts = scpExecutor.getJumpHosts();
 
-    EXPECT_EQ(identityFiles.size(), expectedNumberOfValidKeysAdded);
-    EXPECT_EQ(identityFiles[0].ip, ip1);
-    EXPECT_EQ(identityFiles[0].user, user1);
-    EXPECT_EQ(identityFiles[1].ip, ip2);
-    EXPECT_EQ(identityFiles[1].user, user2);
+    EXPECT_EQ(jumpHosts.size(), expectedNumberOfValidKeysAdded);
+    EXPECT_EQ(jumpHosts[0].ip, ip1);
+    EXPECT_EQ(jumpHosts[0].user, user1);
+    EXPECT_EQ(jumpHosts[1].ip, ip2);
+    EXPECT_EQ(jumpHosts[1].user, user2);
 }
 
 }

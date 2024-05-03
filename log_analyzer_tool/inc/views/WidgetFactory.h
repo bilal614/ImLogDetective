@@ -38,6 +38,7 @@ public:
     void beginLayout(const std::string& name) override;
     bool createButtonGroup(std::vector<PopupButton>& buttons) override;
     bool createInputTextBox(const std::string& label, std::string& input, float width) override;
+    bool createProtectedInputTextBox(const std::string& label, std::string& input, float width) override;
     bool createInputTextBoxGroup(std::vector<PopupInputTextBox>& inputTextBoxes,
         const std::string& title, 
         bool horizontal,
