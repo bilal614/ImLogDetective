@@ -135,8 +135,10 @@ TEST_F(TestScpExecutor, test_ScpExecutor_addIdentityFile_add_existing_identity_f
     auto identityFiles = scpExecutor.getIdentityFiles();
 
     EXPECT_EQ(identityFiles.size(), expectedNumberOfValidKeysAdded);
-    EXPECT_EQ(identityFiles[0], testKeyFile1);
-    EXPECT_EQ(identityFiles[1], testKeyFile2);
+    EXPECT_TRUE(identityFiles.find(testKeyFile1) != identityFiles.end());
+    EXPECT_TRUE(identityFiles.find(testKeyFile2) != identityFiles.end());
+    EXPECT_EQ(*identityFiles.find(testKeyFile1), testKeyFile1);
+    EXPECT_EQ(*identityFiles.find(testKeyFile2), testKeyFile2);
 }
 
 TEST_F(TestScpExecutor, test_ScpExecutor_addJumpHost_only_valid_jump_hosts_will_be_added) {
@@ -144,6 +146,7 @@ TEST_F(TestScpExecutor, test_ScpExecutor_addJumpHost_only_valid_jump_hosts_will_
     const size_t expectedNumberOfValidKeysAdded = 2;
     const std::string user1{"foo"}, user2{"bar"};
     const std::string ip1{"192.168.1.1"}, ip2{"192.168.1.2"};
+    LogScpWrapper::RemoteHost expectedHost1{user1, ip1}, expectedHost2{user2, ip2};
 
     EXPECT_TRUE(scpExecutor.addJumpHost(remoteHost1));
     EXPECT_TRUE(scpExecutor.addJumpHost(remoteHost2));
@@ -152,10 +155,12 @@ TEST_F(TestScpExecutor, test_ScpExecutor_addJumpHost_only_valid_jump_hosts_will_
     auto jumpHosts = scpExecutor.getJumpHosts();
 
     EXPECT_EQ(jumpHosts.size(), expectedNumberOfValidKeysAdded);
-    EXPECT_EQ(jumpHosts[0].ip, ip1);
-    EXPECT_EQ(jumpHosts[0].user, user1);
-    EXPECT_EQ(jumpHosts[1].ip, ip2);
-    EXPECT_EQ(jumpHosts[1].user, user2);
+    EXPECT_TRUE(jumpHosts.find(expectedHost1) != jumpHosts.end());
+    EXPECT_TRUE(jumpHosts.find(expectedHost2) != jumpHosts.end());
+    EXPECT_EQ(jumpHosts.find(expectedHost1)->ip, ip1);
+    EXPECT_EQ(jumpHosts.find(expectedHost1)->user, user1);
+    EXPECT_EQ(jumpHosts.find(expectedHost2)->ip, ip2);
+    EXPECT_EQ(jumpHosts.find(expectedHost2)->user, user2);
 }
 
 }

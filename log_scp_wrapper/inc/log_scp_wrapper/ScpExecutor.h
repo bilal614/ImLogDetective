@@ -23,9 +23,9 @@ public:
     bool setDestinationLocalPath(const std::filesystem::path& localDestinationPath) final;
     std::filesystem::path getDestinationLocalPath() final;
     bool addIdentityFile(const std::filesystem::path& identityFilePath) final;
-    std::vector<std::filesystem::path> getIdentityFiles() final;
+    std::unordered_set<std::filesystem::path> getIdentityFiles() final;
     bool addJumpHost(const std::string& remoteHost) final;
-    std::vector<RemoteHost> getJumpHosts() final;
+    std::unordered_set<RemoteHost, RemoteHostHash> getJumpHosts() final;
     void download() final;
     bool downloadStarted() final;
     bool downloadFinished() final;

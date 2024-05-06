@@ -90,8 +90,8 @@ void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, I
     std::vector<PopupButton> popupButtons = {PopupButton{Common::OkBtn}, PopupButton{Common::CloseBtn}};
     p->modalPopupFactory.createButtonGroup(popupButtons);
 
-    p->processPopupInput(popupButtons[0].clicked, popupButtons[1].clicked);
     p->modalPopupFactory.endLayout();
+    p->processPopupInput(popupButtons[0].clicked, popupButtons[1].clicked);
 }
 
 std::pair<bool, std::filesystem::path> FolderSelectionPopup::getSelectedFolder()

@@ -12,7 +12,7 @@
 #include <mutex>
 #include <iostream>
 #include <regex>
-
+#include <unordered_set>
 #include <thread>
 
 namespace {
@@ -47,8 +47,8 @@ struct ScpExecutor::Impl
     std::mutex mtx, mtx_prompt, mtx_request;
     RemoteHostPath remoteHostPath;
     std::filesystem::path destinationLocalPath;
-    std::vector<std::filesystem::path> identityFilePaths; //TODO identityFilePaths needs to have unique paths, use set
-    std::vector<RemoteHost> jumpHosts;//TODO jumpHosts needs to have unique hosts, use set
+    std::unordered_set<std::filesystem::path> identityFilePaths;
+    std::unordered_set<RemoteHost, RemoteHostHash> jumpHosts;
     LogEventHandling::IEventLoop& eventLoop;
     IAuthenticationWorkFlow& authenticationWorkFlow;
     std::unique_ptr<std::promise<bool>> copyWillBeFinished;
@@ -251,7 +251,7 @@ bool ScpExecutor::addIdentityFile(const std::filesystem::path& identityFilePath)
     {
         if(p->checkKeyEncapsulationBoundaryFormat(identityFilePath))
         {
-            p->identityFilePaths.emplace_back(identityFilePath);
+            p->identityFilePaths.emplace(identityFilePath);
             p->authenticationWorkFlow.addKeyFile(identityFilePath);
             result = true;
         }
@@ -259,7 +259,7 @@ bool ScpExecutor::addIdentityFile(const std::filesystem::path& identityFilePath)
     return result;
 }
 
-std::vector<std::filesystem::path> ScpExecutor::getIdentityFiles()
+std::unordered_set<std::filesystem::path> ScpExecutor::getIdentityFiles()
 {
     return p->identityFilePaths;
 }
@@ -269,13 +269,13 @@ bool ScpExecutor::addJumpHost(const std::string& remoteHost)
     RemoteHost host;
     if(p->extractRemoteHostFrom(remoteHost, host))
     {
-        p->jumpHosts.emplace_back(host);
+        p->jumpHosts.emplace(host);
         return true;
     }
     return false;
 }
 
-std::vector<RemoteHost> ScpExecutor::getJumpHosts()
+std::unordered_set<RemoteHost, RemoteHostHash> ScpExecutor::getJumpHosts()
 {
     return p->jumpHosts;
 }

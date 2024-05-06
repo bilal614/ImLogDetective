@@ -44,4 +44,11 @@ struct RemoteHostPath
     }
 };
 
+struct RemoteHostHash {
+    size_t operator()(const RemoteHost& host) const
+    {
+        return std::hash<std::string>{}(host.toString());
+    }
+};
+
 }
