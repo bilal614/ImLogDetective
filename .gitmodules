@@ -4,3 +4,6 @@
 [submodule "libssh2"]
 	path = libssh2
 	url = https://github.com/libssh2/libssh2.git
+[submodule "mINI"]
+	path = mINI
+	url = git@github.com:metayeti/mINI.git

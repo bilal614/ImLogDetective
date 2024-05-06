@@ -24,7 +24,6 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
 
     add_library(imgui_glfw_opengl SHARED
         ${PROJECT_SOURCE_DIR}/imgui/imgui.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/imgui_demo.cpp
         ${PROJECT_SOURCE_DIR}/imgui/imgui_draw.cpp
         ${PROJECT_SOURCE_DIR}/imgui/imgui_tables.cpp
         ${PROJECT_SOURCE_DIR}/imgui/imgui_widgets.cpp
@@ -61,6 +60,9 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     set(LOG_EVENT_HANDLING_DIR ${PROJECT_SOURCE_DIR}/log_event_handling)
     set(TEST_LOG_EVENT_HANDLING_DIR ${LOG_EVENT_HANDLING_DIR}/test/mocks)
 
+    # Definitions for mINI
+    set(mINI_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/mINI/src)
+
     #log_event_handling
     add_subdirectory(${PROJECT_ROOT}/log_event_handling)
 
@@ -79,7 +81,8 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
 
     #test app
     add_executable(test_app
-    ${PROJECT_SOURCE_DIR}/imgui/examples/example_glfw_opengl3/main.cpp
+        ${PROJECT_SOURCE_DIR}/imgui/examples/example_glfw_opengl3/main.cpp
+        ${PROJECT_SOURCE_DIR}/imgui/imgui_demo.cpp
     )
 
     target_include_directories(test_app  PUBLIC ${PROJECT_INCLUDE_DIRS})

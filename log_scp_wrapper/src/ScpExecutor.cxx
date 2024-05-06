@@ -47,8 +47,8 @@ struct ScpExecutor::Impl
     std::mutex mtx, mtx_prompt, mtx_request;
     RemoteHostPath remoteHostPath;
     std::filesystem::path destinationLocalPath;
-    std::vector<std::filesystem::path> identityFilePaths;
-    std::vector<RemoteHost> jumpHosts;
+    std::vector<std::filesystem::path> identityFilePaths; //TODO identityFilePaths needs to have unique paths, use set
+    std::vector<RemoteHost> jumpHosts;//TODO jumpHosts needs to have unique hosts, use set
     LogEventHandling::IEventLoop& eventLoop;
     IAuthenticationWorkFlow& authenticationWorkFlow;
     std::unique_ptr<std::promise<bool>> copyWillBeFinished;

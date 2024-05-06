@@ -28,11 +28,13 @@ if(${ZLIB_FOUND})
         ${LOG_ANALYZER_TOOL_DIR}/src/models/GzipFile.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/models/LogDataModel.cxx
         ${LOG_ANALYZER_TOOL_DIR}/src/models/LogFileParser.cxx
+        ${LOG_ANALYZER_TOOL_DIR}/src/models/Mini.cxx
     )
 
     target_include_directories(${LOG_ANALYZER_TOOL_LIB} PRIVATE 
         ${PROJECT_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS}
+        ${mINI_INCLUDE_DIR}
         ${LOG_EVENT_HANDLING_LIB}
         ${LOG_SCP_WRAPPER_LIB}
     )

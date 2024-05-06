@@ -16,6 +16,7 @@
 #include "log_scp_wrapper/ScpExecutor.h"
 #include "models/GzipFile.h"
 #include "models/LogFileParser.h"
+#include "models/Mini.h"
 #include "presenters/CopyLogsPresenter.h"
 #include "presenters/FileListPresenter.h"
 #include "presenters/LogFilePresenter.h"
@@ -68,6 +69,7 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<ILogFilterView> logFilterView;
     std::unique_ptr<ILogView> logView;
     std::unique_ptr<GzipFile> gzipFile;
+    std::unique_ptr<IMini> mini;
     std::unique_ptr<ILogFileParser> logFileParser;
     std::unique_ptr<ICopyLogsPresenter> copyLogsPresenter;
     std::unique_ptr<IFileListPresenter> fileListPresenter;
@@ -120,12 +122,9 @@ GlfwBackendBinding::Impl::Impl() :
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
-        //ImGui::StyleColorsClassic();
-        //ImGui::StyleColorsLight();
 
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -148,8 +147,9 @@ GlfwBackendBinding::Impl::Impl() :
     logView = std::make_unique<LogView>(dynamic_cast<ITextWidgetFactory&>(*widgetFactory));
     fileListView = std::make_unique<FileListView>(dynamic_cast<IListTreeFactory&>(*widgetFactory));
     gzipFile = std::make_unique<GzipFile>();
+    mini = std::make_unique<Mini>("loganalyzer.ini");
     logFileParser = std::make_unique<LogFileParser>(*gzipFile);
-    copyLogsPresenter = std::make_unique<CopyLogsPresenter>(*copyLogsPopup, *protectedInputPopup, *scpExecutor);
+    copyLogsPresenter = std::make_unique<CopyLogsPresenter>(*copyLogsPopup, *protectedInputPopup, *scpExecutor, *mini);
     logFilePresenter = std::make_unique<LogFilePresenter>(
         dynamic_cast<IWindowFactory&>(*widgetFactory), 
         *eventLoop, 

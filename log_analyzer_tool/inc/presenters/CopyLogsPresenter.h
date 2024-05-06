@@ -9,6 +9,7 @@ namespace LogScpWrapper {
 namespace LogAnalyzerTool
 {
 class ICopyLogsPopup;
+class IMini;
 class IProtectedInputPopup;
 
 class CopyLogsPresenter : public ICopyLogsPresenter
@@ -16,7 +17,8 @@ class CopyLogsPresenter : public ICopyLogsPresenter
 public:
     CopyLogsPresenter(ICopyLogsPopup& copyLogsPopup,
         IProtectedInputPopup& protectedInputPopup,
-        LogScpWrapper::IScpExecutor& scpExecutor);
+        LogScpWrapper::IScpExecutor& scpExecutor,
+        IMini& mini);
     ~CopyLogsPresenter();
     void update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize) final;
     void monitorCopyLogs() final;

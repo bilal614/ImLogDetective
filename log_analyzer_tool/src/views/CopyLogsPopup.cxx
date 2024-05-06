@@ -68,6 +68,17 @@ void CopyLogsPopup::open(const ImVec2& popupPosition, const ImVec2& popupSize)
     p->opened = true;
 }
 
+void CopyLogsPopup::initInput(const CopyLogs& input)
+{
+    p->copyLogsInput = CopyLogs{};
+    p->copyLogsInput.dstDirectory.insert(0, input.dstDirectory);
+    p->copyLogsInput.srcHostPath.insert(0, input.srcHostPath);
+    p->copyLogsInput.jumpHostPath1.insert(0, input.jumpHostPath1);
+    p->copyLogsInput.jumpHostPath2.insert(0, input.jumpHostPath2);
+    p->copyLogsInput.keyFile1.insert(0, input.keyFile1);
+    p->copyLogsInput.keyFile2.insert(0, input.keyFile2);
+}
+
 void CopyLogsPopup::draw()
 {
     if(p->opened)
@@ -93,13 +104,9 @@ void CopyLogsPopup::draw()
             PopupInputTextBox{"Key File Path 1", p->copyLogsInput.keyFile1, CopyLogsDefs::TextBoxWidth},
             PopupInputTextBox{"Key File Path 2", p->copyLogsInput.keyFile2, CopyLogsDefs::TextBoxWidth}};
         p->modalPopupFactory.createInputTextBoxGroup(keyFiles, "Key File Paths", false, true);
-        
-        //TODO Implement input validation, in presenter
-        {
-            //update state from UI elements
-            p->copyClicked = popupButtons[0].clicked;
-            p->closeClicked = popupButtons[1].clicked;
-        }
+
+        p->copyClicked = popupButtons[0].clicked;
+        p->closeClicked = popupButtons[1].clicked;
 
         p->modalPopupFactory.endLayout();
     }

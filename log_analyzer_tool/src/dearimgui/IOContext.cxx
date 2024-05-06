@@ -14,7 +14,6 @@ struct IOContext::Impl
 IOContext::Impl::Impl() :
     io{ImGui::GetIO()}
 {
-
 }
 
 IOContext::IOContext() :

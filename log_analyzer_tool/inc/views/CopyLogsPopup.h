@@ -26,6 +26,7 @@ public:
     bool okBtnClicked() final;
     bool closeBtnClicked() final;
     CopyLogs getInput() final;
+    void initInput(const CopyLogs& input) final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

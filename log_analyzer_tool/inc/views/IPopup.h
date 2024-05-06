@@ -19,7 +19,6 @@ public:
     virtual bool okBtnClicked() = 0;
     virtual bool closeBtnClicked() = 0;
     virtual T getInput() = 0;
-
 };
 
 }

@@ -21,7 +21,7 @@ struct AuthenticationWorkFlow::Impl {
     std::filesystem::path checkKeyAuthenticationFrom(const std::string& prompt);
 
     std::vector<RemoteHost> remoteHosts;
-    std::vector<std::filesystem::path> keyFiles;
+    std::vector<std::filesystem::path> keyFiles; //TODO keyFiles needs to have unique paths, use set
 };
 
 AuthenticationWorkFlow::Impl::Impl() : 

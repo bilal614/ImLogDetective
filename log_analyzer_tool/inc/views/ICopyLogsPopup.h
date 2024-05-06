@@ -28,7 +28,14 @@ struct CopyLogs{
     std::string keyFile2;
 };
 
-class ICopyLogsPopup : public IPopup<CopyLogs>
+class ICachedCopyLogsPopupInput 
+{
+    public:
+        virtual ~ICachedCopyLogsPopupInput() = default;
+        virtual void initInput(const CopyLogs& input) = 0;
+};
+
+class ICopyLogsPopup : public IPopup<CopyLogs>, public ICachedCopyLogsPopupInput
 {
 };
 
