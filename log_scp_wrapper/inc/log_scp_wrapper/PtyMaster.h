@@ -19,8 +19,8 @@ public:
     std::string getUser() final;
     pty_child& getChild() final;
     void writeLine(const std::string& input) final;
-    std::string read(size_t bytesToRead) final;
-    std::string read() final;
+    std::pair<bool, std::string> read(size_t bytesToRead) final;
+    std::pair<bool, std::string> read() final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

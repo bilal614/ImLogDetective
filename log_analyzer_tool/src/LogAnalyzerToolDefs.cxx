@@ -10,7 +10,7 @@ namespace LogAnalyzerTool
     }
 
     namespace WindowDefs {
-        const char* LogAnalyzerToolApplicationName {"LoggingAnalyzerTool"};
+        const char* ApplicationName {"ImLogDetective"};
         const char* FileListWindow {"FileListWindow"};
         const char* LogsWindow{"LogsWindow"};
         const char* LogFilterChildWindow {"LogFilterWindow"};

@@ -11,7 +11,7 @@ namespace LogAnalyzerTool
     }
 
     namespace WindowDefs {
-        extern const char* LogAnalyzerToolApplicationName;
+        extern const char* ApplicationName;
         extern const char* FileListWindow;
         extern const char* LogsWindow;
         extern const char* LogFilterChildWindow;

@@ -58,8 +58,8 @@ TEST_F(TestFolderSelectionPopup, test_folder_selection_popup_when_invalid_direct
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBox(SelectFolderDefs::Name, _, SelectFolderDefs::TextBoxWidth))
         .WillOnce(DoAll(SetArgReferee<1>(invalidFolderPath), Return(true)));
     EXPECT_CALL(modalPopupFactoryMock, createButtonGroup(_)).WillOnce(DoAll(SetArgReferee<0>(popupButtons), Return(true)));
-    EXPECT_CALL(modalPopupFactoryMock, showErrorText(ErrorMessage::InvalidDirectory));
     EXPECT_CALL(modalPopupFactoryMock, endLayout());
+    EXPECT_CALL(modalPopupFactoryMock, showErrorText(ErrorMessage::InvalidDirectory));
 
     folderSelectionPopup.drawFolderSelectionModalPopup(popupWindowPos, popupWindowSize);
 }

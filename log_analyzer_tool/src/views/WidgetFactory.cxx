@@ -69,7 +69,7 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::Impl::addWindow()
 {
     return std::make_unique<ScopedImGuiWindow>(
         parent,
-        WindowDefs::LogAnalyzerToolApplicationName, 
+        WindowDefs::ApplicationName, 
         mainViewPort.getAreaSize(), 
         mainViewPort.getViewportPosition(), 
         openCloseWidgetPresent.get(), 

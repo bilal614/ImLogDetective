@@ -60,32 +60,44 @@ TEST_F(TestPtyMaster, test_PtyMaster_with_tr) {
 
     process->writeLine(testInputs[0]);
 
+    auto result = process->read(testInputs[0].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(testInputs[0].size() + 2),
+        result.second,
         sanitizeNewLineCharacters(testInputs[0]));
 
+    result = process->read(expectedOutput[0].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(expectedOutput[0].size() + 2),
+        result.second,
         sanitizeNewLineCharacters(expectedOutput[0]));
 
     process->writeLine(testInputs[1]);
 
+    result = process->read(testInputs[1].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(testInputs[1].size() + 2),
+        result.second,
         sanitizeNewLineCharacters(testInputs[1]));
 
+    result = process->read(expectedOutput[1].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(expectedOutput[1].size() + 2), 
+        result.second, 
         sanitizeNewLineCharacters(expectedOutput[1]));
 
     process->writeLine(testInputs[2]);
 
+    result = process->read(testInputs[2].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(testInputs[2].size() + 2), 
+        result.second, 
         sanitizeNewLineCharacters(testInputs[2]));
 
+    result = process->read(expectedOutput[2].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(expectedOutput[2].size() + 2), 
+        result.second, 
         sanitizeNewLineCharacters(expectedOutput[2]));
 
     piped_child.closeMasterChild();
@@ -118,22 +130,30 @@ TEST_F(TestPtyMaster, test_PtyMaster_with_sh) {
 
     process->writeLine(testInputs[0]);
 
+    auto result = process->read(testInputs[0].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(testInputs[0].size() + 2),
+        result.second,
         sanitizeNewLineCharacters(testInputs[0]));
 
+    result = process->read(expectedOutput[0].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(expectedOutput[0].size() + 2), 
+        result.second, 
         sanitizeNewLineCharacters(expectedOutput[0]));
 
     process->writeLine(testInputs[1]);
 
+    result = process->read(testInputs[1].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(testInputs[1].size() + 2),
+        result.second,
         sanitizeNewLineCharacters(testInputs[1]));
 
+    result = process->read(expectedOutput[1].size() + 2);
+    EXPECT_TRUE(result.first);
     EXPECT_EQ(
-        process->read(expectedOutput[1].size() + 2), 
+        result.second, 
         sanitizeNewLineCharacters(expectedOutput[1]));
 
     piped_child.closeMasterChild();

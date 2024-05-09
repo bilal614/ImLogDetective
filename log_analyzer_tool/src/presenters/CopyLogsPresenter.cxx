@@ -7,13 +7,9 @@
 #include "views/ICopyLogsPopup.h"
 #include "views/IProtectedInputPopup.h"
 #include "LogAnalyzerToolDefs.h"
-
 #include <map>
 #include "views/IPopup.h"
 
-//REMOVE LATER
-#include <iostream>
-#include <thread>
 
 namespace LogAnalyzerTool
 {
@@ -23,7 +19,6 @@ enum class PopupType {
     KEY_FILE_AUTHENTICATION,
     USER_AUTHENTICATION
 };
-
 
 struct PopupState{
     bool open_;
@@ -138,7 +133,6 @@ void CopyLogsPresenter::Impl::processPopupInput()
 {
     if (copyPopupLogs.closeBtnClicked())
     {
-        std::cout << "CLOSE BTN CLICKED" << std::endl;
         // if(popupManager.closePopup(PopupType::COPY_LOGS))
         // {
             mini.updateIniFile();
@@ -149,7 +143,6 @@ void CopyLogsPresenter::Impl::processPopupInput()
     }
     if(copyPopupLogs.okBtnClicked())
     {
-        std::cout << "COPY BTN CLICKED" << std::endl;
         if(!downloadInit)
         {
             auto input = copyPopupLogs.getInput();
@@ -215,7 +208,6 @@ CopyLogsPresenter::~CopyLogsPresenter() = default;
 
 void CopyLogsPresenter::update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize)
 {
-
     if(openPopup)
     {
         if(p->isClosed)
@@ -261,36 +253,27 @@ void CopyLogsPresenter::update(bool openPopup, const ImVec2& popupPosition, cons
 
 void CopyLogsPresenter::monitorCopyLogs()
 {
-    if(p->downloadInit && p->scpExecutor.downloadFinished())
-    {
-        p->downloadInit = false;
-    }
-
     if(p->downloadInit && !p->scpExecutor.downloadStarted())
     {
         auto request = p->scpExecutor.getAuthenticationRequest();
 
         if(request.prompt == LogScpWrapper::PromptType::HostAuthenticity)
         {
-            std::cout << "Entering HostAuthenticity, " << p->scpExecutor.prompt() << std::endl;
             p->scpExecutor.enterPass("yes");
         }
         if(request.prompt == LogScpWrapper::PromptType::KeyFileAuthentication)
         {
-            std::cout << "Entering KeyFileAuthentication, " << p->scpExecutor.prompt() << std::endl;
             p->passPopup = true;
         }
         if(request.prompt == LogScpWrapper::PromptType::UserAuthentication)
         {
-            std::cout << "Entering UserAuthentication, " << p->scpExecutor.prompt() << std::endl;
             p->passPopup = true;
         }
     }
 
     if(p->scpExecutor.downloadFinished())
     {
-        // p->isClosed = true;
-        // p->copyPopupLogs.close();
+        p->downloadInit = false;
     }
 }
 

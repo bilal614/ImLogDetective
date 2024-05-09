@@ -236,18 +236,18 @@ void PtyMaster::writeLine(const std::string& input)
     ::write(p->forked_child.master_fd, p->wr_buf, strlen(p->wr_buf));
 }
 
-std::string PtyMaster::read(size_t bytesToRead)
+std::pair<bool, std::string> PtyMaster::read(size_t bytesToRead)
 {
     if (p->awaitDataOnFd())
     {
         memset(p->rd_buf, 0, RW_MAX_BUFF);
         auto bytes_read = ::read(p->forked_child.master_fd, p->rd_buf, bytesToRead);
-        return p->sanitizeNewLineCharacters(p->rd_buf);
+        return {true, p->sanitizeNewLineCharacters(p->rd_buf)};
     }
-    return std::string{};
+    return {false, std::string{}};
 }
 
-std::string PtyMaster::read()
+std::pair<bool, std::string> PtyMaster::read()
 {
     return read(RW_MAX_BUFF);
 }

@@ -150,13 +150,13 @@ ProcessStartInfo ScpExecutor::Impl::prepareProcessStartInfo()
 
 void ScpExecutor::Impl::setPrompt(const std::string& input)
 {
-    //std::lock_guard<std::mutex> lk(mtx_prompt);
+    std::lock_guard<std::mutex> lk(mtx_prompt);
     prompt = input;
 }
 
 std::string ScpExecutor::Impl::getPrompt()
 {
-    //std::lock_guard<std::mutex> lk(mtx_prompt);
+    std::lock_guard<std::mutex> lk(mtx_prompt);
     return prompt;
 }
 
@@ -296,9 +296,12 @@ void ScpExecutor::download()
             p->copyWillBeFinished = std::make_unique<std::promise<bool>>();
             p->downloadHasFinished = false;
         }
+        auto hasInput = true;
         do
         {
-            p->setPrompt(p->process->read());
+            auto result = p->process->read();
+            hasInput = result.first;
+            p->setPrompt(result.second);
 
             if(!p->hasDownloadStarted())
             {
@@ -313,16 +316,14 @@ void ScpExecutor::download()
             } else {
                 std::cout << p->getPrompt() << std::endl;
             }
-        } while(!p->getPrompt().empty());
+        } while(hasInput);
 
         piped_child.closeMasterChild();
         {
             std::lock_guard<std::mutex> lk(p->mtx);
             p->copyWillBeFinished->set_value(true);
         }
-
         p->process.reset();
-
     });
 }
 
@@ -345,6 +346,7 @@ bool ScpExecutor::downloadFinished()
         {
             p->downloadHasFinished = p->copyHasFinished.get();
             p->copyWillBeFinished.reset();
+            std::cout << "Killing process" << std::endl;
         }
     }
     return p->downloadHasFinished;

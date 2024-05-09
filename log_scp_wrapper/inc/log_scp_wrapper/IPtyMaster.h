@@ -54,8 +54,8 @@ public:
     virtual pty_child& getChild() = 0;
     //Pty IO
     virtual void writeLine(const std::string& input) = 0;
-    virtual std::string read(size_t bytesToRead) = 0;
-    virtual std::string read() = 0;
+    virtual std::pair<bool, std::string> read(size_t bytesToRead) = 0;
+    virtual std::pair<bool, std::string> read() = 0;
 };
 
 }
