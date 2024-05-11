@@ -24,5 +24,5 @@ The tool is built on top of the handy dearimgui library. Current implementation 
 * OpenGL
 * GLFW
 * Zlib
-* Gtest\Gmock
+* Gtest+Gmock
 * Scp
