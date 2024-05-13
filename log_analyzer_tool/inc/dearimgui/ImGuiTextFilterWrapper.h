@@ -2,7 +2,7 @@
 #include "dearimgui/IImGuiTextFilterWrapper.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ImGuiTextFilterWrapper : public IImGuiTextFilterWrapper 

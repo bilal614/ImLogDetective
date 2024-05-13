@@ -4,12 +4,12 @@
 #include "gmock/gmock.h"
 #include "ImVec.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class ScopedImGuiWindowMock : public LogAnalyzerTool::IScopedImGuiWindow 
+class ScopedImGuiWindowMock : public ImLogDetective::IScopedImGuiWindow 
 {
 public:
-    MOCK_METHOD(LogAnalyzerTool::WindowType, getWindowType, ());
+    MOCK_METHOD(ImLogDetective::WindowType, getWindowType, ());
     MOCK_METHOD(ImVec2, getWindowPosition, ());
     MOCK_METHOD(ImVec2, getWindowSize,());
     MOCK_METHOD(void, onSameLine, ());

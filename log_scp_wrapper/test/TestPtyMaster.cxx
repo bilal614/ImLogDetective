@@ -47,12 +47,12 @@ TEST_F(TestPtyMaster, test_PtyMaster_with_tr) {
         "GOOD BYE!"
     };
 
-    LogScpWrapper::ProcessStartInfo process_start_info {
+    ImLogDetective::ProcessStartInfo process_start_info {
         .executable_path{"tr"},
         .arguments{"tr", "a-z", "A-Z"},
     };
     
-    std::unique_ptr<LogScpWrapper::IPtyMaster> process{std::make_unique<LogScpWrapper::PtyMaster>(process_start_info)};
+    std::unique_ptr<ImLogDetective::IPtyMaster> process{std::make_unique<ImLogDetective::PtyMaster>(process_start_info)};
 
     process->start();
 
@@ -117,12 +117,12 @@ TEST_F(TestPtyMaster, test_PtyMaster_with_sh) {
         "Good Bye!"
     };
 
-    LogScpWrapper::ProcessStartInfo process_start_info {
+    ImLogDetective::ProcessStartInfo process_start_info {
         .executable_path{"sh"},
         .arguments{"sh"},
     };
 
-    std::unique_ptr<LogScpWrapper::IPtyMaster> process{std::make_unique<LogScpWrapper::PtyMaster>(process_start_info)};
+    std::unique_ptr<ImLogDetective::IPtyMaster> process{std::make_unique<ImLogDetective::PtyMaster>(process_start_info)};
 
     process->start();
 

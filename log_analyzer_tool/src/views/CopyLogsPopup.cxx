@@ -1,6 +1,6 @@
 #include "views/CopyLogsPopup.h"
 #include "views/IModalPopupFactory.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "event_handling/IEventLoop.h"
 #include <cstring>
 #include <filesystem>
@@ -19,7 +19,7 @@ namespace {
 
 }
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct CopyLogsPopup::Impl

@@ -1,7 +1,7 @@
 #include "TestUtility.h"
 #include <unistd.h>
 
-namespace TestLogAnalyzerTool
+namespace TestImLogDetective
 {
 
 TestUtility::TestUtility()

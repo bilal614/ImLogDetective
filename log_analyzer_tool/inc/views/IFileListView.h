@@ -4,7 +4,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IFileListView

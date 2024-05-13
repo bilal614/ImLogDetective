@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IImGuiTextFilterWrapper

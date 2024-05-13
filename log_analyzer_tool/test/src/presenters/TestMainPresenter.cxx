@@ -1,4 +1,4 @@
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "FileListPresenterMock.h"
 #include "FolderSelectionPopupMock.h"
 #include "presenters/MainPresenter.h"
@@ -19,12 +19,12 @@
 #include <memory>
 #include <unordered_map>
 
-namespace TestLogAnalyzerTool
+namespace TestImLogDetective
 {
 
 using namespace ::testing;
 using ::testing::StrictMock;
-using namespace LogAnalyzerTool;
+using namespace ImLogDetective;
 
 class TestMainPresenter : public ::testing::Test {
 protected:
@@ -70,7 +70,7 @@ protected:
     ImVec2 windowSize, windowPos, windowCenter;
     ImVec2 expectedFolderSelectionWindowPopupSize;
     ImVec2 expectedCopyLogsWindowPopupSize;
-    LogAnalyzerTool::MainPresenter mainPresenter;
+    ImLogDetective::MainPresenter mainPresenter;
 };
 
 TestMainPresenter::TestMainPresenter() :
@@ -104,11 +104,11 @@ void TestMainPresenter::SetUp()
 
 ScopedImGuiWindowMock* TestMainPresenter::checkMainWindowAndMenuBarCreation(const float inputScaleFactor)
 {
-    std::unique_ptr<LogAnalyzerTool::IScopedImGuiWindow> guiWindowMock = std::make_unique<ScopedImGuiWindowMock>();
+    std::unique_ptr<ImLogDetective::IScopedImGuiWindow> guiWindowMock = std::make_unique<ScopedImGuiWindowMock>();
     ScopedImGuiWindowMock* guiWindowMockRef{dynamic_cast<ScopedImGuiWindowMock*>(guiWindowMock.get())};
 
     EXPECT_CALL(selectionMenuBarMock, getInputScaleFactor()).WillOnce(Return(inputScaleFactor));
-    EXPECT_CALL(mainViewPortMock, setViewportScale(::testing::Eq(LogAnalyzerTool::Bounds::ScaleFactorLowerBound)));
+    EXPECT_CALL(mainViewPortMock, setViewportScale(::testing::Eq(ImLogDetective::Bounds::ScaleFactorLowerBound)));
     EXPECT_CALL(windowFactoryMock, createWindow()).WillOnce(Return(ByMove(std::move(guiWindowMock))));
     EXPECT_CALL(selectionMenuBarMock, drawSelectionMenuBar());
     return guiWindowMockRef;

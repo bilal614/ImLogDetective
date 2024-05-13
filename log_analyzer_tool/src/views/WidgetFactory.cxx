@@ -1,5 +1,5 @@
 #include "views/WidgetFactory.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "dearimgui/IMainViewPort.h"
 #include "dearimgui/IScopedImGuiWindow.h"
 #include "dearimgui/IImGuiWidgetWrapper.h"
@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct WidgetFactory::Impl

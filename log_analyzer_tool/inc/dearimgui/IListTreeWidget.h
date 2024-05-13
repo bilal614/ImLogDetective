@@ -3,7 +3,7 @@
 #include <functional>
 #include <string>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IListTreeWidget

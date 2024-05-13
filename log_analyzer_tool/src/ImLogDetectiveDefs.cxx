@@ -1,7 +1,7 @@
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include <string>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
     namespace Common {
         const char* OkBtn{"OK"};

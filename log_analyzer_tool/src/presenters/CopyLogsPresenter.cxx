@@ -6,12 +6,12 @@
 #include "presenters/CopyLogsPresenter.h"
 #include "views/ICopyLogsPopup.h"
 #include "views/IProtectedInputPopup.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include <map>
 #include "views/IPopup.h"
 
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 enum class PopupType {
@@ -92,7 +92,7 @@ struct CopyLogsPresenter::Impl
 {
     Impl(ICopyLogsPopup& copyPopupLogs,
         IProtectedInputPopup& protectedInputPopup,
-        LogScpWrapper::IScpExecutor& scpExecutor,
+        ImLogDetective::IScpExecutor& scpExecutor,
         IMini& mini);
     ~Impl() = default;
 
@@ -101,7 +101,7 @@ struct CopyLogsPresenter::Impl
 
     ICopyLogsPopup& copyPopupLogs;
     IProtectedInputPopup& protectedInputPopup;
-    LogScpWrapper::IScpExecutor& scpExecutor;
+    ImLogDetective::IScpExecutor& scpExecutor;
     IMini& mini;
     bool downloadInit;
     bool isClosed;
@@ -111,7 +111,7 @@ struct CopyLogsPresenter::Impl
 
 CopyLogsPresenter::Impl::Impl(ICopyLogsPopup& copyPopupLogs,
     IProtectedInputPopup& protectedInputPopup,
-    LogScpWrapper::IScpExecutor& scpExecutor,
+    ImLogDetective::IScpExecutor& scpExecutor,
     IMini& mini) :
         copyPopupLogs{copyPopupLogs},
         protectedInputPopup{protectedInputPopup},
@@ -198,7 +198,7 @@ void CopyLogsPresenter::Impl::processPopupInput()
 
 CopyLogsPresenter::CopyLogsPresenter(ICopyLogsPopup& copyPopupLogs, 
     IProtectedInputPopup& protectedInputPopup,
-    LogScpWrapper::IScpExecutor& scpExecutor,
+    ImLogDetective::IScpExecutor& scpExecutor,
     IMini& mini) :
         p{std::make_unique<Impl>(copyPopupLogs, protectedInputPopup, scpExecutor, mini)}
 {
@@ -257,15 +257,15 @@ void CopyLogsPresenter::monitorCopyLogs()
     {
         auto request = p->scpExecutor.getAuthenticationRequest();
 
-        if(request.prompt == LogScpWrapper::PromptType::HostAuthenticity)
+        if(request.prompt == ImLogDetective::PromptType::HostAuthenticity)
         {
             p->scpExecutor.enterPass("yes");
         }
-        if(request.prompt == LogScpWrapper::PromptType::KeyFileAuthentication)
+        if(request.prompt == ImLogDetective::PromptType::KeyFileAuthentication)
         {
             p->passPopup = true;
         }
-        if(request.prompt == LogScpWrapper::PromptType::UserAuthentication)
+        if(request.prompt == ImLogDetective::PromptType::UserAuthentication)
         {
             p->passPopup = true;
         }

@@ -1,7 +1,7 @@
 #include "views/LogView.h"
 #include "views/ITextWidgetFactory.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct LogView::Impl

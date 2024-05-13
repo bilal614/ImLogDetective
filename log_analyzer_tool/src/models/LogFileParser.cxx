@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct LogFileParser::Impl

@@ -3,7 +3,7 @@
 #include "IAuthenticationWorkFlow.h"
 #include <memory>
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 class AuthenticationWorkFlow : public IAuthenticationWorkFlow

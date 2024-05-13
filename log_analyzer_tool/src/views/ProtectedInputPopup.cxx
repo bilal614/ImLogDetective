@@ -5,11 +5,11 @@
 #include <string>
 #include <unordered_map>
 #include "imgui.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 
 struct ImVec2;
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct ProtectedInputPopup::Impl

@@ -1,5 +1,5 @@
 #include "presenters/MainPresenter.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "presenters/ILogFileTabsPresenter.h"
 #include "presenters/IFileListPresenter.h"
 #include "views/IFolderSelectionPopup.h"
@@ -12,7 +12,7 @@
 #include <iostream>
 #include <thread>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct MainPresenter::Impl

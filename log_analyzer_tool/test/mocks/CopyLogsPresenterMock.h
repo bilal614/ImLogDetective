@@ -5,9 +5,9 @@
 #include "ImVec.h"
 #include <utility>
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class CopyLogsPresenterMock : public LogAnalyzerTool::ICopyLogsPresenter 
+class CopyLogsPresenterMock : public ImLogDetective::ICopyLogsPresenter 
 {
 public:
     MOCK_METHOD(void, update, (bool, const ImVec2&, const ImVec2&));

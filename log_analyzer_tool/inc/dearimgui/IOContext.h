@@ -3,7 +3,7 @@
 #include "IIOContext.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IOContext : public IIOContext

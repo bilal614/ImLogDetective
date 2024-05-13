@@ -2,7 +2,7 @@
 
 int main(int, char**)
 {
-    LogAnalyzerTool::GlfwBackendBinding glfwBinding;
+    ImLogDetective::GlfwBackendBinding glfwBinding;
     glfwBinding.runMainLoop();
     return 0;
 }

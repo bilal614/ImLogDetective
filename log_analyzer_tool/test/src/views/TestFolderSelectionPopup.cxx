@@ -1,4 +1,4 @@
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "ModalPopupFactoryMock.h"
 #include "views/FolderSelectionPopup.h"
 #include "TestUtility.h"
@@ -8,12 +8,12 @@
 #include <unordered_map>
 
 
-namespace TestLogAnalyzerTool
+namespace TestImLogDetective
 {
 
 using namespace ::testing;
 using ::testing::StrictMock;
-using namespace LogAnalyzerTool;
+using namespace ImLogDetective;
 
 class TestFolderSelectionPopup : public ::testing::Test {
 protected:
@@ -23,7 +23,7 @@ protected:
     ~TestFolderSelectionPopup() = default;
 
     StrictMock<ModalPopupFactoryMock> modalPopupFactoryMock;
-    LogAnalyzerTool::FolderSelectionPopup folderSelectionPopup;
+    ImLogDetective::FolderSelectionPopup folderSelectionPopup;
 };
 
 TestFolderSelectionPopup::TestFolderSelectionPopup() :

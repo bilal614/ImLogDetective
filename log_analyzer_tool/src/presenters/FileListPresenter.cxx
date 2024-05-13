@@ -6,7 +6,7 @@
 //REMOVE LATER
 #include <iostream>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct FileListPresenter::Impl

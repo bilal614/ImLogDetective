@@ -2,7 +2,7 @@
 #include "gmock/gmock.h"
 #include <filesystem>
 
-namespace TestLogAnalyzerTool
+namespace TestImLogDetective
 {
 
 MATCHER_P(imvec2_equal, a, "") { return arg.x == a.x && arg.y == a.y; };

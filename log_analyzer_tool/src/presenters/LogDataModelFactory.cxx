@@ -2,7 +2,7 @@
 #include "models/LogDataModel.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 std::unique_ptr<ILogDataModel> LogDataModelFactory::createLogDataModel(const std::string& source)

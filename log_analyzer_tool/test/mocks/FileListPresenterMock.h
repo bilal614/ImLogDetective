@@ -3,9 +3,9 @@
 #include "presenters/IFileListPresenter.h"
 #include "gmock/gmock.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class FileListPresenterMock : public LogAnalyzerTool::IFileListPresenter 
+class FileListPresenterMock : public ImLogDetective::IFileListPresenter 
 {
 public:
     MOCK_METHOD(std::vector<std::filesystem::path>, getSelectedFiles,());

@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IMini 

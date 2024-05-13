@@ -4,7 +4,7 @@
 
 struct ImVec2;
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 enum class WindowType

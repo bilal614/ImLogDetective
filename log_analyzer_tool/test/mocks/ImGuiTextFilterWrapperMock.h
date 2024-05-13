@@ -5,9 +5,9 @@
 #include <string>
 #include <vector>
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class ImGuiTextFilterWrapperMock : public LogAnalyzerTool::IImGuiTextFilterWrapper 
+class ImGuiTextFilterWrapperMock : public ImLogDetective::IImGuiTextFilterWrapper 
 {
 public:
     MOCK_METHOD(void, draw, ());

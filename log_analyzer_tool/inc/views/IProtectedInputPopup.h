@@ -5,7 +5,7 @@
 
 struct ImVec2;
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IProtectedInputPopup : public IPopup<std::string>

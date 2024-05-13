@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
     namespace Common {
         extern const char* OkBtn;

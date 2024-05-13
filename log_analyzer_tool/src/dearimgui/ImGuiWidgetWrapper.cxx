@@ -1,8 +1,8 @@
 #include "dearimgui/ImGuiWidgetWrapper.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "imgui.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 bool ImGuiWidgetWrapper::beginPopupModal(const std::string& name)

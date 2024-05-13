@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 enum class TextColor

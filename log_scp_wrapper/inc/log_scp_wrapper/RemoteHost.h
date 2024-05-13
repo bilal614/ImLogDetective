@@ -9,7 +9,7 @@ namespace {
     constexpr char COLON_SYMBOL{':'};
 }
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 struct RemoteHost

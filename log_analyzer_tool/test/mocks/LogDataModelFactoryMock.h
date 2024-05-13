@@ -5,12 +5,12 @@
 #include <string>
 #include <vector>
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class LogDataModelFactoryMock : public LogAnalyzerTool::ILogDataModelFactory 
+class LogDataModelFactoryMock : public ImLogDetective::ILogDataModelFactory 
 {
 public:
-    MOCK_METHOD(std::unique_ptr<LogAnalyzerTool::ILogDataModel>, createLogDataModel, (const std::string&));
+    MOCK_METHOD(std::unique_ptr<ImLogDetective::ILogDataModel>, createLogDataModel, (const std::string&));
 };
 
 }

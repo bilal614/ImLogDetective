@@ -5,7 +5,7 @@
 #include <vector>
 #include <unordered_set>
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 struct AuthenticationRequest;

@@ -4,9 +4,9 @@
 #include "gmock/gmock.h"
 #include "ImVec.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class MainViewPortMock : public LogAnalyzerTool::IMainViewPort 
+class MainViewPortMock : public ImLogDetective::IMainViewPort 
 {
 public:
     MOCK_METHOD(ImVec2, getAreaSize, (), (const));

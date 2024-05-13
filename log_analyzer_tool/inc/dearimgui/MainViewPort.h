@@ -3,7 +3,7 @@
 #include "IMainViewPort.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 class IIOContext;
 

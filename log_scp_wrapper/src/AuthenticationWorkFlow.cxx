@@ -10,7 +10,7 @@ namespace {
     std::regex hostAuthenticityPrompt{"The authenticity of host.*yes/no.*\?"};
 }
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 struct AuthenticationWorkFlow::Impl {

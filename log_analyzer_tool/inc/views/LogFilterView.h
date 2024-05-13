@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IImGuiTextFilterWrapper;

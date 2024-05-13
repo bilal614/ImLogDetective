@@ -5,7 +5,7 @@
 #include "views/ITextWidgetFactory.h"
 #include "views/IWindowFactory.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IWidgetFactory : public ITextWidgetFactory, public IWindowFactory, public IListTreeFactory, public IModalPopupFactory

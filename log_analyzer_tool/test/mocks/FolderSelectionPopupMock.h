@@ -5,11 +5,11 @@
 #include "ImVec.h"
 #include <utility>
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
 using ValidFolderPath = std::pair<bool, std::filesystem::path>;
 
-class FolderSelectionPopupMock : public LogAnalyzerTool::IFolderSelectionPopup 
+class FolderSelectionPopupMock : public ImLogDetective::IFolderSelectionPopup 
 {
 public:
     MOCK_METHOD(void, drawFolderSelectionModalPopup, (ImVec2, ImVec2));

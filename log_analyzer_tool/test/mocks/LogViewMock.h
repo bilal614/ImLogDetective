@@ -4,12 +4,12 @@
 #include "views/ITextWidgetFactory.h"
 #include "gmock/gmock.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class LogViewMock : public LogAnalyzerTool::ILogView 
+class LogViewMock : public ImLogDetective::ILogView 
 {
 public:
-    MOCK_METHOD(void, drawLogLineText, (std::string_view logText, const LogAnalyzerTool::TextColor& color));
+    MOCK_METHOD(void, drawLogLineText, (std::string_view logText, const ImLogDetective::TextColor& color));
 };
 
 }

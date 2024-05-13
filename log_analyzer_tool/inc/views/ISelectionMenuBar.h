@@ -1,6 +1,6 @@
 #pragma once
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ISelectionMenuBar

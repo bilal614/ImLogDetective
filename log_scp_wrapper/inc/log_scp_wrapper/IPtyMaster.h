@@ -10,7 +10,7 @@
 
 #include <unistd.h>
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 struct pty_child {

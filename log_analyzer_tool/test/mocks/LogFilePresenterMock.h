@@ -4,12 +4,12 @@
 #include "models/ILogDataModel.h"
 #include "gmock/gmock.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class LogFilePresenterMock : public LogAnalyzerTool::ILogFilePresenter 
+class LogFilePresenterMock : public ImLogDetective::ILogFilePresenter 
 {
 public:
-    MOCK_METHOD(void, update, (const std::filesystem::path&, bool, LogAnalyzerTool::ILogDataModel&));
+    MOCK_METHOD(void, update, (const std::filesystem::path&, bool, ImLogDetective::ILogDataModel&));
 };
 
 }

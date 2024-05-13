@@ -13,7 +13,7 @@ namespace {
     char NEW_LINE = '\n';
 }
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 void onChildExit(int signum)

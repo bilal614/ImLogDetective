@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <vector>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IFileListPresenter

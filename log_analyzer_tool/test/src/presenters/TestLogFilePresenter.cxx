@@ -1,4 +1,4 @@
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "presenters/LogFilePresenter.h"
 #include "EventLoopMock.h"
 #include "ImGuiTextFilterWrapperMock.h"
@@ -14,12 +14,12 @@
 #include <memory>
 #include <unordered_map>
 
-namespace TestLogAnalyzerTool
+namespace TestImLogDetective
 {
 
 using namespace ::testing;
 using ::testing::StrictMock;
-using namespace LogAnalyzerTool;
+using namespace ImLogDetective;
 
 class TestLogFilePresenter : public ::testing::Test {
 protected:
@@ -35,13 +35,13 @@ protected:
     StrictMock<WindowFactoryMock> windowFactoryMock;
 
     std::filesystem::path filePath;
-    std::unordered_map<LogAnalyzerTool::LogLevel, std::string> dummyLogLines;
-    const std::vector<LogAnalyzerTool::LogData> dummyLogData;
+    std::unordered_map<ImLogDetective::LogLevel, std::string> dummyLogLines;
+    const std::vector<ImLogDetective::LogData> dummyLogData;
 
     TestLogFilePresenter();
     ~TestLogFilePresenter() = default;
 
-    LogAnalyzerTool::LogFilePresenter logFilePresenter;
+    ImLogDetective::LogFilePresenter logFilePresenter;
 };
 
 TestLogFilePresenter::TestLogFilePresenter() :
@@ -52,16 +52,16 @@ TestLogFilePresenter::TestLogFilePresenter() :
         logFileParserMock,
         imGuiTextFilterWrapperMock},
     filePath{"/fake/path"},
-    dummyLogLines{{LogAnalyzerTool::LogLevel::Debug, "11:51:45,518 - DEBUG - Foo.Bar - foo bar"},
-        {LogAnalyzerTool::LogLevel::Info, "11:51:45,527 - INFO - Lorem.Ipsum - lorem ipsum"},
-        {LogAnalyzerTool::LogLevel::Warning, "11:51:45,718 - WARNING - Excepteur.Sint - Excepteur sint"},
-        {LogAnalyzerTool::LogLevel::Error, "11:51:46,318 - ERROR - Nemo.Enim - Nemo enim"}
+    dummyLogLines{{ImLogDetective::LogLevel::Debug, "11:51:45,518 - DEBUG - Foo.Bar - foo bar"},
+        {ImLogDetective::LogLevel::Info, "11:51:45,527 - INFO - Lorem.Ipsum - lorem ipsum"},
+        {ImLogDetective::LogLevel::Warning, "11:51:45,718 - WARNING - Excepteur.Sint - Excepteur sint"},
+        {ImLogDetective::LogLevel::Error, "11:51:46,318 - ERROR - Nemo.Enim - Nemo enim"}
         },
     dummyLogData {
-        LogAnalyzerTool::LogData{dummyLogLines[LogAnalyzerTool::LogLevel::Debug], LogAnalyzerTool::LogLevel::Debug},
-        LogAnalyzerTool::LogData{dummyLogLines[LogAnalyzerTool::LogLevel::Info], LogAnalyzerTool::LogLevel::Info},
-        LogAnalyzerTool::LogData{dummyLogLines[LogAnalyzerTool::LogLevel::Warning], LogAnalyzerTool::LogLevel::Warning},
-        LogAnalyzerTool::LogData{dummyLogLines[LogAnalyzerTool::LogLevel::Error], LogAnalyzerTool::LogLevel::Error}
+        ImLogDetective::LogData{dummyLogLines[ImLogDetective::LogLevel::Debug], ImLogDetective::LogLevel::Debug},
+        ImLogDetective::LogData{dummyLogLines[ImLogDetective::LogLevel::Info], ImLogDetective::LogLevel::Info},
+        ImLogDetective::LogData{dummyLogLines[ImLogDetective::LogLevel::Warning], ImLogDetective::LogLevel::Warning},
+        ImLogDetective::LogData{dummyLogLines[ImLogDetective::LogLevel::Error], ImLogDetective::LogLevel::Error}
     }
 {
 }
@@ -79,23 +79,23 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_err
     
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getDebugChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Debug])), 
-        LogAnalyzerTool::TextColor::White));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Debug])), 
+        ImLogDetective::TextColor::White));
     
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getInfoChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Info])), 
-        LogAnalyzerTool::TextColor::White));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Info])), 
+        ImLogDetective::TextColor::White));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getWarningChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Warning])), 
-        LogAnalyzerTool::TextColor::Orange));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Warning])), 
+        ImLogDetective::TextColor::Orange));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getErrorChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Error])), 
-        LogAnalyzerTool::TextColor::Red));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Error])), 
+        ImLogDetective::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
 
@@ -119,18 +119,18 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_info_warning_error_che
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getInfoChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Info])), 
-        LogAnalyzerTool::TextColor::White));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Info])), 
+        ImLogDetective::TextColor::White));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getWarningChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Warning])), 
-        LogAnalyzerTool::TextColor::Orange));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Warning])), 
+        ImLogDetective::TextColor::Orange));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getErrorChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Error])), 
-        LogAnalyzerTool::TextColor::Red));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Error])), 
+        ImLogDetective::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
 
@@ -157,13 +157,13 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_warning_error_checked)
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getWarningChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Warning])), 
-        LogAnalyzerTool::TextColor::Orange));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Warning])), 
+        ImLogDetective::TextColor::Orange));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getErrorChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Error])), 
-        LogAnalyzerTool::TextColor::Red));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Error])), 
+        ImLogDetective::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
 
@@ -193,8 +193,8 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_error_checked) {
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getErrorChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Error])), 
-        LogAnalyzerTool::TextColor::Red));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Error])), 
+        ImLogDetective::TextColor::Red));
 
     logFilePresenter.update(filePath, true, logDataModelMock);
 
@@ -212,23 +212,23 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_err
     
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getDebugChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Debug])), 
-        LogAnalyzerTool::TextColor::White));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Debug])), 
+        ImLogDetective::TextColor::White));
     
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getInfoChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Info])), 
-        LogAnalyzerTool::TextColor::White));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Info])), 
+        ImLogDetective::TextColor::White));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getWarningChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Warning])), 
-        LogAnalyzerTool::TextColor::Orange));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Warning])), 
+        ImLogDetective::TextColor::Orange));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getErrorChecked()).WillOnce(::testing::Return(true));
-    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[LogAnalyzerTool::LogLevel::Error])), 
-        LogAnalyzerTool::TextColor::Red));
+    EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(std::string_view(dummyLogLines[ImLogDetective::LogLevel::Error])), 
+        ImLogDetective::TextColor::Red));
 
     logFilePresenter.update(filePath, false, logDataModelMock);
 }

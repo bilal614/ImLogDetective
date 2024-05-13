@@ -3,9 +3,9 @@
 #include "views/ILogFilterView.h"
 #include "gmock/gmock.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class LogFilterViewMock : public LogAnalyzerTool::ILogFilterView 
+class LogFilterViewMock : public ImLogDetective::ILogFilterView 
 {
 public:
     MOCK_METHOD(void, drawFilterCheckBoxes, (), (const));

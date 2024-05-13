@@ -5,7 +5,7 @@
 #include <memory>
 #include <string_view>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ITextWidgetFactory;

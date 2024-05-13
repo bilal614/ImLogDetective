@@ -1,10 +1,10 @@
 #include "views/FileListView.h"
 #include "views/IListTreeFactory.h"
 #include "dearimgui/IListTreeWidget.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct FileListView::Impl

@@ -1,7 +1,7 @@
 #include "dearimgui/TabBar.h"
 #include "imgui.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct TabBar::Impl

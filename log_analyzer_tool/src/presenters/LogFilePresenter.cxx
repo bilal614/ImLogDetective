@@ -1,4 +1,4 @@
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "dearimgui/IImGuiTextFilterWrapper.h"
 #include "views/ITextWidgetFactory.h"
 #include "views/IWindowFactory.h"
@@ -11,7 +11,7 @@
 #include "views/ILogFilterView.h"
 #include "imgui.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct LogFilePresenter::Impl

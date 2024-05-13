@@ -2,7 +2,7 @@
 #include <memory>
 #include <string_view>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct LogDataModel::Impl

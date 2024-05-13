@@ -1,8 +1,8 @@
 #include "views/SelectionMenuBar.h"
 #include "dearimgui/ScopedImGuiMenuBar.hpp"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct SelectionMenuBar::Impl

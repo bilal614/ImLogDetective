@@ -5,7 +5,7 @@
 #include "imgui.h"
 #include <string>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct ScopedImGuiWindow : public IScopedImGuiWindow

@@ -3,7 +3,7 @@
 #include "dearimgui/ITabBar.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class TabBar : public ITabBar

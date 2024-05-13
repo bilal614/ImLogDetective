@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct LogFileTabsPresenter::Impl

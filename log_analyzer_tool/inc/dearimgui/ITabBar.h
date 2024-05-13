@@ -5,7 +5,7 @@
 #include <tuple>
 #include <vector>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct TabBarItem

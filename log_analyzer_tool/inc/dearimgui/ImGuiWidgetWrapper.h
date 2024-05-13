@@ -2,7 +2,7 @@
 #include "IImGuiWidgetWrapper.h"
 #include <string>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ImGuiWidgetWrapper : public IImGuiWidgetWrapper

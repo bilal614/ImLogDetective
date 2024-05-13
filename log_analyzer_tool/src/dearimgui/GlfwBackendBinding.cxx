@@ -11,7 +11,7 @@
 #include "dearimgui/ITabBar.h"
 #include "event_handling/EventLoop.h"
 #include "event_handling/Event.hpp"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "log_scp_wrapper/AuthenticationWorkFlow.h"
 #include "log_scp_wrapper/ScpExecutor.h"
 #include "models/GzipFile.h"
@@ -41,7 +41,7 @@
 #include <GLFW/glfw3.h>
 
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 void glfw_error_callback(int error, const char* description)
@@ -78,8 +78,8 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<ILogDataModelFactory> logDataModelFactory;
     std::unique_ptr<ITabBar> tabBar;
     std::unique_ptr<MainPresenter> mainPresenter;
-    std::unique_ptr<LogScpWrapper::IScpExecutor> scpExecutor;
-    LogScpWrapper::AuthenticationWorkFlow authenticationWorkFlow;
+    std::unique_ptr<ImLogDetective::IScpExecutor> scpExecutor;
+    ImLogDetective::AuthenticationWorkFlow authenticationWorkFlow;
 };
 
 GlfwBackendBinding::Impl::~Impl()
@@ -136,7 +136,7 @@ GlfwBackendBinding::Impl::Impl() :
     imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapper>();
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort, *imGuiWidgetWrapper);
     eventLoop = std::make_unique<LogEventHandling::EventLoop>();
-    scpExecutor = std::make_unique<LogScpWrapper::ScpExecutor>(*eventLoop, authenticationWorkFlow);
+    scpExecutor = std::make_unique<ImLogDetective::ScpExecutor>(*eventLoop, authenticationWorkFlow);
     selectionMenuBar = std::make_unique<SelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory), *eventLoop);

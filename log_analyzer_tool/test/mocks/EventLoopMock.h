@@ -3,7 +3,7 @@
 #include "event_handling/IEventLoop.h"
 #include "gmock/gmock.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
 class EventLoopMock : public LogEventHandling::IEventLoop 
 {

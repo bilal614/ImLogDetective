@@ -1,4 +1,4 @@
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "dearimgui/ITabBar.h"
 #include "presenters/LogFileTabsPresenter.h"
 #include "EventMock.h"
@@ -13,7 +13,7 @@
 #include <gmock/gmock-more-actions.h>
 #include <gmock/gmock-spec-builders.h>
 
-namespace TestLogAnalyzerTool
+namespace TestImLogDetective
 {
 
 using namespace ::testing;
@@ -29,7 +29,7 @@ protected:
     std::filesystem::path filePath;
     std::vector<std::filesystem::path> dummyTempFilePaths;
 
-    LogAnalyzerTool::LogFileTabsPresenter logFileTabsPresenter;
+    ImLogDetective::LogFileTabsPresenter logFileTabsPresenter;
 
     void SetUp() override;
     void TearDown() override;
@@ -78,7 +78,7 @@ TEST_F(TestLogFileTabsPresenter, test_LogFileTabsPresenter_update) {
         EXPECT_CALL(logDataModelFactoryMock, createLogDataModel(filePath.stem().string()));
         EXPECT_CALL(tabsOpenedEvent, registerDelegate(::testing::_));
     }
-    std::vector<std::reference_wrapper<LogAnalyzerTool::TabBarItem>> data;
+    std::vector<std::reference_wrapper<ImLogDetective::TabBarItem>> data;
 
     EXPECT_CALL(tabBarMock, drawTabBar(::testing::_)).WillOnce(DoAll(::testing::SaveArg<0>(&data)));
 
@@ -88,7 +88,7 @@ TEST_F(TestLogFileTabsPresenter, test_LogFileTabsPresenter_update) {
 
     for(const auto& filePath : dummyTempFilePaths)
     {
-        auto it = std::find_if(data.begin(), data.end(), [&](std::reference_wrapper<LogAnalyzerTool::TabBarItem> item){
+        auto it = std::find_if(data.begin(), data.end(), [&](std::reference_wrapper<ImLogDetective::TabBarItem> item){
             return item.get().name == filePath.stem().string();
         });
         EXPECT_NE(data.end(), it);

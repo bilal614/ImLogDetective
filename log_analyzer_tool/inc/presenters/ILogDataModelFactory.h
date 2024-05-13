@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ILogDataModel;

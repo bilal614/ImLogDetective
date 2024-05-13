@@ -7,7 +7,7 @@
 #include "views/ISelectionMenuBar.h"
 #include "views/ILogView.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 class IFileListPresenter;
 class ISelectionMenuBar;

@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 class PtyMaster : public IPtyMaster

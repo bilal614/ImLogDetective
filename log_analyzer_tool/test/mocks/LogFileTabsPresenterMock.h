@@ -5,9 +5,9 @@
 #include "event_handling/IEvent.h"
 #include "gmock/gmock.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class LogFileTabsPresenterMock : public LogAnalyzerTool::ILogFileTabsPresenter 
+class LogFileTabsPresenterMock : public ImLogDetective::ILogFileTabsPresenter 
 {
 public:
     MOCK_METHOD(void, update, (const std::vector<std::filesystem::path>& filePaths));

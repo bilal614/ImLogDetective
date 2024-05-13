@@ -3,7 +3,7 @@
 #include "models/ILogDataModel.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ITextWidgetFactory;

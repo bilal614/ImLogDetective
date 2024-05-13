@@ -5,7 +5,7 @@
 #include <vector>
 #include "imgui.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct ListTreeWidget::Impl

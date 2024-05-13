@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <sstream>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IGzipFile

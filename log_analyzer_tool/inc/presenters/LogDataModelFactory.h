@@ -3,7 +3,7 @@
 #include "presenters/ILogDataModelFactory.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class LogDataModelFactory : public ILogDataModelFactory

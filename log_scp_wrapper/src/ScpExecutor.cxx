@@ -13,7 +13,6 @@
 #include <iostream>
 #include <regex>
 #include <unordered_set>
-#include <thread>
 
 namespace {
     const std::regex KeyEncapsulationBoundaryHeaderBegin{"-----BEGIN.*-----"};
@@ -23,7 +22,7 @@ namespace {
     const std::string AddHostResponseNo{"no"};
 }
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 struct ScpExecutor::Impl
@@ -283,10 +282,9 @@ std::unordered_set<RemoteHost, RemoteHostHash> ScpExecutor::getJumpHosts()
 void ScpExecutor::download()
 {
     p->eventLoop.post([this](){
-        std::cout << "ScpExecutor:: thread_id=" << std::this_thread::get_id() << std::endl;
         ProcessStartInfo process_start_info = p->prepareProcessStartInfo();
 
-        p->process = std::make_unique<LogScpWrapper::PtyMaster>(process_start_info);
+        p->process = std::make_unique<ImLogDetective::PtyMaster>(process_start_info);
         p->process->start();
         auto& piped_child = p->process->getChild();
 
@@ -309,7 +307,6 @@ void ScpExecutor::download()
                 if(p->getAuthenticationRequest().prompt != PromptType::None)
                 {
                     std::unique_lock lk(p->mtx);
-                    std::cout << "Awaiting user input" << std::endl;
                     p->userInputRequired = true;
                     p->userInput.wait(lk);
                 }
@@ -346,7 +343,6 @@ bool ScpExecutor::downloadFinished()
         {
             p->downloadHasFinished = p->copyHasFinished.get();
             p->copyWillBeFinished.reset();
-            std::cout << "Killing process" << std::endl;
         }
     }
     return p->downloadHasFinished;

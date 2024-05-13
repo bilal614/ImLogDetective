@@ -3,7 +3,7 @@
 #include "models/IGzipFile.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class GzipFile : public IGzipFile

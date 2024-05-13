@@ -6,7 +6,7 @@
 
 struct ImVec2;
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IModalPopupFactory;

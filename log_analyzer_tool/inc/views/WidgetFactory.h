@@ -6,7 +6,7 @@
 #include <string>
 
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 class IMainViewPort;
 class IImGuiWidgetWrapper;

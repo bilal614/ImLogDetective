@@ -3,7 +3,7 @@
 #include "presenters/IFileListPresenter.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IFileListView;

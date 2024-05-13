@@ -3,7 +3,7 @@
 #include <memory>
 #include "presenters/ILogFileTabsPresenter.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ILogFilePresenter;

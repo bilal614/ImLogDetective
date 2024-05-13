@@ -9,7 +9,7 @@ namespace LogEventHandling
     class IEventLoop;
 }
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ILogDataModel;

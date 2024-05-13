@@ -3,7 +3,7 @@
 #include "IMini.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class Mini : public IMini

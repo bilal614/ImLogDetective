@@ -2,11 +2,11 @@
 #include "ICopyLogsPresenter.h"
 #include <memory>
 
-namespace LogScpWrapper {
+namespace ImLogDetective {
     class IScpExecutor;
 }
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 class ICopyLogsPopup;
 class IMini;
@@ -17,7 +17,7 @@ class CopyLogsPresenter : public ICopyLogsPresenter
 public:
     CopyLogsPresenter(ICopyLogsPopup& copyLogsPopup,
         IProtectedInputPopup& protectedInputPopup,
-        LogScpWrapper::IScpExecutor& scpExecutor,
+        ImLogDetective::IScpExecutor& scpExecutor,
         IMini& mini);
     ~CopyLogsPresenter();
     void update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize) final;

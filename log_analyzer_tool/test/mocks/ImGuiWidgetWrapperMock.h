@@ -5,9 +5,9 @@
 #include "ImVec.h"
 #include <string>
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class ImGuiWidgetWrapperMock : public LogAnalyzerTool::IImGuiWidgetWrapper 
+class ImGuiWidgetWrapperMock : public ImLogDetective::IImGuiWidgetWrapper 
 {
 public:
     MOCK_METHOD(bool, beginPopupModal, (const std::string&));

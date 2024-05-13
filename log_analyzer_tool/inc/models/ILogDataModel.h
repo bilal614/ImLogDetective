@@ -4,7 +4,7 @@
 #include <tuple>
 #include <vector>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ITextWidgetFactory;

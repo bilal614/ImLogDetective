@@ -24,8 +24,8 @@ protected:
     void TearDown() final;
 
     LogEventHandling::EventLoop eventLoop;
-    LogScpWrapper::AuthenticationWorkFlow authenticationWorkFlow;
-    LogScpWrapper::ScpExecutor scpExecutor;
+    ImLogDetective::AuthenticationWorkFlow authenticationWorkFlow;
+    ImLogDetective::ScpExecutor scpExecutor;
     const std::filesystem::path testDirPath;
     const std::filesystem::path testRelativePath;
     const std::filesystem::path testKeyFile1, testKeyFile2, invalidKeyFile;
@@ -146,7 +146,7 @@ TEST_F(TestScpExecutor, test_ScpExecutor_addJumpHost_only_valid_jump_hosts_will_
     const size_t expectedNumberOfValidKeysAdded = 2;
     const std::string user1{"foo"}, user2{"bar"};
     const std::string ip1{"192.168.1.1"}, ip2{"192.168.1.2"};
-    LogScpWrapper::RemoteHost expectedHost1{user1, ip1}, expectedHost2{user2, ip2};
+    ImLogDetective::RemoteHost expectedHost1{user1, ip1}, expectedHost2{user2, ip2};
 
     EXPECT_TRUE(scpExecutor.addJumpHost(remoteHost1));
     EXPECT_TRUE(scpExecutor.addJumpHost(remoteHost2));

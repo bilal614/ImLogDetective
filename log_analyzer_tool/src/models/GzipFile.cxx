@@ -15,7 +15,7 @@ constexpr int CHUNK = 16384;
 
 }
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct GzipFile::Impl

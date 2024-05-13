@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class GlfwBackendBinding

@@ -3,9 +3,9 @@
 #include "views/ISelectionMenuBar.h"
 #include "gmock/gmock.h"
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class SelectionMenuBarMock : public LogAnalyzerTool::ISelectionMenuBar 
+class SelectionMenuBarMock : public ImLogDetective::ISelectionMenuBar 
 {
 public:
     MOCK_METHOD(void, drawSelectionMenuBar, ());

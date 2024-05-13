@@ -3,7 +3,7 @@
 #include "dearimgui/IListTreeWidget.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class ListTreeWidget : public IListTreeWidget

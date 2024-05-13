@@ -5,12 +5,12 @@
 #include "gmock/gmock.h"
 #include <vector>
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class TabBarMock : public LogAnalyzerTool::ITabBar 
+class TabBarMock : public ImLogDetective::ITabBar 
 {
 public:
-    MOCK_METHOD(void, drawTabBar, (std::vector<std::reference_wrapper<LogAnalyzerTool::TabBarItem>>)); 
+    MOCK_METHOD(void, drawTabBar, (std::vector<std::reference_wrapper<ImLogDetective::TabBarItem>>)); 
 };
 
 }

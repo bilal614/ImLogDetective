@@ -2,7 +2,7 @@
 #include "models/Mini.h"
 #include "mini/ini.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct Mini::Impl

@@ -8,7 +8,7 @@
 //TODO
 #include <iostream>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 

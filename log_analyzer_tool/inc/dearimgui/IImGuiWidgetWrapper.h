@@ -4,7 +4,7 @@
 struct ImVec2;
 struct ImVec4;
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class IImGuiWidgetWrapper

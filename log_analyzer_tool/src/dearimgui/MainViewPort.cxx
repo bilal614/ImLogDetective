@@ -1,9 +1,9 @@
 #include "dearimgui/MainViewPort.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include "dearimgui/IIOContext.h"
 #include "imgui.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct MainViewPort::Impl

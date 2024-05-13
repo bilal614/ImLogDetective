@@ -1,7 +1,7 @@
 #include "dearimgui/ImGuiTextFilterWrapper.h"
 #include "imgui.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct ImGuiTextFilterWrapper::Impl

@@ -1,7 +1,7 @@
 #include "dearimgui/IOContext.h"
 #include "imgui.h"
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct IOContext::Impl

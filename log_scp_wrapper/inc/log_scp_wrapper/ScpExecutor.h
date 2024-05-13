@@ -7,7 +7,7 @@ namespace LogEventHandling {
     class IEventLoop;
 }
 
-namespace LogScpWrapper
+namespace ImLogDetective
 {
 
 struct AuthenticationRequest;

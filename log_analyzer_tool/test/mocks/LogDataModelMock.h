@@ -5,13 +5,13 @@
 #include <string>
 #include <vector>
 
-namespace TestLogAnalyzerTool {
+namespace TestImLogDetective {
 
-class LogDataModelMock : public LogAnalyzerTool::ILogDataModel 
+class LogDataModelMock : public ImLogDetective::ILogDataModel 
 {
 public:
     MOCK_METHOD(void, addLogData, (std::string dataLine)); 
-    MOCK_METHOD(const std::vector<LogAnalyzerTool::LogData>&, getLogData, ());
+    MOCK_METHOD(const std::vector<ImLogDetective::LogData>&, getLogData, ());
 };
 
 }

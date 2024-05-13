@@ -1,6 +1,6 @@
 #include "views/FolderSelectionPopup.h"
 #include "views/IModalPopupFactory.h"
-#include "LogAnalyzerToolDefs.h"
+#include "ImLogDetectiveDefs.h"
 #include <cstring>
 #include <filesystem>
 
@@ -14,7 +14,7 @@ namespace {
     }
 }
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 struct FolderSelectionPopup::Impl

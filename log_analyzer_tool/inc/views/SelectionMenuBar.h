@@ -3,7 +3,7 @@
 #include "views/ISelectionMenuBar.h"
 #include <memory>
 
-namespace LogAnalyzerTool
+namespace ImLogDetective
 {
 
 class SelectionMenuBar : public ISelectionMenuBar
