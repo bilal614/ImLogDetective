@@ -81,6 +81,17 @@ FolderSelectionPopup::FolderSelectionPopup(IModalPopupFactory& modalPopupFactory
 
 FolderSelectionPopup::~FolderSelectionPopup() = default;
 
+bool FolderSelectionPopup::setInitialSelectedFolderPath(const std::string& path)
+{
+    if(p->validateSelectedFolder(std::filesystem::path{path}))
+    {
+        p->folderPath = path;
+        p->selectedFolderPath = std::filesystem::path{toString(p->folderPath.data())};
+        return true;
+    }
+    return false;
+}
+
 void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize)
 {
     p->modalPopupFactory.open(popupPosition, popupSize, SelectFolderDefs::Name);

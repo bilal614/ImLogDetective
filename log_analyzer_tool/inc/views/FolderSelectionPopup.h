@@ -14,9 +14,10 @@ class FolderSelectionPopup : public IFolderSelectionPopup
 public:
     FolderSelectionPopup(IModalPopupFactory& modalPopup);
     ~FolderSelectionPopup();
-    void drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize) override;
-    std::pair<bool, std::filesystem::path> getSelectedFolder() override;
-    bool popupOpen() override;
+    bool setInitialSelectedFolderPath(const std::string& path) final;
+    void drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize) final;
+    std::pair<bool, std::filesystem::path> getSelectedFolder() final;
+    bool popupOpen() final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

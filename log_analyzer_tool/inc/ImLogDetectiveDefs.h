@@ -18,6 +18,22 @@ namespace ImLogDetective
         extern const char* LogFileContentChildWindow;
     }
 
+    namespace IniDefs{
+        namespace CopyLogsSection {
+            extern const char* Name;
+            extern const char* SrcHostPath;
+            extern const char* DestinationPath;
+            extern const char* JumpHost1;
+            extern const char* JumpHost2;
+            extern const char* KeyFilePath1;
+            extern const char* KeyFilePath2;
+        }
+        namespace SelectedFolderSection {
+            extern const char* Name;
+            extern const char* LogDataFolder;
+        }
+    }
+
     namespace MenuBarOptions {
         extern const char* SelectFolder;
         extern const char* FetchRemoteLogs;

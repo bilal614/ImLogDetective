@@ -3,6 +3,7 @@
 #include "presenters/ILogFileTabsPresenter.h"
 #include "presenters/IFileListPresenter.h"
 #include "views/IFolderSelectionPopup.h"
+#include "models/IMini.h"
 #include "presenters/ICopyLogsPresenter.h"
 #include "views/IWindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
@@ -23,7 +24,8 @@ struct MainPresenter::Impl
         IFolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
-        ICopyLogsPresenter& copyLogsPresenter);
+        ICopyLogsPresenter& copyLogsPresenter,
+        IMini& mini);
     ~Impl() = default;
 
     void showFolderSelectionPopup();
@@ -40,6 +42,7 @@ struct MainPresenter::Impl
     IFolderSelectionPopup& folderSelectionPopup;
     ILogFileTabsPresenter& logFileTabsPresenter;
     ICopyLogsPresenter& copyLogsPresenter;
+    IMini& mini;
 };
 
 MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
@@ -48,15 +51,23 @@ MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
         IFolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
-        ICopyLogsPresenter& copyLogsPresenter) :
+        ICopyLogsPresenter& copyLogsPresenter,
+        IMini& mini) :
     mainViewPort{mainViewPort},
     folderSelectionPopup{folderSelectionPopup},
     selectionMenuBar{selectionMenuBar},
     windowFactory{windowFactory},
     logFileTabsPresenter{logFileTabsPresenter},
     fileListPresenter{fileListPresenter},
-    copyLogsPresenter{copyLogsPresenter}
+    copyLogsPresenter{copyLogsPresenter},
+    mini{mini}
 {
+    if(folderSelectionPopup.setInitialSelectedFolderPath(
+        mini.get(IniDefs::SelectedFolderSection::Name, 
+            IniDefs::SelectedFolderSection::LogDataFolder)))
+    {
+        std::cout << "Initial folder path not set" << std::endl;
+    }
 }
 
 void MainPresenter::Impl::showFolderSelectionPopup()
@@ -67,6 +78,14 @@ void MainPresenter::Impl::showFolderSelectionPopup()
     folderSelectionPopup.drawFolderSelectionModalPopup(mainViewPort.getViewportCenter(), popupSize);
     if(!folderSelectionPopup.popupOpen())
     {
+        auto selectedFolder = folderSelectionPopup.getSelectedFolder();
+        if(selectedFolder.first)
+        {
+            mini.set(IniDefs::SelectedFolderSection::Name, 
+                IniDefs::SelectedFolderSection::LogDataFolder, 
+                selectedFolder.second);
+            mini.updateIniFile();
+        }
         selectionMenuBar.selectionFolderClosed();
     }
 }
@@ -119,14 +138,16 @@ MainPresenter::MainPresenter(IWindowFactory& windowFactory,
         IFolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
-        ICopyLogsPresenter& copyLogsPresenter) : 
+        ICopyLogsPresenter& copyLogsPresenter,
+        IMini& mini) : 
     p {std::make_unique<Impl>(windowFactory,
         mainViewPort,
         selectionMenuBar,
         folderSelectionPopup,
         logFileTabsPresenter,
         fileListPresenter,
-        copyLogsPresenter)}
+        copyLogsPresenter,
+        mini)}
 {
 }
 
@@ -145,7 +166,6 @@ void MainPresenter::update()
 
     p->showCopyRemoteLogsPopup(p->selectionMenuBar.copyRemoteLogsClicked());
     p->copyLogsPresenter.monitorCopyLogs();
-
 
     auto mainWindowSize = mainWindow->getWindowSize();
     auto mainWindowPosition = mainWindow->getWindowPosition();

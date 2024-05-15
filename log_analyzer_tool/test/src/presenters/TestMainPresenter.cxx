@@ -9,6 +9,7 @@
 #include "LogFileTabsPresenterMock.h"
 #include "LogFilterViewMock.h"
 #include "MainViewPortMock.h"
+#include "MiniMock.h"
 #include "ScopedImGuiWindowMock.h"
 #include "SelectionMenuBarMock.h"
 #include "TestUtility.h"
@@ -39,6 +40,7 @@ protected:
     StrictMock<CopyLogsPresenterMock> copyLogsPresenterMock;
     StrictMock<LogFileTabsPresenterMock> logFileTabsPresenterMock;
     StrictMock<FileListPresenterMock> fileListPresenterMock;
+    StrictMock<MiniMock> miniMock;
     StrictMock<SelectionMenuBarMock> selectionMenuBarMock;
     StrictMock<ScopedImGuiWindowMock> scopedImGuiWindowMock;
     StrictMock<WindowFactoryMock> windowFactoryMock;
@@ -70,20 +72,24 @@ protected:
     ImVec2 windowSize, windowPos, windowCenter;
     ImVec2 expectedFolderSelectionWindowPopupSize;
     ImVec2 expectedCopyLogsWindowPopupSize;
-    ImLogDetective::MainPresenter mainPresenter;
+    std::unique_ptr<ImLogDetective::MainPresenter> mainPresenter;
 };
 
 TestMainPresenter::TestMainPresenter() :
-    mainPresenter{windowFactoryMock,
+    testFolderPath{"/test/folder/path"},
+    inputScaleFactor{0.0f}
+{
+    EXPECT_CALL(miniMock, get(_, _));
+    EXPECT_CALL(folderSelectionPopupMock , setInitialSelectedFolderPath(_));
+    mainPresenter = std::make_unique<ImLogDetective::MainPresenter>(
+        windowFactoryMock,
         mainViewPortMock,
         selectionMenuBarMock,
         folderSelectionPopupMock,
         logFileTabsPresenterMock,
         fileListPresenterMock,
-        copyLogsPresenterMock},
-    testFolderPath{"/test/folder/path"},
-    inputScaleFactor{0.0f}
-{
+        copyLogsPresenterMock,
+        miniMock);
 }
 
 void TestMainPresenter::SetUp()
@@ -131,6 +137,7 @@ void TestMainPresenter::checkFolderMenuModal(
         EXPECT_CALL(folderSelectionPopupMock, popupOpen()).WillOnce(Return(selectFolderPopupOpened));
         if(!selectFolderPopupOpened)
         {
+            EXPECT_CALL(folderSelectionPopupMock, getSelectedFolder()).WillRepeatedly(Return(std::pair{false, std::filesystem::path()}));
             EXPECT_CALL(selectionMenuBarMock, selectionFolderClosed());
         }
     }
@@ -174,7 +181,7 @@ TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation) {
     checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
-    mainPresenter.update();
+    mainPresenter->update();
 }
 
 TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation_when_folder_selection_popup_clicked_and_opened) {
@@ -184,7 +191,7 @@ TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation_when_folder_
     checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
-    mainPresenter.update();
+    mainPresenter->update();
 }
 
 TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation_when_folder_selection_popup_clicked_opened_and_closed) {
@@ -194,14 +201,14 @@ TEST_F(TestMainPresenter, test_MainPresenter_update_layout_creation_when_folder_
     checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
-    mainPresenter.update();
+    mainPresenter->update();
 
     guiWindowMockRef = checkMainWindowAndMenuBarCreation(inputScaleFactor);
     checkFolderMenuModal(windowSize, windowCenter, expectedFolderSelectionWindowPopupSize, true, false);
     checkCopyLogsModal(windowSize, windowCenter, expectedCopyLogsWindowPopupSize, false, false);
     checkChildWindows(*guiWindowMockRef, windowSize, windowPos);
 
-    mainPresenter.update();
+    mainPresenter->update();
 }
 
 }

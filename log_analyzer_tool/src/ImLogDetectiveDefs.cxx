@@ -17,6 +17,22 @@ namespace ImLogDetective
         const char* LogFileContentChildWindow {"LogFileContentWindow"};
     }
 
+    namespace IniDefs{
+        namespace CopyLogsSection {
+            const char* Name{"CopyLogs"};
+            const char* SrcHostPath{"src_host_path"};
+            const char* DestinationPath{"destination_path"};
+            const char* JumpHost1{"jump_host1"};
+            const char* JumpHost2{"jump_host2"};
+            const char* KeyFilePath1{"key_file_path1"};
+            const char* KeyFilePath2{"key_file_path2"};
+        }
+        namespace SelectedFolderSection {
+            const char* Name{"SelectedFolder"};
+            const char* LogDataFolder{"log_data_folder"};
+        }
+    }
+
     namespace MenuBarOptions {
         const char* SelectFolder{"Select Folder"};
         const char* FetchRemoteLogs{"Fetch Remote Logs"};

@@ -147,7 +147,7 @@ GlfwBackendBinding::Impl::Impl() :
     logView = std::make_unique<LogView>(dynamic_cast<ITextWidgetFactory&>(*widgetFactory));
     fileListView = std::make_unique<FileListView>(dynamic_cast<IListTreeFactory&>(*widgetFactory));
     gzipFile = std::make_unique<GzipFile>();
-    mini = std::make_unique<Mini>("loganalyzer.ini");
+    mini = std::make_unique<Mini>("ImLogDetective.ini");
     logFileParser = std::make_unique<LogFileParser>(*gzipFile);
     copyLogsPresenter = std::make_unique<CopyLogsPresenter>(*copyLogsPopup, *protectedInputPopup, *scpExecutor, *mini);
     logFilePresenter = std::make_unique<LogFilePresenter>(
@@ -166,7 +166,8 @@ GlfwBackendBinding::Impl::Impl() :
         *folderSelectionPopup,
         *logFileTabsPresenter,
         *fileListPresenter,
-        *copyLogsPresenter);
+        *copyLogsPresenter,
+        *mini);
 
 }
 
