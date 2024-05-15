@@ -1,5 +1,6 @@
 #include "views/LogView.h"
 #include "views/ITextWidgetFactory.h"
+#include "models/LogData.h"
 
 namespace ImLogDetective
 {
@@ -19,14 +20,16 @@ LogView::Impl::Impl(ITextWidgetFactory& textWidgetFactory) :
 LogView::LogView(ITextWidgetFactory& textWidgetFactory) :
     p{std::make_unique<Impl>(textWidgetFactory)}
 {
-
 }
 
 LogView::~LogView() = default;
 
-void LogView::drawLogLineText(std::string_view logText, const TextColor& color)
+void LogView::drawLogLineText(LogData& logLine, const TextColor& color)
 {
-    p->textWidgetFactory.createTextColored(logText, color);
+    logLine.selected = p->textWidgetFactory.createSelectedTextColored(
+        logLine.logLine, 
+        color, 
+        logLine.selected);
 }
 
 }

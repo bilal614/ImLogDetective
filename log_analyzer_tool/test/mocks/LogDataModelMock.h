@@ -1,6 +1,7 @@
 #pragma once
 
 #include "models/ILogDataModel.h"
+#include "models/LogData.h"
 #include "gmock/gmock.h"
 #include <string>
 #include <vector>

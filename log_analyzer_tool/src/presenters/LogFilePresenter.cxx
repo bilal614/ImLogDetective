@@ -3,6 +3,7 @@
 #include "views/ITextWidgetFactory.h"
 #include "views/IWindowFactory.h"
 #include "models/ILogFileParser.h"
+#include "models/LogData.h"
 #include "event_handling/Event.hpp"
 #include "event_handling/IEventLoop.h"
 #include "models/ILogDataModel.h"
@@ -69,23 +70,23 @@ void LogFilePresenter::Impl::updateLogData(
         {
             if(data.level == LogLevel::Unknown)
             {
-                logView.drawLogLineText(data.logLine, TextColor::Yellow);
+                logView.drawLogLineText(data, TextColor::Yellow);
             }
             if(data.level == LogLevel::Debug && logFilterView.getDebugChecked())
             {
-                logView.drawLogLineText(data.logLine, TextColor::White);
+                logView.drawLogLineText(data, TextColor::White);
             }
             if(data.level == LogLevel::Info  && logFilterView.getInfoChecked())
             {
-                logView.drawLogLineText(data.logLine, TextColor::White);
+                logView.drawLogLineText(data, TextColor::White);
             }
             if(data.level == LogLevel::Warning && logFilterView.getWarningChecked())
             {
-                logView.drawLogLineText(data.logLine, TextColor::Orange);
+                logView.drawLogLineText(data, TextColor::Orange);
             }
             if(data.level == LogLevel::Error && logFilterView.getErrorChecked())
             {
-                logView.drawLogLineText(data.logLine, TextColor::Red);
+                logView.drawLogLineText(data, TextColor::Red);
             }
         }
     }

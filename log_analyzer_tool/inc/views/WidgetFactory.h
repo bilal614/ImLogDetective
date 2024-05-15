@@ -26,6 +26,7 @@ public:
     // Text creation functions
     void createUnformattedText(const std::string& text) override;
     void createTextColored(std::string_view text, const TextColor& color) override;
+    bool createSelectedTextColored(std::string_view text, const TextColor& color, bool selected) override;
 
     //List tree widget
     std::unique_ptr<IListTreeWidget> createListTreeWidget() override;

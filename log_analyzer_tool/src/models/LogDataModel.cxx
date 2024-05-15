@@ -1,4 +1,5 @@
 #include "models/LogDataModel.h"
+#include "models/LogData.h"
 #include <memory>
 #include <string_view>
 

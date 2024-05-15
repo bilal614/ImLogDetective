@@ -154,6 +154,16 @@ void WidgetFactory::createTextColored(std::string_view text, const TextColor& co
     }
 }
 
+bool WidgetFactory::createSelectedTextColored(std::string_view text, const TextColor& color, bool selected)
+{
+    auto textColor = p->colorMap.find(color);
+    if(textColor != p->colorMap.end())
+    {
+        return p->imGuiWidgetWrapper.selectableText(textColor->second, text.data(), selected);
+    }
+    return false;
+}
+
 std::unique_ptr<IListTreeWidget> WidgetFactory::createListTreeWidget()
 {
     return std::make_unique<ListTreeWidget>();

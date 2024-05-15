@@ -2,6 +2,21 @@
 #include "ImLogDetectiveDefs.h"
 #include "imgui.h"
 
+namespace {
+    struct TextColorStyle
+    {
+        TextColorStyle(const ImVec4& color)
+        {
+            ImGui::PushStyleColor(ImGuiCol_Text, color);
+        }
+
+        ~TextColorStyle()
+        {
+            ImGui::PopStyleColor();
+        }
+    };
+}
+
 namespace ImLogDetective
 {
 
@@ -81,6 +96,12 @@ void ImGuiWidgetWrapper::textColored(const ImVec4& color, const std::string& tex
 void ImGuiWidgetWrapper::textUnformatted(const std::string& text)
 {
     ImGui::TextUnformatted(text.c_str());
+}
+
+bool ImGuiWidgetWrapper::selectableText(const ImVec4& color, const std::string& text, bool selected)
+{
+    volatile auto textColorStyle = TextColorStyle(color);
+    return ImGui::Selectable(text.c_str(), selected);
 }
 
 }

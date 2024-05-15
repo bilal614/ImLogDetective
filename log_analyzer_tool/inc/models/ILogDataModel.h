@@ -8,21 +8,7 @@ namespace ImLogDetective
 {
 
 class ITextWidgetFactory;
-
-enum LogLevel 
-{
-    Debug,
-    Info, 
-    Warning,
-    Error,
-    Unknown
-};
-
-struct LogData
-{
-    const std::string logLine;
-    const LogLevel level;
-};
+struct LogData;
 
 class ILogDataModel 
 {

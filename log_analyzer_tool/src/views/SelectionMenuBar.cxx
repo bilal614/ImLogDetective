@@ -39,7 +39,6 @@ void SelectionMenuBar::drawSelectionMenuBar()
         {MenuBarOptions::FetchRemoteLogs, std::ref(p->fetchRemoteLogsClicked)},
         {MenuBarOptions::ConfigureHiglighting, std::ref(p->configureHighlightingClicked)}
     }, p->scaleFactor);
-
 }
 
 bool SelectionMenuBar::selectFolderClicked()
