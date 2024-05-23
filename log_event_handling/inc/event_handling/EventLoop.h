@@ -18,6 +18,8 @@ public:
     EventLoop(EventLoop&&) = delete;
     EventLoop& operator=(EventLoop&&) = delete;
 
+    size_t size() final;
+
     void post(const std::function<void()>&) final;
 
     void post(void (*)()) final;

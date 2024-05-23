@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.16)
-project(IMGUI_LOG_ANALYZER_TOOL C CXX)
+project(IM_LOG_DETECTIVE C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -69,15 +69,14 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     #log_scp_wrapper
     add_subdirectory(${PROJECT_ROOT}/log_scp_wrapper)
 
-    #log_analyzer_tool
-    add_subdirectory(${PROJECT_ROOT}/log_analyzer_tool)
+    #ImLogDetective
+    add_subdirectory(${PROJECT_ROOT}/ImLogDetective)
 
     #log_fetching_tool
     #include(${PROJECT_ROOT}/log_fetching_tool/log_fetching_tool.cmake)
 
     #include test_log_fetching_tool
     #include(${PROJECT_ROOT}/log_fetching_tool/test_log_fetching_tool.cmake)
-
 
     #test app
     add_executable(test_app

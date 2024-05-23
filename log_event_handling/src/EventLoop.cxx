@@ -17,6 +17,8 @@ namespace LogEventHandling
 
 struct EventLoop::Impl
 {
+    using CallbackType = std::function<void()>;
+
     Impl();
     ~Impl();
     void process();
@@ -24,7 +26,7 @@ struct EventLoop::Impl
     std::unique_ptr<std::mutex> mut;
     std::unique_ptr<std::thread> thread;
     std::condition_variable nonEmptyQueuCond;
-    std::deque<std::function<void()>> callbacks;
+    std::deque<CallbackType> callbacks;
     bool running;
 
     std::promise<bool> startedProcessing;
@@ -51,11 +53,17 @@ void EventLoop::Impl::process()
     startedProcessing.set_value(true);
     while(running)
     {
-        std::unique_lock<std::mutex> lk(*mut);
-        nonEmptyQueuCond.wait(lk, [&](){ return !callbacks.empty();});
-        auto f = std::move(callbacks.front());
-        callbacks.pop_front();
-        f();
+        std::unique_ptr<CallbackType> f;
+        {
+            std::unique_lock<std::mutex> lk(*mut);
+            nonEmptyQueuCond.wait(lk, [&](){ return !callbacks.empty();});
+            f = std::make_unique<CallbackType>(std::move(callbacks.front()));
+            callbacks.pop_front();
+        }
+        if(f)
+        {
+            (*f)();
+        }
     }
 }
 
@@ -67,6 +75,12 @@ EventLoop::EventLoop() :
 EventLoop::~EventLoop()
 {
     stop();
+}
+
+size_t EventLoop::size()
+{
+    std::lock_guard<std::mutex> lk(*p->mut);
+    return p->callbacks.size();
 }
 
 void EventLoop::post(const std::function<void()>& f)

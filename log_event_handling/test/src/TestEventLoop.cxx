@@ -9,6 +9,8 @@
 namespace TestLogEventHandling
 {
 
+using namespace std::chrono_literals;
+
 class TestEventLoop : public ::testing::Test {
 public:
     ::testing::InSequence seq;
@@ -39,7 +41,7 @@ void TestEventLoop::TearDown()
 
 TEST_F(TestEventLoop, test_posting_on_fifo_eventloop) {
 
-    auto testThreadId = std::this_thread::get_id();
+    const auto testThreadId = std::this_thread::get_id();
     uint32_t testValueInt = 7;
     bool testValueBool = false;
     float testValueFloat = 0.0f;
@@ -63,31 +65,34 @@ TEST_F(TestEventLoop, test_posting_on_fifo_eventloop) {
     eventLoop->post([&](){
         testValueInt = expectedTestValueInt;
         ASSERT_NE(testThreadId, std::this_thread::get_id());
+        ASSERT_EQ(eventLoop->size(), 0);
         firstCallback.set_value();
     });
+
+    firstCallbackFuture.get();
+    EXPECT_EQ(testValueInt, expectedTestValueInt);
 
     eventLoop->post([&](){
         testValueBool = expectedTestValueBool;
         ASSERT_NE(testThreadId, std::this_thread::get_id());
+        //Long lasting task execution should still allow new callbacks to be post'ed on FIFO queue
+        std::this_thread::sleep_for(1000ms);
+        ASSERT_EQ(eventLoop->size(), 1);
         secondCallback.set_value();
     });
 
-    //NOTE: std::function operator() does not use universal references as parameters. Prefer to pass ref parameters if 
-    // you expect to use them as inout arguments
     eventLoop->post<LogEventHandling::EventLoop, void, const int&, const float&, float&>({[&](const int& a, const float& b, float& c){
         c = a*b;
         ASSERT_NE(testThreadId, std::this_thread::get_id());
         thirdCallback.set_value();
     }}, 5, 7.0f, testValueFloat);
 
-    firstCallbackFuture.get();
-    EXPECT_EQ(testValueInt, expectedTestValueInt);
-
     secondCallbackFuture.get();
     EXPECT_EQ(testValueBool, expectedTestValueBool);
 
     thirdCallbackFuture.get();
     EXPECT_FLOAT_EQ(testValueFloat, expectedValueFloat);
+
 }
 
 }

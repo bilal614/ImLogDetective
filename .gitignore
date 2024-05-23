@@ -12,3 +12,6 @@ _deps
 .cache/
 .vscode/
 build/
+tmp/
+logs/
+*.ini
