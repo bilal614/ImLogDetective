@@ -49,10 +49,10 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
         -pthread
     )
 
-    # Definitions for log_scp_wrapper_lib
-    set(LOG_SCP_WRAPPER_LIB log_scp_wrapper_lib)
-    set(LOG_SCP_WRAPPER_DIR ${PROJECT_SOURCE_DIR}/log_scp_wrapper)
-    set(LOG_SCP_WRAPPER_INCLUDE_DIR ${LOG_SCP_WRAPPER_DIR}/inc/)
+    # Definitions for ScpWrapper_lib
+    set(SCP_WRAPPER_LIB ScpWrapper_lib)
+    set(SCP_WRAPPER_DIR ${PROJECT_SOURCE_DIR}/ScpWrapper)
+    set(SCP_WRAPPER_INCLUDE_DIR ${SCP_WRAPPER_DIR}/inc/)
 
     # Definitions for EventHandling_lib 
     set(EVENT_HANDLING_LIB EventHandling_lib)
@@ -66,8 +66,8 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     #EventHandling_lib
     add_subdirectory(${PROJECT_ROOT}/EventHandling)
 
-    #log_scp_wrapper
-    add_subdirectory(${PROJECT_ROOT}/log_scp_wrapper)
+    #ScpWrapper_lib
+    add_subdirectory(${PROJECT_ROOT}/ScpWrapper)
 
     #ImLogDetective
     add_subdirectory(${PROJECT_ROOT}/ImLogDetective)

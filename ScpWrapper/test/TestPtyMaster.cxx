@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "log_scp_wrapper/PtyMaster.h"
+#include "ScpWrapper/PtyMaster.h"
 #include <fstream>
 #include <future>
 #include <poll.h>

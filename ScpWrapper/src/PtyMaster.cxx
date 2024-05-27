@@ -1,4 +1,4 @@
-#include "log_scp_wrapper/PtyMaster.h"
+#include "ScpWrapper/PtyMaster.h"
 #include <algorithm>
 #include <iostream>
 #include <fcntl.h>

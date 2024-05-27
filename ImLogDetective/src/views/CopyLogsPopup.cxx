@@ -5,8 +5,8 @@
 #include <cstring>
 #include <filesystem>
 
-#include "log_scp_wrapper/IPtyMaster.h"
-#include "log_scp_wrapper/PtyMaster.h"
+#include "ScpWrapper/IPtyMaster.h"
+#include "ScpWrapper/PtyMaster.h"
 
 #include "imgui.h"
 

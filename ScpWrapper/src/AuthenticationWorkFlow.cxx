@@ -1,6 +1,6 @@
 
-#include "log_scp_wrapper/AuthenticationWorkFlow.h"
-#include "log_scp_wrapper/RemoteHost.h"
+#include "ScpWrapper/AuthenticationWorkFlow.h"
+#include "ScpWrapper/RemoteHost.h"
 #include <iostream>
 #include <regex>
 #include <utility>

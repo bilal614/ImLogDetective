@@ -1,7 +1,7 @@
 #include <memory>
 #include "imgui.h"
-#include "log_scp_wrapper/IAuthenticationWorkFlow.h"
-#include "log_scp_wrapper/IScpExecutor.h"
+#include "ScpWrapper/IAuthenticationWorkFlow.h"
+#include "ScpWrapper/IScpExecutor.h"
 #include "models/IMini.h"
 #include "presenters/CopyLogsPresenter.h"
 #include "views/ICopyLogsPopup.h"

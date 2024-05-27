@@ -1,8 +1,8 @@
-#include "log_scp_wrapper/ScpExecutor.h"
+#include "ScpWrapper/ScpExecutor.h"
 #include "EventHandling/IEventLoop.h"
-#include "log_scp_wrapper/IAuthenticationWorkFlow.h"
-#include "log_scp_wrapper/RemoteHost.h"
-#include "log_scp_wrapper/PtyMaster.h"
+#include "ScpWrapper/IAuthenticationWorkFlow.h"
+#include "ScpWrapper/RemoteHost.h"
+#include "ScpWrapper/PtyMaster.h"
 
 #include <condition_variable>
 #include <coroutine>
@@ -19,6 +19,7 @@ namespace {
     const std::regex DownloadStarted{"\\S*\\s*.*[0-9]{1,3}%.*/s.*:.*"};
     const std::string AddHostResponseYes{"yes"};
     const std::string AddHostResponseNo{"no"};
+    const std::string ScpTool{"scp"};
 }
 
 namespace ImLogDetective
@@ -121,7 +122,7 @@ bool ScpExecutor::Impl::checkKeyEncapsulationBoundaryFormat(
 ProcessStartInfo ScpExecutor::Impl::prepareProcessStartInfo()
 {
     ProcessStartInfo process_start_info {
-            .executable_path{"scp"},
+            .executable_path{ScpTool},
     };
     process_start_info.arguments.emplace_back("-r");
     if(!identityFilePaths.empty())
@@ -130,7 +131,8 @@ ProcessStartInfo ScpExecutor::Impl::prepareProcessStartInfo()
         std::vector<std::string> identityFiles;
         std::transform(identityFilePaths.cbegin(), identityFilePaths.cend(), std::back_inserter(identityFiles),
                 [](const std::filesystem::path& path) { return path.string(); });
-        process_start_info.arguments.insert(process_start_info.arguments.end(), identityFiles.begin(), identityFiles.end());
+        process_start_info.arguments.insert(process_start_info.arguments.end(), 
+            identityFiles.begin(), identityFiles.end());
     }
     if(!jumpHosts.empty())
     {
@@ -138,7 +140,8 @@ ProcessStartInfo ScpExecutor::Impl::prepareProcessStartInfo()
         std::vector<std::string> jumpHostsArgs;
         std::transform(jumpHosts.cbegin(), jumpHosts.cend(), std::back_inserter(jumpHostsArgs),
                 [](const RemoteHost& host) { return host.toString(); });
-        process_start_info.arguments.insert(process_start_info.arguments.end(), jumpHostsArgs.begin(), jumpHostsArgs.end());
+        process_start_info.arguments.insert(process_start_info.arguments.end(), 
+            jumpHostsArgs.begin(), jumpHostsArgs.end());
     }
 
     process_start_info.arguments.push_back(remoteHostPath.toString());

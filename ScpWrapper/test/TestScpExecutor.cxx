@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "log_scp_wrapper/AuthenticationWorkFlow.h"
-#include "log_scp_wrapper/RemoteHost.h"
-#include "log_scp_wrapper/ScpExecutor.h"
+#include "ScpWrapper/AuthenticationWorkFlow.h"
+#include "ScpWrapper/RemoteHost.h"
+#include "ScpWrapper/ScpExecutor.h"
 #include "EventHandling/EventLoop.h"
 #include <fstream>
 #include <future>

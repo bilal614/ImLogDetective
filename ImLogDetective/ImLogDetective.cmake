@@ -37,7 +37,7 @@ if(${ZLIB_FOUND})
         ${ZLIB_INCLUDE_DIRS}
         ${mINI_INCLUDE_DIR}
         ${LOG_EVENT_HANDLING_LIB}
-        ${LOG_SCP_WRAPPER_LIB}
+        ${SCP_WRAPPER_LIB}
     )
 
     target_include_directories(${IM_LOG_DETECTIVE_LIB} PUBLIC 
@@ -48,7 +48,7 @@ if(${ZLIB_FOUND})
         ${PROJECT_LINK_LIBRARIES}
         ${ZLIB_LIBRARIES}
         ${LOG_EVENT_HANDLING_LIB}
-        ${LOG_SCP_WRAPPER_LIB}
+        ${SCP_WRAPPER_LIB}
     )
 
     add_executable(${IM_LOG_DETECTIVE}
