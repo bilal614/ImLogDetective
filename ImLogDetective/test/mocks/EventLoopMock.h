@@ -1,6 +1,6 @@
 #pragma once
 
-#include "event_handling/IEventLoop.h"
+#include "EventHandling/IEventLoop.h"
 #include "gmock/gmock.h"
 
 namespace TestImLogDetective {

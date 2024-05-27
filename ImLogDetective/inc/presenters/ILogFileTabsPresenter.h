@@ -1,6 +1,6 @@
 #pragma once
 
-#include "event_handling/IEvent.h"
+#include "EventHandling/IEvent.h"
 #include <filesystem>
 #include <vector>
 

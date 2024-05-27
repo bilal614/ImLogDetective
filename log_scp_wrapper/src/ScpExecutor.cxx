@@ -1,8 +1,7 @@
 #include "log_scp_wrapper/ScpExecutor.h"
-#include "event_handling/IEventLoop.h"
+#include "EventHandling/IEventLoop.h"
 #include "log_scp_wrapper/IAuthenticationWorkFlow.h"
 #include "log_scp_wrapper/RemoteHost.h"
-//#include "log_scp_wrapper/IPtyMaster.h"
 #include "log_scp_wrapper/PtyMaster.h"
 
 #include <condition_variable>

@@ -69,10 +69,9 @@ void FileListPresenter::update(const std::filesystem::path& folderPath, bool for
 std::vector<std::filesystem::path> FileListPresenter::getSelectedFiles()
 {
     std::vector<std::filesystem::path> selectedFiles;
-    for(const auto& logFile : p->logFiles)
-    {
-        selectedFiles.push_back(logFile.second);
-    }
+    std::transform(p->logFiles.begin(), p->logFiles.end(), 
+        std::back_inserter(selectedFiles), 
+        [](const auto& logFile){return logFile.second; });
     return selectedFiles;
 }
 

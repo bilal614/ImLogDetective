@@ -1,5 +1,5 @@
 #include "presenters/LogFileTabsPresenter.h"
-#include "event_handling/IEvent.h"
+#include "EventHandling/IEvent.h"
 #include "presenters/ILogFilePresenter.h"
 #include "presenters/ILogDataModelFactory.h"
 #include "models/ILogDataModel.h"

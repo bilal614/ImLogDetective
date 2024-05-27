@@ -1,5 +1,5 @@
 
-#include "event_handling/EventLoop.h"
+#include "EventHandling/EventLoop.h"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include <chrono>

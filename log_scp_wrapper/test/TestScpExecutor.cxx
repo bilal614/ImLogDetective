@@ -3,7 +3,7 @@
 #include "log_scp_wrapper/AuthenticationWorkFlow.h"
 #include "log_scp_wrapper/RemoteHost.h"
 #include "log_scp_wrapper/ScpExecutor.h"
-#include "event_handling/EventLoop.h"
+#include "EventHandling/EventLoop.h"
 #include <fstream>
 #include <future>
 #include <poll.h>

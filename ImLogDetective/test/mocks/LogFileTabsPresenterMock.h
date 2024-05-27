@@ -2,7 +2,7 @@
 
 #include "presenters/ILogFileTabsPresenter.h"
 #include "models/ILogDataModel.h"
-#include "event_handling/IEvent.h"
+#include "EventHandling/IEvent.h"
 #include "gmock/gmock.h"
 
 namespace TestImLogDetective {

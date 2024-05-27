@@ -23,7 +23,7 @@ if(GTest_FOUND)
         ${IM_LOG_DETECTIVE_LIB}
         ${TEST_IM_LOG_DETECTIVE_INCLUDE_DIR}
         ${PROJECT_INCLUDE_DIRS}
-        ${TEST_LOG_EVENT_HANDLING_DIR}
+        ${TEST_EVENT_HANDLING_DIR}
     )
 
     target_link_libraries(${TEST_IM_LOG_DETECTIVE} 

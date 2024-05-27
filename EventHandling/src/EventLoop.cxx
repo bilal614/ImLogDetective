@@ -1,5 +1,5 @@
 
-#include "event_handling/EventLoop.h"
+#include "EventHandling/EventLoop.h"
 #include <condition_variable>
 #include <forward_list>
 #include <functional>

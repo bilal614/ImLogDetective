@@ -1,7 +1,7 @@
 #include "views/CopyLogsPopup.h"
 #include "views/IModalPopupFactory.h"
 #include "ImLogDetectiveDefs.h"
-#include "event_handling/IEventLoop.h"
+#include "EventHandling/IEventLoop.h"
 #include <cstring>
 #include <filesystem>
 
