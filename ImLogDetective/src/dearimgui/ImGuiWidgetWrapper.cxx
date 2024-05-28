@@ -101,7 +101,7 @@ void ImGuiWidgetWrapper::textUnformatted(const std::string& text)
 bool ImGuiWidgetWrapper::selectableText(const ImVec4& color, const std::string& text, bool selected)
 {
     volatile auto textColorStyle = TextColorStyle(color);
-    return ImGui::Selectable(text.c_str(), selected);
+    return text.empty() ? false : ImGui::Selectable(text.c_str(), selected);
 }
 
 }
