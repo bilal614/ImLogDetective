@@ -17,6 +17,8 @@ endif()
 
 if(OPENGL_FOUND AND GLFW3_FOUND)
 
+    enable_testing()
+
     include_directories(
         ${OPENGL_INCLUDE_DIRS}
         ${GLFW3_INCLUDE_DIRS}
@@ -45,7 +47,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
         ${OPENGL_LIBRARIES}
         ${GLFW3_LIBRARIES}
         ${CMAKE_DL_LIBS} #link to dl lib for dynamic loading
-        -lX11 #In some cases need to explicitly link to x11 lib, needed by glfw3
+        -lX11 #Needed by glfw3
         -pthread
     )
 

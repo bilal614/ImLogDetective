@@ -1,8 +1,6 @@
 set(TEST_SCP_WRAPPER TestScpWrapper)
 set(TEST_SCP_WRAPPER_DIR ${SCP_WRAPPER_DIR}/test)
 
-enable_testing()
-
 include(${PROJECT_ROOT}/ScpWrapper/find_libssh2.cmake)
 
 find_package(GTest REQUIRED)
@@ -26,7 +24,6 @@ if(GTest_FOUND AND LIBSSH2_FOUND)
         GTest::gmock 
         GTest::gmock_main)
 
-    include(GoogleTest)
-    gtest_discover_tests(${TEST_SCP_WRAPPER})
+    add_test(NAME TEST_SCP_WRAPPER COMMAND ${TEST_SCP_WRAPPER})
 
 endif()

@@ -1,5 +1,3 @@
-
-enable_testing()
 find_package(GTest REQUIRED)
 
 if(GTest_FOUND)
@@ -20,8 +18,6 @@ if(GTest_FOUND)
         GTest::gmock_main
     )
 
-    include(GoogleTest)
-        gtest_discover_tests(${TEST_EVENT_HANDLING}
-    )
+    add_test(NAME TEST_EVENT_HANDLING COMMAND ${TEST_EVENT_HANDLING})
 
 endif()

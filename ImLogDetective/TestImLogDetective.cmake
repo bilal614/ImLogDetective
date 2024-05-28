@@ -1,7 +1,6 @@
 set(TEST_IM_LOG_DETECTIVE TestImLogDetective)
 set(TEST_IM_LOG_DETECTIVE_INCLUDE_DIR ${IM_LOG_DETECTIVE_DIR}/test/inc ${IM_LOG_DETECTIVE_DIR}/test/mocks)
 
-enable_testing()
 find_package(GTest REQUIRED)
 
 if(GTest_FOUND)
@@ -34,8 +33,6 @@ if(GTest_FOUND)
         GTest::gmock_main
     )
 
-    include(GoogleTest)
-        gtest_discover_tests(${TEST_IM_LOG_DETECTIVE}
-    )
+    add_test(NAME TEST_IM_LOG_DETECTIVE COMMAND ${TEST_IM_LOG_DETECTIVE})
 
 endif()
