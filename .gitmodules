@@ -1,12 +1,12 @@
 [submodule "imgui"]
-	path = imgui
+	path = ext/imgui
 	url = https://github.com/ocornut/imgui
 [submodule "libssh2"]
 	path = libssh2
 	url = https://github.com/libssh2/libssh2.git
 [submodule "mINI"]
-	path = mINI
+	path = ext/mINI
 	url = git@github.com:metayeti/mINI.git
 [submodule "stb"]
-	path = stb
+	path = ext/stb
 	url = git@github.com:nothings/stb.git

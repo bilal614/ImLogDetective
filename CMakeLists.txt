@@ -7,6 +7,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR})
 
+# external modules
+set(DEARIMGUI_MODULE ${PROJECT_SOURCE_DIR}/ext/imgui/)
+set(STB_MODULE ${PROJECT_SOURCE_DIR}/ext/stb/)
+set(MINI_MODULE ${PROJECT_SOURCE_DIR}/ext/mINI/)
+
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -25,26 +30,26 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     )
 
     add_library(imgui_glfw_opengl SHARED
-        ${PROJECT_SOURCE_DIR}/imgui/imgui.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/imgui_draw.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/imgui_tables.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/imgui_widgets.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/backends/imgui_impl_glfw.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/misc/cpp/imgui_stdlib.cpp
+        ${DEARIMGUI_MODULE}/imgui.cpp
+        ${DEARIMGUI_MODULE}/imgui_draw.cpp
+        ${DEARIMGUI_MODULE}/imgui_tables.cpp
+        ${DEARIMGUI_MODULE}/imgui_widgets.cpp
+        ${DEARIMGUI_MODULE}/backends/imgui_impl_glfw.cpp
+        ${DEARIMGUI_MODULE}/backends/imgui_impl_opengl3.cpp
+        ${DEARIMGUI_MODULE}/misc/cpp/imgui_stdlib.cpp
     )
 
     target_include_directories(imgui_glfw_opengl PRIVATE 
-        ${PROJECT_SOURCE_DIR}/imgui
+        ${DEARIMGUI_MODULE}
     )
     
     set(DEARIMGUI_INCLUDE_DIRS 
-        ${PROJECT_SOURCE_DIR}/imgui
-        ${PROJECT_SOURCE_DIR}/imgui/backends
+        ${DEARIMGUI_MODULE}
+        ${DEARIMGUI_MODULE}/backends
     )
 
     set(STB_INCLUDE_DIRS
-        ${PROJECT_SOURCE_DIR}/stb
+        ${STB_MODULE}
     )
 
     set(PROJECT_LINK_LIBRARIES imgui_glfw_opengl
@@ -67,7 +72,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     set(TEST_EVENT_HANDLING_DIR ${EVENT_HANDLING_DIR}/test/mocks)
 
     # Definitions for mINI
-    set(mINI_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/mINI/src)
+    set(mINI_INCLUDE_DIR ${MINI_MODULE}/src)
 
     #EventHandling_lib
     add_subdirectory(${PROJECT_ROOT}/EventHandling)
@@ -86,8 +91,8 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
 
     #test app
     add_executable(test_app
-        ${PROJECT_SOURCE_DIR}/imgui/examples/example_glfw_opengl3/main.cpp
-        ${PROJECT_SOURCE_DIR}/imgui/imgui_demo.cpp
+        ${DEARIMGUI_MODULE}/examples/example_glfw_opengl3/main.cpp
+        ${DEARIMGUI_MODULE}/imgui_demo.cpp
     )
 
     target_include_directories(test_app  PUBLIC ${DEARIMGUI_INCLUDE_DIRS})
