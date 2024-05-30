@@ -38,6 +38,10 @@ namespace ImLogDetective
         const char* DefaultFontTffPath{"fonts/Roboto/Roboto-Regular.ttf"};
     }
 
+    namespace Icons{
+        const char* ImLogDetectiveIcon{"icons/ImLogDetective_icon.png"};
+    }
+
     namespace MenuBarOptions {
         const char* SelectFolder{"Select Folder"};
         const char* FetchRemoteLogs{"Fetch Remote Logs"};

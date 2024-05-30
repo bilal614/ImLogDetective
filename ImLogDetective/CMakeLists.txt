@@ -10,10 +10,17 @@ include(${PROJECT_ROOT}/ImLogDetective/ImLogDetective.cmake)
 #TestImLogDetective
 include(${PROJECT_ROOT}/ImLogDetective/TestImLogDetective.cmake)
 
-#Post-build 
+#Post-build
 set(FONTS_DIR ${IM_LOG_DETECTIVE_DIR}/assets/fonts)
 
 add_custom_command(TARGET ${IM_LOG_DETECTIVE} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${FONTS_DIR} $<TARGET_FILE_DIR:${IM_LOG_DETECTIVE}>/fonts
+)
+
+set(ICONS_DIR ${IM_LOG_DETECTIVE_DIR}/assets/icons)
+
+add_custom_command(TARGET ${IM_LOG_DETECTIVE} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${ICONS_DIR} $<TARGET_FILE_DIR:${IM_LOG_DETECTIVE}>/icons
 )

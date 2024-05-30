@@ -7,3 +7,6 @@
 [submodule "mINI"]
 	path = mINI
 	url = git@github.com:metayeti/mINI.git
+[submodule "stb"]
+	path = stb
+	url = git@github.com:nothings/stb.git

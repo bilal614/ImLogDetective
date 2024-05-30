@@ -21,7 +21,7 @@ if(GTest_FOUND)
     target_include_directories(${TEST_IM_LOG_DETECTIVE} PUBLIC 
         ${IM_LOG_DETECTIVE_LIB}
         ${TEST_IM_LOG_DETECTIVE_INCLUDE_DIR}
-        ${PROJECT_INCLUDE_DIRS}
+        ${DEARIMGUI_INCLUDE_DIRS}
         ${TEST_EVENT_HANDLING_DIR}
     )
 

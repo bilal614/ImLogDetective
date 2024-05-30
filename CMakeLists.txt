@@ -38,9 +38,13 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
         ${PROJECT_SOURCE_DIR}/imgui
     )
     
-    set(PROJECT_INCLUDE_DIRS 
+    set(DEARIMGUI_INCLUDE_DIRS 
         ${PROJECT_SOURCE_DIR}/imgui
         ${PROJECT_SOURCE_DIR}/imgui/backends
+    )
+
+    set(STB_INCLUDE_DIRS
+        ${PROJECT_SOURCE_DIR}/stb
     )
 
     set(PROJECT_LINK_LIBRARIES imgui_glfw_opengl
@@ -86,7 +90,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
         ${PROJECT_SOURCE_DIR}/imgui/imgui_demo.cpp
     )
 
-    target_include_directories(test_app  PUBLIC ${PROJECT_INCLUDE_DIRS})
+    target_include_directories(test_app  PUBLIC ${DEARIMGUI_INCLUDE_DIRS})
 
     target_link_libraries(test_app ${PROJECT_LINK_LIBRARIES})
 

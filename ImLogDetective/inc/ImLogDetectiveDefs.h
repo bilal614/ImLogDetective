@@ -31,6 +31,10 @@ namespace ImLogDetective
         extern const char* DefaultFontTffPath;
     }
 
+    namespace Icons{
+        extern const char* ImLogDetectiveIcon;
+    }
+
     namespace IniDefs{
         extern const char* IniFile;
         namespace CopyLogsSection {

@@ -33,11 +33,12 @@ if(${ZLIB_FOUND})
     )
 
     target_include_directories(${IM_LOG_DETECTIVE_LIB} PRIVATE 
-        ${PROJECT_INCLUDE_DIRS}
+        ${DEARIMGUI_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS}
         ${mINI_INCLUDE_DIR}
         ${LOG_EVENT_HANDLING_LIB}
         ${SCP_WRAPPER_LIB}
+        ${STB_INCLUDE_DIRS}
     )
 
     target_include_directories(${IM_LOG_DETECTIVE_LIB} PUBLIC 

@@ -39,6 +39,9 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include <GLFW/glfw3.h>
 
 
@@ -82,6 +85,9 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<MainPresenter> mainPresenter;
     std::unique_ptr<ImLogDetective::IScpExecutor> scpExecutor;
     ImLogDetective::AuthenticationWorkFlow authenticationWorkFlow;
+
+    GLFWimage icon[1];
+
 };
 
 GlfwBackendBinding::Impl::~Impl()
@@ -90,6 +96,8 @@ GlfwBackendBinding::Impl::~Impl()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    stbi_image_free(icon[0].pixels);
 
     glfwDestroyWindow(window);
     glfwTerminate();
@@ -101,6 +109,8 @@ GlfwBackendBinding::Impl::Impl() :
     logView{ nullptr },
     mainPresenter{ nullptr }
 {
+    icon[0].pixels = stbi_load(Icons::ImLogDetectiveIcon, &icon[0].width, &icon[0].height, 0, 4);
+
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
     {
@@ -118,6 +128,7 @@ GlfwBackendBinding::Impl::Impl() :
     window = glfwCreateWindow(screenWidth, screenHeight, WindowDefs::ApplicationName, NULL, NULL);
     if (window != NULL)
     {
+        glfwSetWindowIcon(window, 1, icon); 
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // Enable vsync
 
