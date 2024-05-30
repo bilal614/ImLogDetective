@@ -25,7 +25,7 @@ if(${ZLIB_FOUND})
         ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogFilePresenter.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogDataModelFactory.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogFileTabsPresenter.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/models/FontConfigurator.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/models/AssetsConfigurator.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/GzipFile.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/LogDataModel.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/LogFileParser.cxx

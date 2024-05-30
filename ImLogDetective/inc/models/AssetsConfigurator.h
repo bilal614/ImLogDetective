@@ -1,18 +1,19 @@
 #pragma once
 
-#include "IFontConfigurator.h"
+#include "IAssetsConfigurator.h"
 #include <memory>
 
 namespace ImLogDetective
 {
 
-class FontConfigurator : public IFontConfigurator
+class AssetsConfigurator : public IAssetsConfigurator
 {
 public:
-    FontConfigurator();
-    ~FontConfigurator();
+    AssetsConfigurator();
+    ~AssetsConfigurator();
     std::filesystem::path getTtfFile(const std::string& fontName) final;
     std::filesystem::path getDefaultTtfFile() final;
+    std::filesystem::path getIconFile() final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

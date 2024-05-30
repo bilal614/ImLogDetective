@@ -14,7 +14,7 @@
 #include "ImLogDetectiveDefs.h"
 #include "ScpWrapper/AuthenticationWorkFlow.h"
 #include "ScpWrapper/ScpExecutor.h"
-#include "models/FontConfigurator.h"
+#include "models/AssetsConfigurator.h"
 #include "models/GzipFile.h"
 #include "models/LogFileParser.h"
 #include "models/Mini.h"
@@ -60,7 +60,7 @@ struct GlfwBackendBinding::Impl
     std::string glShaderLanguageVersion;
     GLFWwindow* window;
     std::unique_ptr<IMainViewPort> mainViewPort;
-    std::unique_ptr<IFontConfigurator> fontConfigurator;
+    std::unique_ptr<AssetsConfigurator> assetsConfigurator;
     std::unique_ptr<IIOContext> ioContext;
     std::unique_ptr<LogEventHandling::IEventLoop> eventLoop;
     std::unique_ptr<IImGuiWidgetWrapper> imGuiWidgetWrapper;
@@ -107,9 +107,10 @@ GlfwBackendBinding::Impl::Impl() :
     glShaderLanguageVersion{"#version 130"},
     widgetFactory{},
     logView{ nullptr },
-    mainPresenter{ nullptr }
+    mainPresenter{ nullptr },
+    assetsConfigurator{std::make_unique<AssetsConfigurator>()}
 {
-    icon[0].pixels = stbi_load(Icons::ImLogDetectiveIcon, &icon[0].width, &icon[0].height, 0, 4);
+    icon[0].pixels = stbi_load(assetsConfigurator->getIconFile().c_str(), &icon[0].width, &icon[0].height, 0, 4);
 
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -143,10 +144,10 @@ GlfwBackendBinding::Impl::Impl() :
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(glShaderLanguageVersion.c_str());
     }
-    fontConfigurator = std::make_unique<FontConfigurator>();
+
     ioContext = std::make_unique<IOContext>();
     ioContext->unsetIniFile();
-    ioContext->setFontFromTtfFile(fontConfigurator->getDefaultTtfFile());
+    ioContext->setFontFromTtfFile(assetsConfigurator->getDefaultTtfFile());
     mainViewPort = std::make_unique<MainViewPort>(*ioContext);
     imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapper>();
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort, *imGuiWidgetWrapper);
@@ -183,7 +184,6 @@ GlfwBackendBinding::Impl::Impl() :
         *fileListPresenter,
         *copyLogsPresenter,
         *mini);
-
 }
 
 GlfwBackendBinding::GlfwBackendBinding() : p{std::make_unique<Impl>()}
