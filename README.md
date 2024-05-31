@@ -1,3 +1,6 @@
+# ImLogDetective
+[![Build and test (Release-Ubuntu)](https://github.com/bilal614/ImLogDetective/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/bilal614/ImLogDetective/actions/workflows/build.yml)
+
 The ImLogDetective is a developer tool for developers and engineers. This tool is intended for viewing log files and logging data. It allows copying of logs from remote hosts and configuring text highlighting for ease of reading logging data. The tool is built using the popular dearimgui library for its UI.
 
 ImLogDetective is heavily based on the excellent dearimgui API and thus relies on immediate mode rendering. As such, the tool is also a great way to learn and become familiar with dearimgui and immediate mode GUIs in general. For building, this repository relies on cmake(to be followed up with build instructions).   
