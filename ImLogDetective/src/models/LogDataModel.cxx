@@ -16,11 +16,14 @@ struct LogDataModel::Impl
 
     const std::string dataSource;
     std::vector<LogData> logData;
+    bool completed;
 };
 
 
 LogDataModel::Impl::Impl(const std::string& dataSource) :
-    dataSource{dataSource}
+    dataSource{dataSource},
+    logData{},
+    completed{false}
 {
 }
 
@@ -60,6 +63,16 @@ void LogDataModel::addLogData(std::string dataLine)
 const std::vector<LogData>& LogDataModel::getLogData()
 {
     return p->logData;
+}
+
+void LogDataModel::setCompleted(bool completed)
+{
+    p->completed = completed;
+}
+
+bool LogDataModel::getCompleted()
+{
+    return p->completed;
 }
 
 }

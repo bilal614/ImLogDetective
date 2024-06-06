@@ -54,6 +54,7 @@ void LogFileParser::readLogFileData(const std::filesystem::path& filePath, ILogD
             logDataModel.addLogData(line);
         }
     }
+    logDataModel.setCompleted(true);
 }
 
 }

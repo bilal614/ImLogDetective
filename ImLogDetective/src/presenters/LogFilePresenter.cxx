@@ -62,31 +62,39 @@ void LogFilePresenter::Impl::updateLogData(
         });
     }
 
-    auto logData = logDataModel.getLogData();
-
-    for(auto data : logData)
+    if(logDataModel.getCompleted())
     {
-        if(textFilterWrapper.passFilter(data.logLine))
+        auto logData = logDataModel.getLogData();
+
+        for(auto data : logData)
         {
-            if(data.level == LogLevel::Unknown)
+            if(textFilterWrapper.passFilter(data.logLine))
             {
-                logView.drawLogLineText(data, TextColor::Yellow);
-            }
-            if(data.level == LogLevel::Debug && logFilterView.getDebugChecked())
-            {
-                logView.drawLogLineText(data, TextColor::White);
-            }
-            if(data.level == LogLevel::Info  && logFilterView.getInfoChecked())
-            {
-                logView.drawLogLineText(data, TextColor::White);
-            }
-            if(data.level == LogLevel::Warning && logFilterView.getWarningChecked())
-            {
-                logView.drawLogLineText(data, TextColor::Orange);
-            }
-            if(data.level == LogLevel::Error && logFilterView.getErrorChecked())
-            {
-                logView.drawLogLineText(data, TextColor::Red);
+                if(data.level == LogLevel::Unknown)
+                {
+                    logView.drawLogLineText(data, TextColor::Yellow);
+                    continue;
+                }
+                if(data.level == LogLevel::Debug && logFilterView.getDebugChecked())
+                {
+                    logView.drawLogLineText(data, TextColor::White);
+                    continue;
+                }
+                if(data.level == LogLevel::Info  && logFilterView.getInfoChecked())
+                {
+                    logView.drawLogLineText(data, TextColor::White);
+                    continue;
+                }
+                if(data.level == LogLevel::Warning && logFilterView.getWarningChecked())
+                {
+                    logView.drawLogLineText(data, TextColor::Orange);
+                    continue;
+                }
+                if(data.level == LogLevel::Error && logFilterView.getErrorChecked())
+                {
+                    logView.drawLogLineText(data, TextColor::Red);
+                    continue;
+                }
             }
         }
     }

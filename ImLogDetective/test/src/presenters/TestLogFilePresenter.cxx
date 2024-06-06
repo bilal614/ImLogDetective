@@ -69,8 +69,9 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_err
     EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
+    EXPECT_CALL(logDataModelMock, getCompleted()).WillOnce(::testing::Return(true));
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
-    
+
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(logFilterViewMock, getDebugChecked()).WillOnce(::testing::Return(true));
     EXPECT_CALL(logViewMock, drawLogLineText(::testing::Eq(dummyLogData[0]), 
@@ -106,6 +107,7 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_info_warning_error_che
     EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
+    EXPECT_CALL(logDataModelMock, getCompleted()).WillOnce(::testing::Return(true));
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
@@ -141,6 +143,7 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_warning_error_checked)
     EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
+    EXPECT_CALL(logDataModelMock, getCompleted()).WillOnce(::testing::Return(true));
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
@@ -174,6 +177,7 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_error_checked) {
     EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
     EXPECT_CALL(eventLoopMock, post(::testing::An<const std::function<void()>&>())).WillOnce(DoAll(::testing::SaveArg<0>(&postedReadDataFunction)));
 
+    EXPECT_CALL(logDataModelMock, getCompleted()).WillOnce(::testing::Return(true));
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
 
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));
@@ -202,6 +206,7 @@ TEST_F(TestLogFilePresenter, test_logFilePresenter_update_debug_info_warning_err
     EXPECT_CALL(logFilterViewMock, drawFilterCheckBoxes()).Times(1);
     EXPECT_CALL(windowFactoryMock, createChildWindow(WindowDefs::LogFileContentChildWindow, ::testing::_, ::testing::_)).Times(1);
 
+    EXPECT_CALL(logDataModelMock, getCompleted()).WillOnce(::testing::Return(true));
     EXPECT_CALL(logDataModelMock, getLogData()).WillOnce(testing::ReturnRef(dummyLogData));
     
     EXPECT_CALL(imGuiTextFilterWrapperMock, passFilter(::testing::_)).WillOnce(::testing::Return(true));

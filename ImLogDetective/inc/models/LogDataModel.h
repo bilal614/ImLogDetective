@@ -15,6 +15,8 @@ public:
     ~LogDataModel();
     void addLogData(std::string dataLine) override;
     const std::vector<LogData>& getLogData() override; 
+    void setCompleted(bool completed) override;
+    bool getCompleted() override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

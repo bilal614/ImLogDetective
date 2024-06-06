@@ -52,7 +52,7 @@ struct ScopedImGuiWindow : public IScopedImGuiWindow
 
         if(windowType == WindowType::MainWindow)
         {
-            ImGui::Begin(windowName.c_str(), openClose, windowFlags);
+            ImGui::Begin(windowName.c_str(), openClose, windowFlags | ImGuiWindowFlags_NoTitleBar);
         }
         if(windowType == WindowType::ChildWindow)
         {

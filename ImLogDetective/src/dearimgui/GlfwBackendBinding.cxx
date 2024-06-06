@@ -57,6 +57,9 @@ struct GlfwBackendBinding::Impl
 {
     Impl();
     ~Impl();
+
+    void applyColorTheme();
+
     std::string glShaderLanguageVersion;
     GLFWwindow* window;
     std::unique_ptr<IMainViewPort> mainViewPort;
@@ -103,6 +106,30 @@ GlfwBackendBinding::Impl::~Impl()
     glfwTerminate();
 }
 
+void GlfwBackendBinding::Impl::applyColorTheme()
+{
+    ImGui::StyleColorsDark();
+    ImGuiStyle* style = &ImGui::GetStyle();
+    ImVec4* colors = style->Colors;
+    colors[ImGuiCol_Button]                 = ImVec4(0.16f, 0.19f, 0.12f, 0.40f);
+    colors[ImGuiCol_ButtonHovered]          = ImVec4(0.16f, 0.19f, 0.12f, 1.00f);
+    colors[ImGuiCol_ButtonActive]           = ImVec4(0.16f, 0.03f, 0.12f, 1.00f);
+    
+    colors[ImGuiCol_FrameBg]                = ImVec4(0.16f, 0.19f, 0.18f, 0.54f);
+    colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.16f, 0.19f, 0.18f, 0.40f);
+    colors[ImGuiCol_FrameBgActive]          = ImVec4(0.26f, 0.29f, 0.28f, 0.67f);
+
+    colors[ImGuiCol_Header]                 = ImVec4(0.08f, 0.09f, 0.08f, 0.25f);
+    colors[ImGuiCol_HeaderHovered]          = ImVec4(0.18f, 0.18f, 0.18f, 0.95f);
+    colors[ImGuiCol_HeaderActive]           = ImVec4(0.18f, 0.18f, 0.18f, 0.95f);
+
+    colors[ImGuiCol_Tab]                    = ImVec4(0.36f, 0.39f, 0.38f, 0.54f);
+    colors[ImGuiCol_TabHovered]             = ImVec4(0.36f, 0.39f, 0.38f, 0.85f);
+    colors[ImGuiCol_TabActive]              = ImVec4(0.56f, 0.59f, 0.58f, 0.54f);
+    colors[ImGuiCol_TabUnfocused]           = ImVec4(0.36f, 0.39f, 0.38f, 0.54f);
+    colors[ImGuiCol_TabUnfocusedActive]     = ImVec4(0.36f, 0.39f, 0.38f, 0.54f);
+}
+
 GlfwBackendBinding::Impl::Impl() :
     glShaderLanguageVersion{"#version 130"},
     widgetFactory{},
@@ -138,7 +165,8 @@ GlfwBackendBinding::Impl::Impl() :
         ImGui::CreateContext();
 
         // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsDark();
+        applyColorTheme();
 
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);
