@@ -1,9 +1,8 @@
 #pragma once
 
 #include "views/ILogView.h"
-#include "views/ITextWidgetFactory.h"
-#include "gmock/gmock.h"
-#include "models/LogData.h"
+#include "models/LogLine.h"
+#include <gmock/gmock.h>
 
 
 namespace TestImLogDetective {
@@ -11,7 +10,7 @@ namespace TestImLogDetective {
 class LogViewMock : public ImLogDetective::ILogView 
 {
 public:
-    MOCK_METHOD(void, drawLogLineText, (ImLogDetective::LogData& logLine, const ImLogDetective::TextColor& color));
+    MOCK_METHOD(void, drawLogLineText, (ImLogDetective::LogLine& logLine));
 };
 
 }

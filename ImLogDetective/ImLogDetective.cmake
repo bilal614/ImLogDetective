@@ -28,6 +28,7 @@ if(${ZLIB_FOUND})
         ${IM_LOG_DETECTIVE_DIR}/src/models/AssetsConfigurator.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/GzipFile.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/LogDataModel.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/models/LogLine.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/LogFileParser.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/Mini.cxx
     )

@@ -5,14 +5,14 @@
 namespace ImLogDetective
 {
 
-struct LogData;
+struct LogLine;
 enum class TextColor;
 
 class ILogView
 {
 public:
     virtual ~ILogView() = default;
-    virtual void drawLogLineText(LogData& logLine, const TextColor& color) = 0;
+    virtual void drawLogLineText(LogLine& logLine) = 0;
 };
 
 }

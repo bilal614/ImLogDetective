@@ -1,6 +1,5 @@
 #pragma once
 #include "IImGuiWidgetWrapper.h"
-#include <string>
 
 namespace ImLogDetective
 {
@@ -21,9 +20,9 @@ public:
     void sameLine() final;
     void setNextWindowPos(const ImVec2& pos) final;
     void setNextWindowSize(const ImVec2& size) final;
-    void textColored(const ImVec4& color, const std::string& text) final;
-    void textUnformatted(const std::string& text) final;
-    bool selectableText(const ImVec4& color, const std::string& text, bool selected) final;
+    void textColored(const ImVec4& color, std::string_view text) final;
+    void textUnformatted(std::string_view text) final;
+    bool selectableText(const ImVec4& color, std::string_view text, bool selected) final;
 };
 
 }

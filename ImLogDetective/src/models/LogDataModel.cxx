@@ -1,7 +1,5 @@
 #include "models/LogDataModel.h"
-#include "models/LogData.h"
-#include <memory>
-#include <string_view>
+#include "models/LogLine.h"
 
 namespace ImLogDetective
 {
@@ -15,7 +13,7 @@ struct LogDataModel::Impl
     LogLevel getLogLevel(std::string_view dataLine);
 
     const std::string dataSource;
-    std::vector<LogData> logData;
+    std::vector<LogLine> logData;
     bool completed;
 };
 
@@ -57,10 +55,10 @@ LogDataModel::~LogDataModel() = default;
 
 void LogDataModel::addLogData(std::string dataLine)
 {
-    p->logData.emplace_back(LogData{dataLine, p->getLogLevel(dataLine)});
+    p->logData.emplace_back(LogLine{dataLine, p->getLogLevel(dataLine)});
 }
 
-const std::vector<LogData>& LogDataModel::getLogData()
+const std::vector<LogLine>& LogDataModel::getLogData()
 {
     return p->logData;
 }

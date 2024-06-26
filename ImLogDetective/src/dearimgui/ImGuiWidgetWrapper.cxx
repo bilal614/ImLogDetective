@@ -88,20 +88,20 @@ void ImGuiWidgetWrapper::setNextWindowSize(const ImVec2& size)
     ImGui::SetNextWindowSize(size, ImGuiCond_Appearing);
 }
 
-void ImGuiWidgetWrapper::textColored(const ImVec4& color, const std::string& text)
+void ImGuiWidgetWrapper::textColored(const ImVec4& color, std::string_view text)
 {
     ImGui::TextColored(color, "%s", text.data());
 }
 
-void ImGuiWidgetWrapper::textUnformatted(const std::string& text)
+void ImGuiWidgetWrapper::textUnformatted(std::string_view text)
 {
-    ImGui::TextUnformatted(text.c_str());
+    ImGui::TextUnformatted(text.data());
 }
 
-bool ImGuiWidgetWrapper::selectableText(const ImVec4& color, const std::string& text, bool selected)
+bool ImGuiWidgetWrapper::selectableText(const ImVec4& color, std::string_view text, bool selected)
 {
     volatile auto textColorStyle = TextColorStyle(color);
-    return text.empty() ? false : ImGui::Selectable(text.c_str(), selected);
+    return text.empty() ? false : ImGui::Selectable(text.data(), selected);
 }
 
 }

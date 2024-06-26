@@ -5,9 +5,8 @@
 #include "dearimgui/IImGuiWidgetWrapper.h"
 #include "dearimgui/ListTreeWidget.h"
 #include "dearimgui/ScopedImGuiWindow.hpp"
-
+#include "dearimgui/TextColor.h"
 #include <unordered_map>
-
 #include <iostream>
 
 namespace ImLogDetective
@@ -159,6 +158,11 @@ bool WidgetFactory::createSelectedTextColored(std::string_view text, const TextC
     auto textColor = p->colorMap.find(color);
     if(textColor != p->colorMap.end())
     {
+        if(color == TextColor::Yellow)
+        {
+            p->imGuiWidgetWrapper.textColored(textColor->second, text);
+            return true;
+        }
         return p->imGuiWidgetWrapper.selectableText(textColor->second, text.data(), selected);
     }
     return false;

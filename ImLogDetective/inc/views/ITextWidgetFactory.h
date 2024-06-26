@@ -5,14 +5,7 @@
 namespace ImLogDetective
 {
 
-enum class TextColor
-{
-    Red,
-    Orange,
-    Yellow,
-    Green,
-    White,
-};
+enum class TextColor;
 
 class ITextWidgetFactory
 {

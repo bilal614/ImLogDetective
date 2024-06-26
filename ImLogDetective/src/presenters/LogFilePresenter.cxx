@@ -1,13 +1,12 @@
+#include "presenters/LogFilePresenter.h"
 #include "ImLogDetectiveDefs.h"
 #include "dearimgui/IImGuiTextFilterWrapper.h"
-#include "views/ITextWidgetFactory.h"
 #include "views/IWindowFactory.h"
 #include "models/ILogFileParser.h"
-#include "models/LogData.h"
+#include "models/LogLine.h"
 #include "EventHandling/Event.hpp"
 #include "EventHandling/IEventLoop.h"
 #include "models/ILogDataModel.h"
-#include "presenters/LogFilePresenter.h"
 #include "views/ILogView.h"
 #include "views/ILogFilterView.h"
 #include "imgui.h"
@@ -24,6 +23,7 @@ struct LogFilePresenter::Impl
         ILogFileParser& logFileParser,
         IImGuiTextFilterWrapper& textFilterWrapper);
     ~Impl() = default;
+    bool checkLogLineFiltered(const LogLine& line);
     void updateLogData(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel);
 
     IWindowFactory& windowFactory;
@@ -50,6 +50,34 @@ LogFilePresenter::Impl::Impl(
 {
 }
 
+bool LogFilePresenter::Impl::checkLogLineFiltered(const LogLine& line)
+{
+    if(textFilterWrapper.passFilter(line.logLine))
+    {
+        if(line.level == LogLevel::Debug && logFilterView.getDebugChecked())
+        {
+            return true;
+        }
+        if(line.level == LogLevel::Info  && logFilterView.getInfoChecked())
+        {
+            return true;
+        }
+        if(line.level == LogLevel::Warning && logFilterView.getWarningChecked())
+        {
+            return true;
+        }
+        if(line.level == LogLevel::Error && logFilterView.getErrorChecked())
+        {
+            return true;
+        }
+        if(line.level == LogLevel::Unknown)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void LogFilePresenter::Impl::updateLogData(
     const std::filesystem::path& filePath, 
     bool readLogFile, 
@@ -68,33 +96,9 @@ void LogFilePresenter::Impl::updateLogData(
 
         for(auto data : logData)
         {
-            if(textFilterWrapper.passFilter(data.logLine))
+            if(checkLogLineFiltered(data))
             {
-                if(data.level == LogLevel::Unknown)
-                {
-                    logView.drawLogLineText(data, TextColor::Yellow);
-                    continue;
-                }
-                if(data.level == LogLevel::Debug && logFilterView.getDebugChecked())
-                {
-                    logView.drawLogLineText(data, TextColor::White);
-                    continue;
-                }
-                if(data.level == LogLevel::Info  && logFilterView.getInfoChecked())
-                {
-                    logView.drawLogLineText(data, TextColor::White);
-                    continue;
-                }
-                if(data.level == LogLevel::Warning && logFilterView.getWarningChecked())
-                {
-                    logView.drawLogLineText(data, TextColor::Orange);
-                    continue;
-                }
-                if(data.level == LogLevel::Error && logFilterView.getErrorChecked())
-                {
-                    logView.drawLogLineText(data, TextColor::Red);
-                    continue;
-                }
+                logView.drawLogLineText(data);
             }
         }
     }

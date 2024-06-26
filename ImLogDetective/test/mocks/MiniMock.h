@@ -1,8 +1,7 @@
 #pragma once
 
 #include "models/IMini.h"
-#include "gmock/gmock.h"
-#include "models/LogData.h"
+#include <gmock/gmock.h>
 
 
 namespace TestImLogDetective {

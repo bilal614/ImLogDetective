@@ -24,9 +24,9 @@ public:
     virtual void sameLine() = 0;
     virtual void setNextWindowPos(const ImVec2& pos) = 0;
     virtual void setNextWindowSize(const ImVec2& size) = 0;
-    virtual void textColored(const ImVec4& color, const std::string& text) = 0;
-    virtual void textUnformatted(const std::string& text) = 0;
-    virtual bool selectableText(const ImVec4& color, const std::string& text, bool selected) = 0;
+    virtual void textColored(const ImVec4& color, std::string_view text) = 0;
+    virtual void textUnformatted(std::string_view text) = 0;
+    virtual bool selectableText(const ImVec4& color, std::string_view text, bool selected) = 0;
 };
 
 }
