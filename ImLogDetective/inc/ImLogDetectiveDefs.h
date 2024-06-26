@@ -75,6 +75,7 @@ namespace ImLogDetective
 
     namespace SelectFolderDefs {
         extern const char* Name;
+        extern const char* ClearLogs;
         constexpr float TextBoxWidth = 400.0f;
     }
 

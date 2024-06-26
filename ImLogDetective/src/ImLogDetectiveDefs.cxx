@@ -50,6 +50,7 @@ namespace ImLogDetective
 
     namespace SelectFolderDefs {
         const char* Name{"Select Folder"};
+        const char* ClearLogs{"Clear Logs"};
     }
 
     namespace CopyLogsDefs {

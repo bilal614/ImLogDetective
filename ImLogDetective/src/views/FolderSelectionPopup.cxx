@@ -71,7 +71,6 @@ void FolderSelectionPopup::Impl::processPopupInput(bool okButtonClicked, bool cl
     }
     if(clearLogsBtnClicked)
     {
-        //TODO Clear logs here
         if(validateSelectedFolder(selectedFolderPath))
         {
             for (const auto& entry : std::filesystem::directory_iterator(selectedFolderPath)) 
@@ -112,7 +111,7 @@ void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, I
 
     std::vector<PopupButton> popupButtons{PopupButton{Common::OkBtn}, PopupButton{Common::CloseBtn}};
     p->modalPopupFactory.createButtonGroup(popupButtons);
-    PopupButton clearLogBtn{"Clear Logs"}; 
+    PopupButton clearLogBtn{SelectFolderDefs::ClearLogs}; 
     p->modalPopupFactory.createButton(clearLogBtn);
 
     p->modalPopupFactory.endLayout();
