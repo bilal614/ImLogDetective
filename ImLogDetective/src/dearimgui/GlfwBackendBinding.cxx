@@ -186,7 +186,7 @@ GlfwBackendBinding::Impl::Impl() :
     copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory), *eventLoop);
     protectedInputPopup = std::make_unique<ProtectedInputPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
-    logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper);
+    logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper, *imGuiWidgetWrapper);
     tabBar = std::make_unique<TabBar>("LogFileTabs");
     logView = std::make_unique<LogView>(dynamic_cast<ITextWidgetFactory&>(*widgetFactory));
     fileListView = std::make_unique<FileListView>(dynamic_cast<IListTreeFactory&>(*widgetFactory));

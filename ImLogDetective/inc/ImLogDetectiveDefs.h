@@ -97,4 +97,11 @@ namespace ImLogDetective
         extern const char* InvalidDirectory;
     }
 
+    namespace LogFilterDefs {
+        extern const char* DebugCheckBoxLabel;
+        extern const char* InfoCheckBoxLabel;
+        extern const char* WarningCheckBoxLabel;
+        extern const char* ErrorCheckBoxLabel;
+    }
+
 }

@@ -13,6 +13,7 @@ public:
     virtual ~IImGuiWidgetWrapper() = default;
     virtual bool beginPopupModal(const std::string& name) = 0;
     virtual bool button(const std::string& label) = 0;
+    virtual bool checkBox(std::string_view label, bool& checked) = 0;
     virtual void closeCurrentPopup() = 0;
     virtual bool collapsingHeader(const std::string& title) = 0;
     virtual void endPopup() = 0;
@@ -22,6 +23,7 @@ public:
     virtual void popItemWidth() = 0;
     virtual void pushItemWidth(float width) = 0;
     virtual void sameLine() = 0;
+    virtual void separator() = 0;
     virtual void setNextWindowPos(const ImVec2& pos) = 0;
     virtual void setNextWindowSize(const ImVec2& size) = 0;
     virtual void textColored(const ImVec4& color, std::string_view text) = 0;

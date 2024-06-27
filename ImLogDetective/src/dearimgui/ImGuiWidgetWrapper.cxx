@@ -30,6 +30,11 @@ bool ImGuiWidgetWrapper::button(const std::string& label)
     return ImGui::Button(label.c_str());
 }
 
+bool ImGuiWidgetWrapper::checkBox(std::string_view label, bool& checked)
+{
+    return ImGui::Checkbox(label.data(), &checked);
+}
+
 void ImGuiWidgetWrapper::closeCurrentPopup()
 {
     ImGui::CloseCurrentPopup();
@@ -76,6 +81,11 @@ void ImGuiWidgetWrapper::pushItemWidth(float width)
 void ImGuiWidgetWrapper::sameLine()
 {
     ImGui::SameLine();
+}
+
+void ImGuiWidgetWrapper::separator()
+{
+    ImGui::Separator();
 }
 
 void ImGuiWidgetWrapper::setNextWindowPos(const ImVec2& pos)

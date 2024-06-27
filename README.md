@@ -1,6 +1,6 @@
 # ImLogDetective
 [![Build](https://github.com/bilal614/ImLogDetective/actions/workflows/build.yml/badge.svg)](https://github.com/bilal614/ImLogDetective/actions/workflows/build.yml)
-![Code Coverage](https://img.shields.io/badge/Code%20Coverage-55%25-yellow?style=flat)
+![Code Coverage](https://img.shields.io/badge/Code%20Coverage-56%25-yellow?style=flat)
 
 The ImLogDetective is a developer tool for developers and engineers. This tool is intended for viewing log files and logging data. It allows copying of logs from remote hosts and configuring text highlighting for ease of reading logging data. The tool is built using the popular dearimgui library for its UI.
 

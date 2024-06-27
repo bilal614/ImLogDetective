@@ -67,4 +67,11 @@ namespace ImLogDetective
         const char* InvalidDirectory {"Not a valid directory path."};
     }
 
+    namespace LogFilterDefs {
+        const char* DebugCheckBoxLabel{"DEBUG"};
+        const char* InfoCheckBoxLabel{"INFO"};
+        const char* WarningCheckBoxLabel{"WARNING"};
+        const char* ErrorCheckBoxLabel{"ERROR"};
+    }
+
 }

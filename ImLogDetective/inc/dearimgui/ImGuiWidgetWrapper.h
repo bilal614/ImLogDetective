@@ -9,6 +9,7 @@ class ImGuiWidgetWrapper : public IImGuiWidgetWrapper
 public:
     bool beginPopupModal(const std::string& name) final;
     bool button(const std::string& label) final;
+    bool checkBox(std::string_view label, bool& checked) final;
     void closeCurrentPopup() final;
     bool collapsingHeader(const std::string& title) final;
     void endPopup() final;
@@ -18,6 +19,7 @@ public:
     void popItemWidth() final;
     void pushItemWidth(float width) final;
     void sameLine() final;
+    void separator() final;
     void setNextWindowPos(const ImVec2& pos) final;
     void setNextWindowSize(const ImVec2& size) final;
     void textColored(const ImVec4& color, std::string_view text) final;

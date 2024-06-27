@@ -1,12 +1,15 @@
 #include "views/LogFilterView.h"
+#include "ImLogDetectiveDefs.h"
 #include "dearimgui/IImGuiTextFilterWrapper.h"
-#include "imgui.h"
+#include "dearimgui/IImGuiWidgetWrapper.h"
 
 namespace ImLogDetective
 {
 struct LogFilterView::Impl
 {
-    Impl(IImGuiTextFilterWrapper& textFilterWrapper);
+    Impl(
+        IImGuiTextFilterWrapper& textFilterWrapper,
+        IImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~Impl() = default;
 
     bool debugBoxChecked;
@@ -14,20 +17,26 @@ struct LogFilterView::Impl
     bool warningBoxChecked;
     bool errorBoxChecked;
     IImGuiTextFilterWrapper& textFilterWrapper;
+    IImGuiWidgetWrapper& imGuiWidgetWrapper; 
     
 };
 
-LogFilterView::Impl::Impl(IImGuiTextFilterWrapper& textFilterWrapper) :
-    debugBoxChecked{true},
-    infoBoxChecked{true},
-    warningBoxChecked{true},
-    errorBoxChecked{true},
-    textFilterWrapper{textFilterWrapper}
+LogFilterView::Impl::Impl(
+    IImGuiTextFilterWrapper& textFilterWrapper,
+    IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+        debugBoxChecked{true},
+        infoBoxChecked{true},
+        warningBoxChecked{true},
+        errorBoxChecked{true},
+        textFilterWrapper{textFilterWrapper},
+        imGuiWidgetWrapper{imGuiWidgetWrapper}
 {
 }
 
-LogFilterView::LogFilterView(IImGuiTextFilterWrapper& textFilterWrapper) :
-    p{std::make_unique<Impl>(textFilterWrapper)}
+LogFilterView::LogFilterView(
+    IImGuiTextFilterWrapper& textFilterWrapper, 
+    IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+        p{std::make_unique<Impl>(textFilterWrapper, imGuiWidgetWrapper)}
 {
 }
 
@@ -35,15 +44,15 @@ LogFilterView::~LogFilterView() = default;
 
 void LogFilterView::drawFilterCheckBoxes() const
 {
-    ImGui::SameLine();
-    ImGui::Checkbox("DEBUG", &p->debugBoxChecked);
-    ImGui::SameLine();
-    ImGui::Checkbox("INFO", &p->infoBoxChecked);
-    ImGui::SameLine();
-    ImGui::Checkbox("WARNING", &p->warningBoxChecked);
-    ImGui::SameLine();
-    ImGui::Checkbox("ERROR", &p->errorBoxChecked);
-    ImGui::Separator();
+    p->imGuiWidgetWrapper.sameLine();
+    p->imGuiWidgetWrapper.checkBox(LogFilterDefs::DebugCheckBoxLabel, p->debugBoxChecked);
+    p->imGuiWidgetWrapper.sameLine();
+    p->imGuiWidgetWrapper.checkBox(LogFilterDefs::InfoCheckBoxLabel, p->infoBoxChecked);
+    p->imGuiWidgetWrapper.sameLine();
+    p->imGuiWidgetWrapper.checkBox(LogFilterDefs::WarningCheckBoxLabel, p->warningBoxChecked);
+    p->imGuiWidgetWrapper.sameLine();
+    p->imGuiWidgetWrapper.checkBox(LogFilterDefs::ErrorCheckBoxLabel, p->errorBoxChecked);
+    p->imGuiWidgetWrapper.separator();
     p->textFilterWrapper.draw();
 }
 
