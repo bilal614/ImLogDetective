@@ -24,6 +24,6 @@ if(GTest_FOUND AND LIBSSH2_FOUND)
         GTest::gmock 
         GTest::gmock_main)
 
-    add_test(NAME TEST_SCP_WRAPPER COMMAND ${TEST_SCP_WRAPPER})
+    gtest_discover_tests(${TEST_SCP_WRAPPER} WORKING_DIRECTORY ${SCP_WRAPPER_DIR})
 
 endif()

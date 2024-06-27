@@ -18,6 +18,6 @@ if(GTest_FOUND)
         GTest::gmock_main
     )
 
-    add_test(NAME TEST_EVENT_HANDLING COMMAND ${TEST_EVENT_HANDLING})
+    gtest_discover_tests(${TEST_EVENT_HANDLING} WORKING_DIRECTORY ${EVENT_HANDLING_DIR})
 
 endif()

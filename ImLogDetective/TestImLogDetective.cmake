@@ -33,6 +33,6 @@ if(GTest_FOUND)
         GTest::gmock_main
     )
 
-    add_test(NAME TEST_IM_LOG_DETECTIVE COMMAND ${TEST_IM_LOG_DETECTIVE})
+    gtest_discover_tests(${TEST_IM_LOG_DETECTIVE} WORKING_DIRECTORY ${IM_LOG_DETECTIVE_DIR})
 
 endif()

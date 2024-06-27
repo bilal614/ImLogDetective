@@ -6,6 +6,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+
+option(WITH_COVERAGE "Build with coverage" OFF)
+
+if (WITH_COVERAGE)
+    set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Setting Debug for coverage" FORCE)
+    include(CodeCoverage)
+    append_coverage_compiler_flags()
+endif()
 
 # external modules
 set(DEARIMGUI_MODULE ${PROJECT_SOURCE_DIR}/ext/imgui/)
@@ -98,5 +107,20 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     target_include_directories(test_app  PUBLIC ${DEARIMGUI_INCLUDE_DIRS})
 
     target_link_libraries(test_app ${PROJECT_LINK_LIBRARIES})
+
+    if (WITH_COVERAGE)
+        set(GCOVR_ADDITIONAL_ARGS --print-summary)
+        setup_target_for_coverage_gcovr_xml(
+            NAME "coverage-gcov"
+            EXECUTABLE ctest
+            BASE_DIRECTORY "${PROJECT_ROOT}"
+            EXCLUDE "/usr/*" "ext/*")
+
+        setup_target_for_coverage_lcov(
+            NAME "coverage-lcov"
+            EXECUTABLE ctest
+            BASE_DIRECTORY "${PROJECT_ROOT}"
+            EXCLUDE "/usr/*" "ext/*")
+    endif()
 
 endif()
