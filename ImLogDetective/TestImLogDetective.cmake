@@ -14,6 +14,7 @@ if(GTest_FOUND)
         ${IM_LOG_DETECTIVE_DIR}/test/src/presenters/TestLogFileTabsPresenter.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/presenters/TestMainPresenter.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/TestUtility.cxx
+        ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestFileListView.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestFolderSelectionPopup.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/main.cxx
     )
