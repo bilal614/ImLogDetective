@@ -1,36 +1,20 @@
 #include "views/CopyLogsPopup.h"
-#include "views/IModalPopupFactory.h"
 #include "ImLogDetectiveDefs.h"
-#include "EventHandling/IEventLoop.h"
-#include <cstring>
-#include <filesystem>
-
-#include "ScpWrapper/IPtyMaster.h"
-#include "ScpWrapper/PtyMaster.h"
-
+#include "views/IModalPopupFactory.h"
 #include "imgui.h"
 
-namespace {
-
-    std::string toString(const char* data)
-    {
-        return std::string(data, std::strlen(data));
-    }
-
-}
 
 namespace ImLogDetective
 {
 
 struct CopyLogsPopup::Impl
 {
-    Impl(IModalPopupFactory& modalPopupFactory, LogEventHandling::IEventLoop& eventLoop);
+    Impl(IModalPopupFactory& modalPopupFactory);
     ~Impl() = default;
 
     void resetInternalState();
 
     IModalPopupFactory& modalPopupFactory;
-    LogEventHandling::IEventLoop& eventLoop;
 
     bool copyClicked;
     bool closeClicked;
@@ -38,9 +22,8 @@ struct CopyLogsPopup::Impl
     CopyLogs copyLogsInput;
 };
 
-CopyLogsPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory, LogEventHandling::IEventLoop& eventLoop) :
+CopyLogsPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
     modalPopupFactory{modalPopupFactory},
-    eventLoop{eventLoop},
     copyClicked{false},
     closeClicked{false},
     opened{false}
@@ -55,8 +38,8 @@ void CopyLogsPopup::Impl::resetInternalState()
     opened = false;
 }
 
-CopyLogsPopup::CopyLogsPopup(IModalPopupFactory& modalPopupFactory, LogEventHandling::IEventLoop& eventLoop) :
-    p{std::make_unique<Impl>(modalPopupFactory, eventLoop)}
+CopyLogsPopup::CopyLogsPopup(IModalPopupFactory& modalPopupFactory) :
+    p{std::make_unique<Impl>(modalPopupFactory)}
 {
 }
 
@@ -91,14 +74,14 @@ void CopyLogsPopup::draw()
         p->modalPopupFactory.createButtonGroup(popupButtons);
 
         std::vector<PopupInputTextBox> popupSrcDestFolders{
-            PopupInputTextBox{"Source Host Path", p->copyLogsInput.srcHostPath, CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{"Destination Directory", p->copyLogsInput.dstDirectory, CopyLogsDefs::TextBoxWidth}};
-        p->modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, "Directories", true);
+            PopupInputTextBox{CopyLogsDefs::SrcHostPath, p->copyLogsInput.srcHostPath, CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::DestDir, p->copyLogsInput.dstDirectory, CopyLogsDefs::TextBoxWidth}};
+        p->modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, CopyLogsDefs::SrcDestGroup, true);
 
         std::vector<PopupInputTextBox> jumpHosts{
             PopupInputTextBox{"Jump Host 1", p->copyLogsInput.jumpHostPath1, CopyLogsDefs::TextBoxWidth},
             PopupInputTextBox{"Jump Host 2", p->copyLogsInput.jumpHostPath2, CopyLogsDefs::TextBoxWidth}};
-        p->modalPopupFactory.createInputTextBoxGroup(jumpHosts, "Jump Hosts", false, true);
+        p->modalPopupFactory.createInputTextBoxGroup(jumpHosts, CopyLogsDefs::JumpHostGroup, false, true);
 
         std::vector<PopupInputTextBox> keyFiles{
             PopupInputTextBox{"Key File Path 1", p->copyLogsInput.keyFile1, CopyLogsDefs::TextBoxWidth},

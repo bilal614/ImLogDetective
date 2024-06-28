@@ -56,6 +56,10 @@ namespace ImLogDetective
     namespace CopyLogsDefs {
         const char* Name{"Copy Remote Logs"};
         const char* EnterPass{"Enter pass"};
+        const char* SrcDestGroup{"Directories"};
+        const char* SrcHostPath{"Source Host Path"};
+        const char* DestDir{"Destination Directory"};
+        const char* JumpHostGroup{"Jump Host"};
     }
 
     namespace ProtectedInputDefs{

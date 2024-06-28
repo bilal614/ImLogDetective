@@ -5,19 +5,15 @@
 #include <string>
 
 
-namespace LogEventHandling {
-    class IEventLoop;
-}
 namespace ImLogDetective
 {
 
 class IModalPopupFactory;
-class IProtectedInputPopup;
 
 class CopyLogsPopup : public ICopyLogsPopup
 {
 public:
-    CopyLogsPopup(IModalPopupFactory& modalPopup, LogEventHandling::IEventLoop& eventLoop);
+    CopyLogsPopup(IModalPopupFactory& modalPopup);
     ~CopyLogsPopup();
     void open(const ImVec2& popupPosition, const ImVec2& popupSize) final;
     void draw() final;
@@ -30,7 +26,6 @@ public:
 private:
     struct Impl;
     std::unique_ptr<Impl> p;
-
 };
 
 }

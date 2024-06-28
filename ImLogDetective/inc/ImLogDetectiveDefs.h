@@ -82,6 +82,10 @@ namespace ImLogDetective
     namespace CopyLogsDefs {
         extern const char* Name;
         extern const char* EnterPass;
+        extern const char* SrcDestGroup;
+        extern const char* SrcHostPath;
+        extern const char* DestDir;
+        extern const char* JumpHostGroup;
         constexpr float TextBoxWidth = 350.0f;
     }
 

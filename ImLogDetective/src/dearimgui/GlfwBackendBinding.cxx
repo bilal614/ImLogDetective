@@ -183,7 +183,7 @@ GlfwBackendBinding::Impl::Impl() :
     scpExecutor = std::make_unique<ImLogDetective::ScpExecutor>(*eventLoop, authenticationWorkFlow);
     selectionMenuBar = std::make_unique<SelectionMenuBar>();
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
-    copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory), *eventLoop);
+    copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     protectedInputPopup = std::make_unique<ProtectedInputPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
     logFilterView = std::make_unique<LogFilterView>(*textFilterWrapper, *imGuiWidgetWrapper);
