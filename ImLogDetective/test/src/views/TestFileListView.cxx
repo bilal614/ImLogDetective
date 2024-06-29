@@ -1,8 +1,7 @@
 #include "views/FileListView.h"
 #include "ListTreeFactoryMock.h"
 #include "ListTreeWidgetMock.h"
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
+#include <gtest/gtest.h>
 #include <memory>
 
 

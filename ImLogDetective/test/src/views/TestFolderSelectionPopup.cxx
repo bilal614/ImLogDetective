@@ -2,8 +2,7 @@
 #include "ModalPopupFactoryMock.h"
 #include "views/FolderSelectionPopup.h"
 #include "TestUtility.h"
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
+#include <gtest/gtest.h>
 #include <fstream>
 #include <memory>
 #include <unordered_map>

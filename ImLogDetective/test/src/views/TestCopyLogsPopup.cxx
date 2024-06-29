@@ -3,7 +3,6 @@
 #include "ModalPopupFactoryMock.h"
 #include "ImGuiWidgetWrapperMock.h"
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include <cstring>
 #include <memory>
 #include <tuple>
