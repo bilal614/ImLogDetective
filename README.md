@@ -16,6 +16,9 @@ Do you often find yourself browsing through logs on remote hosts by Ssh'ing in a
 ![ImLogDetective_filtering](https://github.com/bilal614/ImLogDetective/assets/15609233/ff26a475-0ff8-4e11-ade8-48730d60e412)
 *Easy text filtering*
 
+![ImLogDetective_scaling](https://github.com/bilal614/ImLogDetective/assets/15609233/7556841b-2606-4056-9ed1-29e627be4eb6)
+*Scaled viewing*
+
 ## Features
 * View log files with text highlights
 * Decompress log files on the fly (only gzip)
