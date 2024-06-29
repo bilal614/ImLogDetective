@@ -4,13 +4,16 @@
 
 The ImLogDetective is a developer tool for developers and engineers. This tool is intended for viewing log files and logging data. It allows copying of logs from remote hosts and configuring text highlighting for ease of reading logging data. The tool is built using the popular dearimgui library for its UI.
 
-ImLogDetective is heavily based on the excellent dearimgui API and thus relies on immediate mode rendering. As such, the tool is also a great way to learn and become familiar with dearimgui and immediate mode GUIs in general. For building, this repository relies on cmake(to be followed up with build instructions).   
+ImLogDetective is heavily based on the excellent dearimgui API and thus relies on immediate mode rendering. As such, the tool is also a great way to learn and become familiar with dearimgui and immediate mode GUIs in general. For building, this repository relies on cmake(to be followed up with build instructions).
+
+### The Sales Pitch
+Do you often find yourself browsing through logs on remote hosts by Ssh'ing in a terminal? And, do you find it unwieldy reading those incomprehensible logs on an unembellished terminal? Like tons of similar developer tools, the ImLogDetective can lend itself to make reading, especially remote logs, a little less awkward.
 
 ### Screenshots 
-![image](https://github.com/bilal614/ImLogDetective/assets/15609233/7bfa6a84-bccd-4f3f-afef-2b2d00fe71f8)
+![image](https://github.com/bilal614/ImLogDetective/assets/15609233/3fcc5e47-bdef-4078-a976-400831fc2233)
 *Tabbed log file view*
 
-![image](https://github.com/bilal614/ImLogDetective/assets/15609233/5e560cb1-e014-4154-af50-85ee02fd9b3b)
+![ImLogDetective_filtering](https://github.com/bilal614/ImLogDetective/assets/15609233/ff26a475-0ff8-4e11-ade8-48730d60e412)
 *Easy text filtering*
 
 ## Features
