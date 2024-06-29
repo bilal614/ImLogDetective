@@ -19,6 +19,7 @@ if(GTest_FOUND)
         ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestFolderSelectionPopup.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestLogFilterView.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestLogView.cxx
+        ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestProtectedInputPopup.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/main.cxx
     )
 

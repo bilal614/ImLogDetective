@@ -103,7 +103,6 @@ bool ProtectedInputPopup::okBtnClicked()
 
 bool ProtectedInputPopup::closeBtnClicked()
 {
-    //p->passInput = std::string(1024, '\0');
     return p->closeClicked;
 }
 
