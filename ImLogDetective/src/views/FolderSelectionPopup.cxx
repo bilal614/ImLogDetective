@@ -27,6 +27,7 @@ struct FolderSelectionPopup::Impl
         bool okButtonClicked, 
         bool clearLogsBtnClicked);
     void closePopup();
+    void setFolderPath(const std::string& path);
 
     std::filesystem::path selectedFolderPath;
     std::string folderPath;
@@ -50,6 +51,11 @@ void FolderSelectionPopup::Impl::closePopup()
 {
     invalidFolderSelected = false;
     modalPopupFactory.close();
+}
+
+void FolderSelectionPopup::Impl::setFolderPath(const std::string& path)
+{
+    strcpy(folderPath.data(), path.c_str());
 }
 
 void FolderSelectionPopup::Impl::processPopupInput(bool okButtonClicked, bool closeButtonClicked, bool clearLogsBtnClicked)
@@ -96,8 +102,8 @@ bool FolderSelectionPopup::setInitialSelectedFolderPath(const std::string& path)
 {
     if(p->validateSelectedFolder(std::filesystem::path{path}))
     {
-        p->folderPath = path;
-        p->selectedFolderPath = std::filesystem::path{toString(p->folderPath.data())};
+        p->setFolderPath(path);
+        p->selectedFolderPath = std::filesystem::path{path};
         return true;
     }
     return false;
