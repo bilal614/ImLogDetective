@@ -3,6 +3,7 @@
 #include "dearimgui/IOContext.h"
 #include "dearimgui/MainViewPort.h"
 #include "views/WidgetFactory.h"
+#include "dearimgui/ImGuiMenuBarWrapper.h"
 #include "dearimgui/ImGuiTextFilterWrapper.h"
 #include "dearimgui/ImGuiWidgetWrapper.h"
 #include "dearimgui/TabBar.h"
@@ -69,6 +70,7 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<IImGuiWidgetWrapper> imGuiWidgetWrapper;
     std::unique_ptr<IWidgetFactory> widgetFactory;
     std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
+    std::unique_ptr<IImGuiMenuBarWrapper> imGuiMenuBarWrapper;
     std::unique_ptr<ISelectionMenuBar> selectionMenuBar;
     std::unique_ptr<IFolderSelectionPopup> folderSelectionPopup;
     std::unique_ptr<ICopyLogsPopup> copyLogsPopup;
@@ -178,10 +180,11 @@ GlfwBackendBinding::Impl::Impl() :
     ioContext->setFontFromTtfFile(assetsConfigurator->getDefaultTtfFile());
     mainViewPort = std::make_unique<MainViewPort>(*ioContext);
     imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapper>();
+    imGuiMenuBarWrapper = std::make_unique<ImGuiMenuBarWrapper>();
     widgetFactory  = std::make_unique<WidgetFactory>(*mainViewPort, *imGuiWidgetWrapper);
     eventLoop = std::make_unique<LogEventHandling::EventLoop>();
     scpExecutor = std::make_unique<ImLogDetective::ScpExecutor>(*eventLoop, authenticationWorkFlow);
-    selectionMenuBar = std::make_unique<SelectionMenuBar>();
+    selectionMenuBar = std::make_unique<SelectionMenuBar>(*imGuiMenuBarWrapper);
     folderSelectionPopup = std::make_unique<FolderSelectionPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     copyLogsPopup = std::make_unique<CopyLogsPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));
     protectedInputPopup = std::make_unique<ProtectedInputPopup>(dynamic_cast<IModalPopupFactory&>(*widgetFactory));

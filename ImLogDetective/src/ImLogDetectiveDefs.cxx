@@ -42,6 +42,11 @@ namespace ImLogDetective
         const char* ImLogDetectiveIcon{"icons/ImLogDetective_icon.png"};
     }
 
+    namespace MenuBar{
+        const char* Name{"Menu"};
+        const char* ScaleLabel{"Scale"};
+    }
+
     namespace MenuBarOptions {
         const char* SelectFolder{"Select Folder"};
         const char* FetchRemoteLogs{"Fetch Remote Logs"};

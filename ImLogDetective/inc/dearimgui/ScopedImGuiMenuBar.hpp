@@ -2,7 +2,7 @@
 
 #include "imgui.h"
 #include "ImLogDetectiveDefs.h"
-#include <functional>
+#include "dearimgui/IImGuiMenuBarWrapper.h"
 #include <string>
 #include <initializer_list>
 
@@ -11,31 +11,34 @@ namespace ImLogDetective
 
 struct ScopedImGuiMenuBar
 {
-    ScopedImGuiMenuBar(std::initializer_list<std::pair<std::string, bool&>> menuItems, int& scaleFactor)
+    ScopedImGuiMenuBar(
+        IImGuiMenuBarWrapper& wrapper, 
+        std::initializer_list<std::pair<std::string, bool&>> menuItems, 
+        int& scaleFactor) :
+        menuBarWrapper{wrapper}
     {
-        if (ImGui::BeginMenuBar())
+        if(menuBarWrapper.beginMenuBar())
         {
-            if (ImGui::BeginMenu("Menu"))
+            if(menuBarWrapper.beginMenu(MenuBar::Name))
             {
                 for(auto& menuItem : menuItems)
                 {
-                    if (ImGui::MenuItem(menuItem.first.c_str(), NULL, &menuItem.second))
+                    if (menuBarWrapper.menuItem(menuItem.first, menuItem.second))
                     {
                     }
                 }
-
-                ImGui::SliderInt("Scale", &scaleFactor, 
-                    Scaling::MinScaleFactor, 
-                    Scaling::MaxScaleFactor);
-                ImGui::EndMenu();
+                menuBarWrapper.slider(MenuBar::ScaleLabel, scaleFactor, Scaling::MinScaleFactor, Scaling::MaxScaleFactor);
+                menuBarWrapper.endMenu();
             }
         }
     }
 
     ~ScopedImGuiMenuBar()
     {
-        ImGui::EndMenuBar();
+        menuBarWrapper.endMenuBar();
     }
+
+    IImGuiMenuBarWrapper& menuBarWrapper;
 };
 
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dearimgui/IImGuiTextFilterWrapper.h"
-#include "gmock/gmock.h"
+#include <gmock/gmock.h>
 #include <string>
 #include <vector>
 

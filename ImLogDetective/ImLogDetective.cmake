@@ -5,11 +5,12 @@ if(${ZLIB_FOUND})
     add_library(${IM_LOG_DETECTIVE_LIB} STATIC
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/IOContext.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/GlfwBackendBinding.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/ImGuiMenuBarWrapper.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/ImGuiWidgetWrapper.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/ListTreeWidget.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/MainViewPort.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/TabBar.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/ImGuiTextFilterWrapper.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/views/CopyLogsPopup.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/views/FileListView.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/views/FolderSelectionPopup.cxx

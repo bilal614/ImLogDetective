@@ -52,6 +52,10 @@ namespace ImLogDetective
         }
     }
 
+    namespace MenuBar{
+        extern const char* Name;
+        extern const char* ScaleLabel;
+    }
     namespace MenuBarOptions {
         extern const char* SelectFolder;
         extern const char* FetchRemoteLogs;

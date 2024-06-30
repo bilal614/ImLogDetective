@@ -7,27 +7,29 @@ namespace ImLogDetective
 
 struct SelectionMenuBar::Impl
 {
-    Impl();
+    Impl(IImGuiMenuBarWrapper& wrapper);
     ~Impl() = default;
 
     bool folderSelectionClicked;
     bool fetchRemoteLogsClicked;
     bool configureHighlightingClicked;
     int scaleFactor;
+    IImGuiMenuBarWrapper& menuBarWrapper;
     std::unique_ptr<ScopedImGuiMenuBar> menuBar;
 };
 
-SelectionMenuBar::Impl::Impl() :
+SelectionMenuBar::Impl::Impl(IImGuiMenuBarWrapper& wrapper) :
     folderSelectionClicked{false},
     fetchRemoteLogsClicked{false},
     configureHighlightingClicked{false},
+    menuBarWrapper{wrapper},
     menuBar{nullptr},
     scaleFactor{0}
 {
 }
 
-SelectionMenuBar::SelectionMenuBar() :
-    p{std::make_unique<Impl>()}
+SelectionMenuBar::SelectionMenuBar(IImGuiMenuBarWrapper& wrapper) :
+    p{std::make_unique<Impl>(wrapper)}
 {
 }
 
@@ -35,7 +37,7 @@ SelectionMenuBar::~SelectionMenuBar() = default;
 
 void SelectionMenuBar::drawSelectionMenuBar()
 {
-    ScopedImGuiMenuBar({
+    ScopedImGuiMenuBar(p->menuBarWrapper,{
         {MenuBarOptions::SelectFolder, std::ref(p->folderSelectionClicked)},
         {MenuBarOptions::FetchRemoteLogs, std::ref(p->fetchRemoteLogsClicked)},
         {MenuBarOptions::ConfigureHiglighting, std::ref(p->configureHighlightingClicked)}
@@ -54,7 +56,9 @@ void SelectionMenuBar::selectionFolderClosed()
 
 float SelectionMenuBar::getInputScaleFactor()
 {
-    return Scaling::ScaleFactorLowerBound + (p->scaleFactor * 10.0f) / 100.f;
+    return std::min(
+        Scaling::ScaleFactorLowerBound + (p->scaleFactor * 10.0f) / 100.f, 
+        Scaling::ScaleFactorUpperBound);
 }
 
 bool SelectionMenuBar::copyRemoteLogsClicked()

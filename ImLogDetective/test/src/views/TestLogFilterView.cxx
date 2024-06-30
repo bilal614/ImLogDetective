@@ -61,7 +61,7 @@ TEST_P(TestLogFilterView, test_LogFilterView_drawFilterCheckBoxes) {
 }
 
 INSTANTIATE_TEST_CASE_P(
-    LogFilterViewTests,
+    Draw_LogFilterViewTests,
     TestLogFilterView,
     ::testing::Values(
         std::tuple{true, true, true, true},

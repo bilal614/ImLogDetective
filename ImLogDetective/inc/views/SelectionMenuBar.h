@@ -6,10 +6,12 @@
 namespace ImLogDetective
 {
 
+class IImGuiMenuBarWrapper;
+
 class SelectionMenuBar : public ISelectionMenuBar
 {
 public:
-    SelectionMenuBar();
+    SelectionMenuBar(IImGuiMenuBarWrapper& wrapper);
     ~SelectionMenuBar();
     void drawSelectionMenuBar() override;
     bool selectFolderClicked() override;
