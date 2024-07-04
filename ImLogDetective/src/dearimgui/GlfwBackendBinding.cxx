@@ -14,10 +14,10 @@
 #include "ImLogDetectiveDefs.h"
 #include "ScpWrapper/AuthenticationWorkFlow.h"
 #include "ScpWrapper/ScpExecutor.h"
-#include "models/AssetsConfigurator.h"
-#include "models/GzipFile.h"
-#include "models/LogFileParser.h"
-#include "models/Mini.h"
+#include "models/AssetsConfiguratorImpl.h"
+#include "models/GzipFileImpl.h"
+#include "models/LogFileParserImpl.h"
+#include "models/MiniImpl.h"
 #include "presenters/CopyLogsPresenter.h"
 #include "presenters/FileListPresenter.h"
 #include "presenters/LogFilePresenter.h"
@@ -78,8 +78,8 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<LogFilterView> logFilterView;
     std::unique_ptr<LogView> logView;
     std::unique_ptr<GzipFile> gzipFile;
-    std::unique_ptr<IMini> mini;
-    std::unique_ptr<ILogFileParser> logFileParser;
+    std::unique_ptr<Mini> mini;
+    std::unique_ptr<LogFileParser> logFileParser;
     std::unique_ptr<ICopyLogsPresenter> copyLogsPresenter;
     std::unique_ptr<IFileListPresenter> fileListPresenter;
     std::unique_ptr<ILogFilePresenter> logFilePresenter;
@@ -136,7 +136,7 @@ GlfwBackendBinding::Impl::Impl() :
     widgetFactory{},
     logView{ nullptr },
     mainPresenter{ nullptr },
-    assetsConfigurator{std::make_unique<AssetsConfigurator>()}
+    assetsConfigurator{std::make_unique<AssetsConfiguratorImpl>()}
 {
     icon[0].pixels = stbi_load(assetsConfigurator->getIconFile().c_str(), &icon[0].width, &icon[0].height, 0, 4);
 
@@ -192,9 +192,9 @@ GlfwBackendBinding::Impl::Impl() :
     tabBar = std::make_unique<TabBarImpl>("LogFileTabs");
     logView = std::make_unique<LogViewImpl>(dynamic_cast<TextWidgetFactory&>(*widgetFactory));
     fileListView = std::make_unique<FileListViewImpl>(dynamic_cast<ListTreeFactory&>(*widgetFactory));
-    gzipFile = std::make_unique<GzipFile>();
-    mini = std::make_unique<Mini>(IniDefs::IniFile);
-    logFileParser = std::make_unique<LogFileParser>(*gzipFile);
+    gzipFile = std::make_unique<GzipFileImpl>();
+    mini = std::make_unique<MiniImpl>(IniDefs::IniFile);
+    logFileParser = std::make_unique<LogFileParserImpl>(*gzipFile);
     copyLogsPresenter = std::make_unique<CopyLogsPresenter>(*copyLogsPopup, *protectedInputPopup, *scpExecutor, *mini);
     logFilePresenter = std::make_unique<LogFilePresenter>(
         dynamic_cast<WindowFactory&>(*widgetFactory), 

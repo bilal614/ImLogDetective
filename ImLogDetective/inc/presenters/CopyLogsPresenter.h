@@ -9,7 +9,7 @@ namespace ImLogDetective {
 namespace ImLogDetective
 {
 class CopyLogsPopup;
-class IMini;
+class Mini;
 class ProtectedInputPopup;
 
 class CopyLogsPresenter : public ICopyLogsPresenter
@@ -18,7 +18,7 @@ public:
     CopyLogsPresenter(CopyLogsPopup& copyLogsPopup,
         ProtectedInputPopup& protectedInputPopup,
         ImLogDetective::IScpExecutor& scpExecutor,
-        IMini& mini);
+        Mini& mini);
     ~CopyLogsPresenter();
     void update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize) final;
     void monitorCopyLogs() final;

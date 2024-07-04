@@ -2,7 +2,7 @@
 #include "EventHandling/IEvent.h"
 #include "presenters/ILogFilePresenter.h"
 #include "presenters/ILogDataModelFactory.h"
-#include "models/ILogDataModel.h"
+#include "models/LogDataModel.h"
 #include "dearimgui/TabBar.h"
 
 #include <algorithm>
@@ -21,7 +21,7 @@ struct LogFileTabsPresenter::Impl
             const std::filesystem::path& path, 
             bool read, 
             bool isOpen, 
-            std::unique_ptr<ILogDataModel> dataModel,
+            std::unique_ptr<LogDataModel> dataModel,
             ILogFilePresenter& logFilePresenter) :
                 filePath{path},
                 readLogFile{read},
@@ -43,7 +43,7 @@ struct LogFileTabsPresenter::Impl
         }
         std::filesystem::path filePath;
         bool readLogFile;
-        std::unique_ptr<ILogDataModel> logDataModel;
+        std::unique_ptr<LogDataModel> logDataModel;
         TabBarItem tabBarItem;
         ILogFilePresenter& logFilePresenter;
     };

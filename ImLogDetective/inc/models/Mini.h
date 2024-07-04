@@ -1,22 +1,21 @@
-#pragma once
 
-#include "IMini.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_MODELS_MINI_H
+#define IMLOGDETECTIVE_MODELS_MINI_H
+
+#include <filesystem>
 
 namespace ImLogDetective
 {
 
-class Mini : public IMini
+class Mini 
 {
 public:
-    Mini(const std::filesystem::path& iniFilePath);
-    ~Mini();
-    void set(const std::string& section, const std::string& name, const std::string& value) final;
-    std::string get(const std::string& section, const std::string& name) final;
-    void updateIniFile() final;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual~Mini() = default;
+    virtual void set(const std::string& section, const std::string& name, const std::string& value) = 0;
+    virtual std::string get(const std::string& section, const std::string& name) = 0;
+    virtual void updateIniFile() = 0;
 };
 
 }
+
+#endif

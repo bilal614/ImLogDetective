@@ -15,7 +15,7 @@ class ICopyLogsPresenter;
 class FolderSelectionPopup;
 class ILogFileTabsPresenter;
 class MainViewPort;
-class IMini;
+class Mini;
 class WindowFactory;
 
 class MainPresenter : public IMainPresenter
@@ -28,7 +28,7 @@ public:
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,
-        IMini& mini);
+        Mini& mini);
     ~MainPresenter();
     void update() override;
 private:

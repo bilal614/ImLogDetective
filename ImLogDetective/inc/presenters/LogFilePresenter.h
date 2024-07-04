@@ -11,8 +11,8 @@ namespace LogEventHandling
 namespace ImLogDetective
 {
 
-class ILogDataModel;
-class ILogFileParser;
+class LogDataModel;
+class LogFileParser;
 class LogFilterView;
 class LogView;
 class ImGuiTextFilterWrapper;
@@ -26,10 +26,10 @@ public:
         LogEventHandling::IEventLoop& eventLoop,
         LogFilterView& logFilterView, 
         LogView& logView,
-        ILogFileParser& logFileParser,
+        LogFileParser& logFileParser,
         ImGuiTextFilterWrapper& textFilterWrapper);
     ~LogFilePresenter();
-    void update(const std::filesystem::path& filePath,  bool readLogFile, ILogDataModel& logDataModel) override;
+    void update(const std::filesystem::path& filePath,  bool readLogFile, LogDataModel& logDataModel) override;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

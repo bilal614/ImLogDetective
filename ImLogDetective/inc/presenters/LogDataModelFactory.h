@@ -9,7 +9,7 @@ namespace ImLogDetective
 class LogDataModelFactory : public ILogDataModelFactory
 {
 public:
-    std::unique_ptr<ILogDataModel> createLogDataModel(const std::string& source) override;
+    std::unique_ptr<LogDataModel> createLogDataModel(const std::string& source) override;
 
 };
 

@@ -1,22 +1,21 @@
-#pragma once
 
-#include "models/ILogFileParser.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_MODELS_LOGFILEPARSER_H
+#define IMLOGDETECTIVE_MODELS_LOGFILEPARSER_H
+
+#include <filesystem>
 
 namespace ImLogDetective
 {
 
-class IGzipFile;
+class LogDataModel;
 
-class LogFileParser : public ILogFileParser
+class LogFileParser 
 {
 public:
-    LogFileParser(IGzipFile& gzipFile);
-    ~LogFileParser();
-    void readLogFileData(const std::filesystem::path& filePath, ILogDataModel& logDataModel) override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~LogFileParser() = default;
+    virtual void readLogFileData(const std::filesystem::path& filePath, LogDataModel& logDataModel) = 0;
 };
 
 }
+
+#endif

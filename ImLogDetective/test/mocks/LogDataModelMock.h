@@ -1,6 +1,6 @@
 #pragma once
 
-#include "models/ILogDataModel.h"
+#include "models/LogDataModel.h"
 #include "models/LogLine.h"
 #include <gmock/gmock.h>
 #include <string>
@@ -8,7 +8,7 @@
 
 namespace TestImLogDetective {
 
-class LogDataModelMock : public ImLogDetective::ILogDataModel 
+class LogDataModelMock : public ImLogDetective::LogDataModel 
 {
 public:
     MOCK_METHOD(void, addLogData, (std::string dataLine)); 

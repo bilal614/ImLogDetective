@@ -3,11 +3,10 @@
 #include "presenters/ILogFileTabsPresenter.h"
 #include "presenters/IFileListPresenter.h"
 #include "views/FolderSelectionPopup.h"
-#include "models/IMini.h"
+#include "models/Mini.h"
 #include "presenters/ICopyLogsPresenter.h"
 #include "views/WindowFactory.h"
 #include "dearimgui/MainViewPort.h"
-// #include "dearimgui/ScopedImGuiWindow.h"
 #include "imgui.h"
 
 #include <iostream>
@@ -25,7 +24,7 @@ struct MainPresenter::Impl
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,
-        IMini& mini);
+        Mini& mini);
     ~Impl() = default;
 
     void showFolderSelectionPopup();
@@ -42,7 +41,7 @@ struct MainPresenter::Impl
     FolderSelectionPopup& folderSelectionPopup;
     ILogFileTabsPresenter& logFileTabsPresenter;
     ICopyLogsPresenter& copyLogsPresenter;
-    IMini& mini;
+    Mini& mini;
 };
 
 MainPresenter::Impl::Impl(WindowFactory& windowFactory,
@@ -52,7 +51,7 @@ MainPresenter::Impl::Impl(WindowFactory& windowFactory,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,
-        IMini& mini) :
+        Mini& mini) :
     mainViewPort{mainViewPort},
     folderSelectionPopup{folderSelectionPopup},
     selectionMenuBar{selectionMenuBar},
@@ -140,7 +139,7 @@ MainPresenter::MainPresenter(WindowFactory& windowFactory,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,
-        IMini& mini) : 
+        Mini& mini) : 
     p {std::make_unique<Impl>(windowFactory,
         mainViewPort,
         selectionMenuBar,

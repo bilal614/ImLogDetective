@@ -1,4 +1,6 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_MODELS_LOGLINE_H
+#define IMLOGDETECTIVE_MODELS_LOGLINE_H
 
 #include "dearimgui/TextColor.h"
 #include <string>
@@ -28,3 +30,5 @@ struct LogLine
 };
 
 }
+
+#endif

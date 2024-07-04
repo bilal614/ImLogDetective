@@ -1,26 +1,25 @@
-#pragma once
 
-#include "models/ILogDataModel.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_MODELS_LOGDATAMODEL_H
+#define IMLOGDETECTIVE_MODELS_LOGDATAMODEL_H
+
+#include <string>
 #include <vector>
 
 namespace ImLogDetective
 {
 
-class ITextWidgetFactory;
+struct LogLine;
 
-class LogDataModel : public ILogDataModel
+class LogDataModel 
 {
 public:
-    LogDataModel(const std::string& dataSource);
-    ~LogDataModel();
-    void addLogData(std::string dataLine) override;
-    const std::vector<LogLine>& getLogData() override; 
-    void setCompleted(bool completed) override;
-    bool getCompleted() override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~LogDataModel() = default;
+    virtual void addLogData(std::string dataLine) = 0;
+    virtual const std::vector<LogLine>& getLogData() = 0; 
+    virtual void setCompleted(bool completed) = 0;
+    virtual bool getCompleted() = 0;
 };
 
 }
+
+#endif

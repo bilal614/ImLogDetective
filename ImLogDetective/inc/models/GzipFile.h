@@ -1,21 +1,21 @@
-#pragma once
 
-#include "models/IGzipFile.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_MODELS_GZIPFILE_H
+#define IMLOGDETECTIVE_MODELS_GZIPFILE_H
+
+#include <filesystem>
+#include <sstream>
 
 namespace ImLogDetective
 {
 
-class GzipFile : public IGzipFile
+class GzipFile
 {
 public:
-    GzipFile();
-    ~GzipFile();
-    std::stringstream decompress(const std::filesystem::path& filePath) final;
-    bool isGzipFormat(const std::filesystem::path& filePath) final;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~GzipFile() = default;
+    virtual std::stringstream decompress(const std::filesystem::path& filePath) = 0;
+    virtual bool isGzipFormat(const std::filesystem::path& filePath) = 0;
 };
 
 }
+
+#endif

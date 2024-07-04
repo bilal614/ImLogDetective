@@ -1,22 +1,21 @@
-#pragma once
 
-#include "IAssetsConfigurator.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_MODELS_ASSETCONFIGURATOR_H
+#define IMLOGDETECTIVE_MODELS_ASSETCONFIGURATOR_H
+
+#include <filesystem>
 
 namespace ImLogDetective
 {
 
-class AssetsConfigurator : public IAssetsConfigurator
+class AssetsConfigurator
 {
 public:
-    AssetsConfigurator();
-    ~AssetsConfigurator();
-    std::filesystem::path getTtfFile(const std::string& fontName) final;
-    std::filesystem::path getDefaultTtfFile() final;
-    std::filesystem::path getIconFile() final;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~AssetsConfigurator() = default;
+    virtual std::filesystem::path getTtfFile(const std::string& fontName) = 0;
+    virtual std::filesystem::path getDefaultTtfFile() = 0;
+    virtual std::filesystem::path getIconFile() = 0;
 };
 
 }
+
+#endif

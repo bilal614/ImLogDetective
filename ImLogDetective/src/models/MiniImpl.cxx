@@ -1,11 +1,11 @@
 
-#include "models/Mini.h"
+#include "models/MiniImpl.h"
 #include "mini/ini.h"
 
 namespace ImLogDetective
 {
 
-struct Mini::Impl
+struct MiniImpl::Impl
 {
     Impl(const std::filesystem::path& iniFilePath);
     ~Impl() = default;
@@ -14,31 +14,31 @@ struct Mini::Impl
     mINI::INIStructure ini;
 };
 
-Mini::Impl::Impl(const std::filesystem::path& iniFilePath) :
+MiniImpl::Impl::Impl(const std::filesystem::path& iniFilePath) :
     iniFile{iniFilePath.string()},
     ini{}
 {
     iniFile.read(ini);
 }
 
-Mini::Mini(const std::filesystem::path& iniFilePath) :
+MiniImpl::MiniImpl(const std::filesystem::path& iniFilePath) :
     p{std::make_unique<Impl>(iniFilePath)}
 {
 }
 
-Mini::~Mini() = default;
+MiniImpl::~MiniImpl() = default;
 
-void Mini::set(const std::string& section, const std::string& name, const std::string& value)
+void MiniImpl::set(const std::string& section, const std::string& name, const std::string& value)
 {
     p->ini[section][name] = value;
 }
 
-std::string Mini::get(const std::string& section, const std::string& name)
+std::string MiniImpl::get(const std::string& section, const std::string& name)
 {
     return p->ini[section][name];
 }
 
-void Mini::updateIniFile()
+void MiniImpl::updateIniFile()
 {
     p->iniFile.write(p->ini);
 }

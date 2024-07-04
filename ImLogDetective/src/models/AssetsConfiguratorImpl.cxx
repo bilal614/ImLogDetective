@@ -1,5 +1,5 @@
 
-#include "models/AssetsConfigurator.h"
+#include "models/AssetsConfiguratorImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include <unistd.h>
 #include <string>
@@ -8,7 +8,7 @@
 namespace ImLogDetective
 {
 
-struct AssetsConfigurator::Impl
+struct AssetsConfiguratorImpl::Impl
 {
     Impl();
     ~Impl() = default;
@@ -16,7 +16,7 @@ struct AssetsConfigurator::Impl
     std::filesystem::path currentModulePath;
 };
 
-AssetsConfigurator::Impl::Impl() :
+AssetsConfiguratorImpl::Impl::Impl() :
     currentModule(Common::MaxTextboxInputLength, '\0')
 {
     if(readlink("/proc/self/exe", currentModule.data(), Common::MaxTextboxInputLength) > 0)
@@ -25,24 +25,24 @@ AssetsConfigurator::Impl::Impl() :
     }
 }
 
-AssetsConfigurator::AssetsConfigurator() :
+AssetsConfiguratorImpl::AssetsConfiguratorImpl() :
     p{std::make_unique<Impl>()}
 {
 }
 
-AssetsConfigurator::~AssetsConfigurator() = default;
+AssetsConfiguratorImpl::~AssetsConfiguratorImpl() = default;
 
-std::filesystem::path AssetsConfigurator::getTtfFile(const std::string& fontName)
+std::filesystem::path AssetsConfiguratorImpl::getTtfFile(const std::string& fontName)
 {
     return std::filesystem::path{};
 }
 
-std::filesystem::path AssetsConfigurator::getDefaultTtfFile()
+std::filesystem::path AssetsConfiguratorImpl::getDefaultTtfFile()
 {
     return p->currentModulePath / std::filesystem::path{Font::DefaultFontTffPath};
 }
 
-std::filesystem::path AssetsConfigurator::getIconFile()
+std::filesystem::path AssetsConfiguratorImpl::getIconFile()
 {
     return p->currentModulePath / std::filesystem::path{Icons::ImLogDetectiveIcon};
 }

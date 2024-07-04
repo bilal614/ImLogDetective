@@ -5,12 +5,12 @@
 namespace ImLogDetective
 {
 
-class ILogDataModel;
+class LogDataModel;
 class ILogFilePresenter
 {
 public:
     virtual ~ILogFilePresenter() = default;
-    virtual void update(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel) = 0;
+    virtual void update(const std::filesystem::path& filePath, bool readLogFile, LogDataModel& logDataModel) = 0;
 };
 
 }

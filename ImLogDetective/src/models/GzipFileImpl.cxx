@@ -1,4 +1,4 @@
-#include "models/GzipFile.h"
+#include "models/GzipFileImpl.h"
 #include <memory>
 #include <cstring>
 #include <fstream>
@@ -18,7 +18,7 @@ constexpr int CHUNK = 16384;
 namespace ImLogDetective
 {
 
-struct GzipFile::Impl
+struct GzipFileImpl::Impl
 {
     struct ScopedFile{
         std::unique_ptr<FILE, std::function<void(FILE*)>> inputFile;
@@ -65,23 +65,23 @@ struct GzipFile::Impl
     char out[CHUNK];
 };
 
-GzipFile::Impl::~Impl()
+GzipFileImpl::Impl::~Impl()
 {
 }
 
-GzipFile::Impl::Impl() :
+GzipFileImpl::Impl::Impl() :
     in{'\0'},
     out{'\0'}
 {
 }
 
-size_t GzipFile::Impl::getFileSize(const std::filesystem::path& filePath)
+size_t GzipFileImpl::Impl::getFileSize(const std::filesystem::path& filePath)
 {
     std::ifstream file{filePath, std::ios::binary | std::ios::ate};
     return file.tellg();
 }
 
-bool GzipFile::isGzipFormat(const std::filesystem::path& filePath)
+bool GzipFileImpl::isGzipFormat(const std::filesystem::path& filePath)
 {
     std::ifstream file{filePath, std::ios::binary | std::ios::ate};
     file.seekg(0);
@@ -91,7 +91,7 @@ bool GzipFile::isGzipFormat(const std::filesystem::path& filePath)
     return result;
 }
 
-std::stringstream GzipFile::Impl::decompress(const std::filesystem::path& filePath)
+std::stringstream GzipFileImpl::Impl::decompress(const std::filesystem::path& filePath)
 {
     ScopedZStream zStrm;
     int retval = 0;
@@ -126,14 +126,14 @@ std::stringstream GzipFile::Impl::decompress(const std::filesystem::path& filePa
     return result;
 }
 
-GzipFile::GzipFile() :
+GzipFileImpl::GzipFileImpl() :
     p{std::make_unique<Impl>()}
 {
 }
 
-GzipFile::~GzipFile() = default;
+GzipFileImpl::~GzipFileImpl() = default;
 
-std::stringstream GzipFile::decompress(const std::filesystem::path& filePath)
+std::stringstream GzipFileImpl::decompress(const std::filesystem::path& filePath)
 {
     if(!isGzipFormat(filePath))
     {

@@ -6,13 +6,13 @@
 namespace ImLogDetective
 {
 
-class ILogDataModel;
+class LogDataModel;
 
 class ILogDataModelFactory
 {
 public:
     virtual ~ILogDataModelFactory() = default;
-    virtual std::unique_ptr<ILogDataModel> createLogDataModel(const std::string& source) = 0;
+    virtual std::unique_ptr<LogDataModel> createLogDataModel(const std::string& source) = 0;
 };
 
 }

@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 #include <filesystem>
-#include "models/GzipFile.h"
+#include "models/GzipFileImpl.h"
 #include "TestUtility.h"
 namespace TestImLogDetective
 {
 
 TEST(TestGzipFileParser, test_gzip_file_parser) 
 {
-    ImLogDetective::GzipFile gzipFileParser;
+    ImLogDetective::GzipFileImpl gzipFileParser;
     std::vector<std::string> expectedLines{"hello world 1", 
         "hello world 2", 
         "hello world 3", 

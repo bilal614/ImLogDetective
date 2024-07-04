@@ -1,10 +1,10 @@
-#include "models/LogDataModel.h"
+#include "models/LogDataModelImpl.h"
 #include "models/LogLine.h"
 
 namespace ImLogDetective
 {
 
-struct LogDataModel::Impl
+struct LogDataModelImpl::Impl
 {
 
     Impl(const std::string& dataSource);
@@ -18,14 +18,14 @@ struct LogDataModel::Impl
 };
 
 
-LogDataModel::Impl::Impl(const std::string& dataSource) :
+LogDataModelImpl::Impl::Impl(const std::string& dataSource) :
     dataSource{dataSource},
     logData{},
     completed{false}
 {
 }
 
-LogLevel LogDataModel::Impl::getLogLevel(std::string_view dataLine)
+LogLevel LogDataModelImpl::Impl::getLogLevel(std::string_view dataLine)
 {
     if(dataLine.find("DEBUG") != std::string_view::npos)
     {
@@ -46,29 +46,29 @@ LogLevel LogDataModel::Impl::getLogLevel(std::string_view dataLine)
     return LogLevel::Unknown;
 }
 
-LogDataModel::LogDataModel(const std::string& dataSource) :
+LogDataModelImpl::LogDataModelImpl(const std::string& dataSource) :
     p{std::make_unique<Impl>(dataSource)}
 {
 }
 
-LogDataModel::~LogDataModel() = default;
+LogDataModelImpl::~LogDataModelImpl() = default;
 
-void LogDataModel::addLogData(std::string dataLine)
+void LogDataModelImpl::addLogData(std::string dataLine)
 {
     p->logData.emplace_back(LogLine{dataLine, p->getLogLevel(dataLine)});
 }
 
-const std::vector<LogLine>& LogDataModel::getLogData()
+const std::vector<LogLine>& LogDataModelImpl::getLogData()
 {
     return p->logData;
 }
 
-void LogDataModel::setCompleted(bool completed)
+void LogDataModelImpl::setCompleted(bool completed)
 {
     p->completed = completed;
 }
 
-bool LogDataModel::getCompleted()
+bool LogDataModelImpl::getCompleted()
 {
     return p->completed;
 }

@@ -1,6 +1,6 @@
-#include "models/LogFileParser.h"
-#include "models/ILogDataModel.h"
-#include "models/IGzipFile.h"
+#include "models/LogFileParserImpl.h"
+#include "models/LogDataModel.h"
+#include "models/GzipFile.h"
 #include <memory>
 #include <fstream>
 #include <sstream>
@@ -8,21 +8,21 @@
 namespace ImLogDetective
 {
 
-struct LogFileParser::Impl
+struct LogFileParserImpl::Impl
 {
-    Impl(IGzipFile& gzipFile);
+    Impl(GzipFile& gzipFile);
     ~Impl() = default;
     std::unique_ptr<std::basic_istream<char>> getFileStream(const std::filesystem::path& filePath);
 
-    IGzipFile& gzipFile;
+    GzipFile& gzipFile;
 };
 
-LogFileParser::Impl::Impl(IGzipFile& gzipFile) :
+LogFileParserImpl::Impl::Impl(GzipFile& gzipFile) :
     gzipFile{gzipFile}
 {
 }
 
-std::unique_ptr<std::basic_istream<char>> LogFileParser::Impl::getFileStream(const std::filesystem::path& filePath)
+std::unique_ptr<std::basic_istream<char>> LogFileParserImpl::Impl::getFileStream(const std::filesystem::path& filePath)
 {
     std::unique_ptr<std::basic_istream<char>> logStream;
     if(gzipFile.isGzipFormat(filePath))
@@ -36,14 +36,14 @@ std::unique_ptr<std::basic_istream<char>> LogFileParser::Impl::getFileStream(con
     return logStream;
 }
 
-LogFileParser::LogFileParser(IGzipFile& gzipFile) :
+LogFileParserImpl::LogFileParserImpl(GzipFile& gzipFile) :
     p{std::make_unique<Impl>(gzipFile)}
 {
 }
 
-LogFileParser::~LogFileParser() = default;
+LogFileParserImpl::~LogFileParserImpl() = default;
 
-void LogFileParser::readLogFileData(const std::filesystem::path& filePath, ILogDataModel& logDataModel)
+void LogFileParserImpl::readLogFileData(const std::filesystem::path& filePath, LogDataModel& logDataModel)
 {
     auto logFileStream = p->getFileStream(filePath);
     std::string line;

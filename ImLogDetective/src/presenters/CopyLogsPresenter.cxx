@@ -2,7 +2,7 @@
 #include "imgui.h"
 #include "ScpWrapper/IAuthenticationWorkFlow.h"
 #include "ScpWrapper/IScpExecutor.h"
-#include "models/IMini.h"
+#include "models/Mini.h"
 #include "presenters/CopyLogsPresenter.h"
 #include "views/CopyLogsPopup.h"
 #include "views/ProtectedInputPopup.h"
@@ -93,7 +93,7 @@ struct CopyLogsPresenter::Impl
     Impl(CopyLogsPopup& copyPopupLogs,
         ProtectedInputPopup& protectedInputPopup,
         ImLogDetective::IScpExecutor& scpExecutor,
-        IMini& mini);
+        Mini& mini);
     ~Impl() = default;
 
     void processPopupInput();
@@ -102,7 +102,7 @@ struct CopyLogsPresenter::Impl
     CopyLogsPopup& copyPopupLogs;
     ProtectedInputPopup& protectedInputPopup;
     ImLogDetective::IScpExecutor& scpExecutor;
-    IMini& mini;
+    Mini& mini;
     bool downloadInit;
     bool isClosed;
     bool passPopup;
@@ -112,7 +112,7 @@ struct CopyLogsPresenter::Impl
 CopyLogsPresenter::Impl::Impl(CopyLogsPopup& copyPopupLogs,
     ProtectedInputPopup& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
-    IMini& mini) :
+    Mini& mini) :
         copyPopupLogs{copyPopupLogs},
         protectedInputPopup{protectedInputPopup},
         scpExecutor{scpExecutor},
@@ -211,7 +211,7 @@ void CopyLogsPresenter::Impl::processPopupInput()
 CopyLogsPresenter::CopyLogsPresenter(CopyLogsPopup& copyPopupLogs, 
     ProtectedInputPopup& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
-    IMini& mini) :
+    Mini& mini) :
         p{std::make_unique<Impl>(copyPopupLogs, protectedInputPopup, scpExecutor, mini)}
 {
 }
