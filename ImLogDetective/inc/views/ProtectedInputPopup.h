@@ -1,33 +1,21 @@
-#pragma once
 
-#include "IProtectedInputPopup.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_VIEWS_PROTECTEDINPUTPOPUP_H
+#define IMLOGDETECTIVE_VIEWS_PROTECTEDINPUTPOPUP_H
+
 #include <string>
+#include "views/Popup.h"
 
 struct ImVec2;
 
 namespace ImLogDetective
 {
 
-class IModalPopupFactory;
-
-class ProtectedInputPopup : public IProtectedInputPopup
+class ProtectedInputPopup : public Popup<std::string>
 {
 public:
-    ProtectedInputPopup(IModalPopupFactory& modalPopupFactory);
-    ~ProtectedInputPopup();
-    void open(const ImVec2& popupPosition, const ImVec2& popupSize) final;
-    void draw() final;
-    void close() final;
-    bool isOpen() final;
-    bool okBtnClicked() final;
-    bool closeBtnClicked() final;
-    std::string getInput() final;
-    void setPrompt(const std::string& prompt) final;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
-
+    virtual void setPrompt(const std::string& prompt) = 0;
 };
 
 }
+
+#endif

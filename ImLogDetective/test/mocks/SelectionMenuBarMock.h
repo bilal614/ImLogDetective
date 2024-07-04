@@ -1,11 +1,13 @@
-#pragma once
 
-#include "views/ISelectionMenuBar.h"
+#ifndef IMLOGDETECTIVE_VIEWS_SELECTIONMENUBARMOCK_H
+#define IMLOGDETECTIVE_VIEWS_SELECTIONMENUBARMOCK_H
+
+#include "views/SelectionMenuBar.h"
 #include "gmock/gmock.h"
 
 namespace TestImLogDetective {
 
-class SelectionMenuBarMock : public ImLogDetective::ISelectionMenuBar 
+class SelectionMenuBarMock : public ImLogDetective::SelectionMenuBar 
 {
 public:
     MOCK_METHOD(void, drawSelectionMenuBar, ());
@@ -17,3 +19,5 @@ public:
 };
 
 }
+
+#endif

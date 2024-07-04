@@ -1,5 +1,5 @@
-#include "views/FolderSelectionPopup.h"
-#include "views/IModalPopupFactory.h"
+#include "views/FolderSelectionPopupImpl.h"
+#include "views/ModalPopupFactory.h"
 #include "ImLogDetectiveDefs.h"
 #include <cstring>
 #include <filesystem>
@@ -17,9 +17,9 @@ namespace {
 namespace ImLogDetective
 {
 
-struct FolderSelectionPopup::Impl
+struct FolderSelectionPopupImpl::Impl
 {
-    Impl(IModalPopupFactory& modalPopupFactory);
+    Impl(ModalPopupFactory& modalPopupFactory);
     ~Impl() = default;
     bool validateSelectedFolder(const std::filesystem::path& path);
     void processPopupInput(
@@ -32,33 +32,33 @@ struct FolderSelectionPopup::Impl
     std::filesystem::path selectedFolderPath;
     std::string folderPath;
     bool invalidFolderSelected;
-    IModalPopupFactory& modalPopupFactory;
+    ModalPopupFactory& modalPopupFactory;
 };
 
-FolderSelectionPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
+FolderSelectionPopupImpl::Impl::Impl(ModalPopupFactory& modalPopupFactory) :
     folderPath(Common::MaxTextboxInputLength, '\0'),
     invalidFolderSelected{false},
     modalPopupFactory{modalPopupFactory}
 {
 }
 
-bool FolderSelectionPopup::Impl::validateSelectedFolder(const std::filesystem::path& path)
+bool FolderSelectionPopupImpl::Impl::validateSelectedFolder(const std::filesystem::path& path)
 {
     return std::filesystem::is_directory(path);
 }
 
-void FolderSelectionPopup::Impl::closePopup()
+void FolderSelectionPopupImpl::Impl::closePopup()
 {
     invalidFolderSelected = false;
     modalPopupFactory.close();
 }
 
-void FolderSelectionPopup::Impl::setFolderPath(const std::string& path)
+void FolderSelectionPopupImpl::Impl::setFolderPath(const std::string& path)
 {
     strcpy(folderPath.data(), path.c_str());
 }
 
-void FolderSelectionPopup::Impl::processPopupInput(bool okButtonClicked, bool closeButtonClicked, bool clearLogsBtnClicked)
+void FolderSelectionPopupImpl::Impl::processPopupInput(bool okButtonClicked, bool closeButtonClicked, bool clearLogsBtnClicked)
 {
     if (closeButtonClicked)
     {
@@ -91,14 +91,14 @@ void FolderSelectionPopup::Impl::processPopupInput(bool okButtonClicked, bool cl
     }
 }
 
-FolderSelectionPopup::FolderSelectionPopup(IModalPopupFactory& modalPopupFactory) :
+FolderSelectionPopupImpl::FolderSelectionPopupImpl(ModalPopupFactory& modalPopupFactory) :
     p{std::make_unique<Impl>(modalPopupFactory)}
 {
 }
 
-FolderSelectionPopup::~FolderSelectionPopup() = default;
+FolderSelectionPopupImpl::~FolderSelectionPopupImpl() = default;
 
-bool FolderSelectionPopup::setInitialSelectedFolderPath(const std::string& path)
+bool FolderSelectionPopupImpl::setInitialSelectedFolderPath(const std::string& path)
 {
     if(p->validateSelectedFolder(std::filesystem::path{path}))
     {
@@ -109,7 +109,7 @@ bool FolderSelectionPopup::setInitialSelectedFolderPath(const std::string& path)
     return false;
 }
 
-void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize)
+void FolderSelectionPopupImpl::drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize)
 {
     p->modalPopupFactory.open(popupPosition, popupSize, SelectFolderDefs::Name);
     p->modalPopupFactory.beginLayout(SelectFolderDefs::Name);
@@ -124,12 +124,12 @@ void FolderSelectionPopup::drawFolderSelectionModalPopup(ImVec2 popupPosition, I
     p->processPopupInput(popupButtons[0].clicked, popupButtons[1].clicked, clearLogBtn.clicked);
 }
 
-std::pair<bool, std::filesystem::path> FolderSelectionPopup::getSelectedFolder()
+std::pair<bool, std::filesystem::path> FolderSelectionPopupImpl::getSelectedFolder()
 {
     return {p->validateSelectedFolder(p->selectedFolderPath), p->selectedFolderPath};
 }
 
-bool FolderSelectionPopup::popupOpen()
+bool FolderSelectionPopupImpl::popupOpen()
 {
     return p->modalPopupFactory.isPopupOpen();
 }

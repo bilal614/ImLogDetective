@@ -1,6 +1,8 @@
-#pragma once
 
-#include "views/ITextWidgetFactory.h"
+#ifndef IMLOGDETECTIVE_VIEWS_TEXTWIDGETFACTORYMOCK_H
+#define IMLOGDETECTIVE_VIEWS_TEXTWIDGETFACTORYMOCK_H
+
+#include "views/TextWidgetFactory.h"
 #include "dearimgui/TextColor.h"
 #include "gmock/gmock.h"
 #include <functional>
@@ -9,7 +11,7 @@
 namespace TestImLogDetective
 {
 
-class TextWidgetFactoryMock : public ImLogDetective::ITextWidgetFactory
+class TextWidgetFactoryMock : public ImLogDetective::TextWidgetFactory
 {
 public:
     MOCK_METHOD(void, createUnformattedText,(const std::string&));
@@ -18,3 +20,5 @@ public:
 };
 
 }
+
+#endif

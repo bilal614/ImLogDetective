@@ -1,23 +1,22 @@
-#pragma once
 
-#include "views/IFileListView.h"
+#ifndef IMLOGDETECTIVE_VIEWS_FILELISTVIEW_H
+#define IMLOGDETECTIVE_VIEWS_FILELISTVIEW_H
+
+#include <filesystem>
 #include <functional>
-#include <memory>
+#include <unordered_map>
 
 namespace ImLogDetective
 {
 
-class IListTreeFactory;
-
-class FileListView : public IFileListView
+class FileListView
 {
 public:
-    FileListView(IListTreeFactory& listTreeFactory);
-    ~FileListView();
-    void draw(const std::vector<std::string>& fileList) override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~FileListView() = default;
+    virtual void draw(const std::vector<std::string>& fileList) = 0;
+    std::function<void(const std::string&)> fileListCallback;
 };
 
 }
+
+#endif

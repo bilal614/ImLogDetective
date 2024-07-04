@@ -1,4 +1,6 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_VIEWS_MODALPOPUPFACTORY_H
+#define IMLOGDETECTIVE_VIEWS_MODALPOPUPFACTORY_H
 
 #include <string>
 #include <vector>
@@ -28,10 +30,10 @@ struct PopupInputTextBox {
     std::string& input;
 };
 
-class IModalPopupFactory
+class ModalPopupFactory
 {
 public:
-    virtual ~IModalPopupFactory() = default;
+    virtual ~ModalPopupFactory() = default;
     virtual void open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name) = 0;
     virtual void beginLayout(const std::string& name) = 0; 
     virtual bool createButtonGroup(std::vector<PopupButton>& buttons) = 0;
@@ -50,3 +52,5 @@ public:
 };
 
 }
+
+#endif

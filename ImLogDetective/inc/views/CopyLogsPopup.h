@@ -1,31 +1,46 @@
-#pragma once
 
-#include "views/ICopyLogsPopup.h"
-#include <memory>
-#include <string>
+#ifndef IMLOGDETECTIVE_VIEWS_COPYLOGSPOPUP_H
+#define IMLOGDETECTIVE_VIEWS_COPYLOGSPOPUP_H
 
+#include "views/Popup.h"
+#include <filesystem>
+#include <utility>
+
+struct ImVec2;
 
 namespace ImLogDetective
 {
 
-class IModalPopupFactory;
+struct CopyLogs{
+    CopyLogs() :
+        srcHostPath(1024, '\0'),
+        dstDirectory(1024, '\0'),
+        jumpHostPath1(1024, '\0'),
+        jumpHostPath2(1024, '\0'),
+        keyFile1(1024, '\0'),
+        keyFile2(1024, '\0')
+    {}
+    std::string srcHostPath;
+    std::string dstDirectory;
 
-class CopyLogsPopup : public ICopyLogsPopup
+    std::string jumpHostPath1;
+    std::string jumpHostPath2;
+
+    std::string keyFile1;
+    std::string keyFile2;
+};
+
+class ICachedCopyLogsPopupInput 
 {
-public:
-    CopyLogsPopup(IModalPopupFactory& modalPopup);
-    ~CopyLogsPopup();
-    void open(const ImVec2& popupPosition, const ImVec2& popupSize) final;
-    void draw() final;
-    void close() final;
-    bool isOpen() final;
-    bool okBtnClicked() final;
-    bool closeBtnClicked() final;
-    CopyLogs getInput() final;
-    void initInput(const CopyLogs& input) final;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    public:
+        virtual ~ICachedCopyLogsPopupInput() = default;
+        virtual void initInput(const CopyLogs& input) = 0;
+};
+
+class CopyLogsPopup : public Popup<CopyLogs>, public ICachedCopyLogsPopupInput
+{
 };
 
 }
+
+#endif

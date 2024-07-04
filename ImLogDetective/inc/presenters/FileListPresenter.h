@@ -6,13 +6,13 @@
 namespace ImLogDetective
 {
 
-class IFileListView;
+class FileListView;
 class ILogFileTabsPresenter;
 
 class FileListPresenter : public IFileListPresenter
 {
 public:
-    FileListPresenter(ILogFileTabsPresenter& fileTabsPresenter,IFileListView& fileListView);
+    FileListPresenter(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView);
     ~FileListPresenter();
     void update(const std::filesystem::path& folderPath, bool forced) override;
     std::vector<std::filesystem::path> getSelectedFiles() override;

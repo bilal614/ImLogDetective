@@ -1,14 +1,14 @@
 #include "presenters/LogFilePresenter.h"
 #include "ImLogDetectiveDefs.h"
 #include "dearimgui/IImGuiTextFilterWrapper.h"
-#include "views/IWindowFactory.h"
+#include "views/WindowFactory.h"
 #include "models/ILogFileParser.h"
 #include "models/LogLine.h"
 #include "EventHandling/Event.hpp"
 #include "EventHandling/IEventLoop.h"
 #include "models/ILogDataModel.h"
-#include "views/ILogView.h"
-#include "views/ILogFilterView.h"
+#include "views/LogView.h"
+#include "views/LogFilterView.h"
 #include "imgui.h"
 
 namespace ImLogDetective
@@ -16,29 +16,29 @@ namespace ImLogDetective
 
 struct LogFilePresenter::Impl
 {
-    Impl(IWindowFactory& windowFactory,
+    Impl(WindowFactory& windowFactory,
         LogEventHandling::IEventLoop& eventLoop,
-        ILogFilterView& logFilterView, 
-        ILogView& logView,
+        LogFilterView& logFilterView, 
+        LogView& logView,
         ILogFileParser& logFileParser,
         IImGuiTextFilterWrapper& textFilterWrapper);
     ~Impl() = default;
     bool checkLogLineFiltered(const LogLine& line);
     void updateLogData(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel);
 
-    IWindowFactory& windowFactory;
+    WindowFactory& windowFactory;
     LogEventHandling::IEventLoop& eventLoop;
-    ILogFilterView& logFilterView;
-    ILogView& logView;
+    LogFilterView& logFilterView;
+    LogView& logView;
     ILogFileParser& logFileParser;
     IImGuiTextFilterWrapper& textFilterWrapper;
 };
 
 LogFilePresenter::Impl::Impl(
-    IWindowFactory& windowFactory,
+    WindowFactory& windowFactory,
     LogEventHandling::IEventLoop& eventLoop,
-    ILogFilterView& logFilterView, 
-    ILogView& logView,
+    LogFilterView& logFilterView, 
+    LogView& logView,
     ILogFileParser& logFileParser,
     IImGuiTextFilterWrapper& textFilterWrapper) :
         windowFactory{windowFactory},
@@ -105,10 +105,10 @@ void LogFilePresenter::Impl::updateLogData(
 }
 
 LogFilePresenter::LogFilePresenter(
-        IWindowFactory& windowFactory,
+        WindowFactory& windowFactory,
         LogEventHandling::IEventLoop& eventLoop,
-        ILogFilterView& logFilterView, 
-        ILogView& logView,
+        LogFilterView& logFilterView, 
+        LogView& logView,
         ILogFileParser& logFileParser,
         IImGuiTextFilterWrapper& textFilterWrapper) : 
     p {std::make_unique<Impl>(windowFactory, eventLoop, logFilterView, logView, logFileParser, textFilterWrapper)}

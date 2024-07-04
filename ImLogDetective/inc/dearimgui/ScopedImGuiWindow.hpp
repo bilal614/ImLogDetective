@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dearimgui/IScopedImGuiWindow.h"
-#include "views/IWidgetFactory.h"
+#include "views/WidgetFactory.h"
 #include "imgui.h"
 #include <string>
 
@@ -13,7 +13,7 @@ struct ScopedImGuiWindow : public IScopedImGuiWindow
     WindowType windowType;
     ImVec2 windowSize;
     ImVec2 windowPosition;
-    IWidgetFactory& widgetFactory;
+    WidgetFactory& widgetFactory;
 
     WindowType getWindowType() override
     {
@@ -35,7 +35,7 @@ struct ScopedImGuiWindow : public IScopedImGuiWindow
         widgetFactory.onSameLine();
     }
 
-    ScopedImGuiWindow(IWidgetFactory& widgetFactory, 
+    ScopedImGuiWindow(WidgetFactory& widgetFactory, 
         const std::string& windowName, 
         const ImVec2& size, 
         const ImVec2& position, 

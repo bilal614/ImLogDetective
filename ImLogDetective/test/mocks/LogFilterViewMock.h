@@ -1,11 +1,13 @@
-#pragma once
 
-#include "views/ILogFilterView.h"
+#ifndef IMLOGDETECTIVE_VIEWS_LOGFILTERVIEWMOCK_H
+#define IMLOGDETECTIVE_VIEWS_LOGFILTERVIEWMOCK_H
+
+#include "views/LogFilterView.h"
 #include "gmock/gmock.h"
 
 namespace TestImLogDetective {
 
-class LogFilterViewMock : public ImLogDetective::ILogFilterView 
+class LogFilterViewMock : public ImLogDetective::LogFilterView 
 {
 public:
     MOCK_METHOD(void, drawFilterCheckBoxes, (), (const));
@@ -16,3 +18,5 @@ public:
 };
 
 }
+
+#endif

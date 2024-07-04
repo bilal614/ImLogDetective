@@ -4,27 +4,27 @@
 #include "dearimgui/IMainViewPort.h"
 #include "presenters/ILogFilePresenter.h"
 #include "presenters/IMainPresenter.h"
-#include "views/ISelectionMenuBar.h"
-#include "views/ILogView.h"
+#include "views/SelectionMenuBar.h"
+#include "views/LogView.h"
 
 namespace ImLogDetective
 {
 class IFileListPresenter;
 class ISelectionMenuBar;
 class ICopyLogsPresenter;
-class IFolderSelectionPopup;
+class FolderSelectionPopup;
 class ILogFileTabsPresenter;
 class IMainViewPort;
 class IMini;
-class IWindowFactory;
+class WindowFactory;
 
 class MainPresenter : public IMainPresenter
 {
 public:
-    MainPresenter(IWindowFactory& windowFactory,
+    MainPresenter(WindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        ISelectionMenuBar& selectionMenuBar,
-        IFolderSelectionPopup& folderSelectionPopup,
+        SelectionMenuBar& selectionMenuBar,
+        FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,

@@ -1,4 +1,4 @@
-#include "views/FileListView.h"
+#include "views/FileListViewImpl.h"
 #include "ListTreeFactoryMock.h"
 #include "ListTreeWidgetMock.h"
 #include <gtest/gtest.h>
@@ -20,7 +20,7 @@ protected:
     ~TestFileListView() = default;
 
     StrictMock<ListTreeFactoryMock> listTreeFactoryMock;
-    ImLogDetective::FileListView fileListView;
+    ImLogDetective::FileListViewImpl fileListView;
 };
 
 TestFileListView::TestFileListView() :

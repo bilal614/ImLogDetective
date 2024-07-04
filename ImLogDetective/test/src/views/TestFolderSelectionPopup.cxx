@@ -1,6 +1,6 @@
 #include "ImLogDetectiveDefs.h"
 #include "ModalPopupFactoryMock.h"
-#include "views/FolderSelectionPopup.h"
+#include "views/FolderSelectionPopupImpl.h"
 #include "TestUtility.h"
 #include <gtest/gtest.h>
 #include <fstream>
@@ -26,7 +26,7 @@ protected:
     void TearDown() override;
 
     StrictMock<ModalPopupFactoryMock> modalPopupFactoryMock;
-    ImLogDetective::FolderSelectionPopup folderSelectionPopup;
+    ImLogDetective::FolderSelectionPopupImpl folderSelectionPopup;
     std::filesystem::path testFolderPath;
 };
 

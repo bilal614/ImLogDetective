@@ -1,4 +1,4 @@
-#include "views/CopyLogsPopup.h"
+#include "views/CopyLogsPopupImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "ModalPopupFactoryMock.h"
 #include "ImGuiWidgetWrapperMock.h"
@@ -31,7 +31,7 @@ protected:
     ~TestCopyLogsPopup() = default;
 
     StrictMock<ModalPopupFactoryMock> modalPopupFactoryMock;
-    ImLogDetective::CopyLogsPopup copyLogsPopup;
+    ImLogDetective::CopyLogsPopupImpl copyLogsPopup;
 };
 
 TestCopyLogsPopup::TestCopyLogsPopup() :

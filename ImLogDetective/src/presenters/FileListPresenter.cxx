@@ -1,6 +1,6 @@
 #include "presenters/FileListPresenter.h"
 #include "presenters/ILogFileTabsPresenter.h"
-#include "views/IFileListView.h"
+#include "views/FileListView.h"
 #include <memory>
 
 //REMOVE LATER
@@ -11,10 +11,10 @@ namespace ImLogDetective
 
 struct FileListPresenter::Impl
 {
-    Impl(ILogFileTabsPresenter& fileTabsPresenter, IFileListView& fileListView);
+    Impl(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView);
     ~Impl() = default;
 
-    IFileListView& fileListView;
+    FileListView& fileListView;
     std::filesystem::path folderPath;
 
     std::unordered_map<std::string, std::filesystem::path> logFiles;
@@ -22,7 +22,7 @@ struct FileListPresenter::Impl
     ILogFileTabsPresenter& fileTabsPresenter;
 };
 
-FileListPresenter::Impl::Impl(ILogFileTabsPresenter& fileTabsPresenter, IFileListView& fileListView) :
+FileListPresenter::Impl::Impl(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView) :
     fileListView{fileListView},
     folderPath{},
     fileTabsPresenter{fileTabsPresenter}
@@ -32,7 +32,7 @@ FileListPresenter::Impl::Impl(ILogFileTabsPresenter& fileTabsPresenter, IFileLis
     };
 }
 
-FileListPresenter::FileListPresenter(ILogFileTabsPresenter& fileTabsPresenter, IFileListView& fileListView) :
+FileListPresenter::FileListPresenter(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView) :
     p{std::make_unique<Impl>(fileTabsPresenter, fileListView)}
 {
 }

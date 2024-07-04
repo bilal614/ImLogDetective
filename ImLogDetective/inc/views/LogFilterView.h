@@ -1,29 +1,21 @@
-#pragma once
 
-#include "views/ILogFilterView.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_VIEWS_LOGFILTERVIEW_H
+#define IMLOGDETECTIVE_VIEWS_LOGFILTERVIEW_H
 
 namespace ImLogDetective
 {
 
-class IImGuiTextFilterWrapper;
-class IImGuiWidgetWrapper;
-
-class LogFilterView : public ILogFilterView
+class LogFilterView
 {
 public:
-    LogFilterView(
-        IImGuiTextFilterWrapper& textFilterWrapper, 
-        IImGuiWidgetWrapper& imGuiWidgetWrapper);
-    ~LogFilterView();
-    void drawFilterCheckBoxes() const override;
-    bool getDebugChecked() const override;
-    bool getInfoChecked() const override;
-    bool getWarningChecked() const override;
-    bool getErrorChecked() const override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~LogFilterView() = default;
+    virtual void drawFilterCheckBoxes() const = 0;
+    virtual bool getDebugChecked() const = 0;
+    virtual bool getInfoChecked() const = 0;
+    virtual bool getWarningChecked() const = 0;
+    virtual bool getErrorChecked() const = 0; 
 };
 
 }
+
+#endif

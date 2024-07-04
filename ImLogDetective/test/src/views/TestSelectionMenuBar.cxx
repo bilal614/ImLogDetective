@@ -1,4 +1,4 @@
-#include "views/SelectionMenuBar.h"
+#include "views/SelectionMenuBarImpl.h"
 #include "ImGuiMenuBarWrapperMock.h"
 #include "ImLogDetectiveDefs.h"
 #include <gtest/gtest.h>
@@ -18,7 +18,7 @@ protected:
     ~TestSelectionMenuBar() = default;
 
     StrictMock<ImGuiMenuBarWrapperMock> imGuiMenuBarWrapperMock;
-    SelectionMenuBar selectionMenuBar;
+    SelectionMenuBarImpl selectionMenuBar;
 };
 
 TestSelectionMenuBar::TestSelectionMenuBar() :
@@ -81,7 +81,7 @@ protected:
     ~TestSelectionMenuBarClosingMenuItems() = default;
 
     StrictMock<ImGuiMenuBarWrapperMock> imGuiMenuBarWrapperMock;
-    SelectionMenuBar selectionMenuBar;
+    SelectionMenuBarImpl selectionMenuBar;
 };
 
 TestSelectionMenuBarClosingMenuItems::TestSelectionMenuBarClosingMenuItems() :

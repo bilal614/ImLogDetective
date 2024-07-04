@@ -1,4 +1,4 @@
-#include "views/ProtectedInputPopup.h"
+#include "views/ProtectedInputPopupImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "ModalPopupFactoryMock.h"
 #include "TestUtility.h"
@@ -20,7 +20,7 @@ protected:
     ~TestProtectedInputPopup() = default;
 
     StrictMock<ModalPopupFactoryMock> modalPopupFactoryMock;
-    ProtectedInputPopup protectedInputPopup;
+    ProtectedInputPopupImpl protectedInputPopup;
 };
 
 TestProtectedInputPopup::TestProtectedInputPopup() :

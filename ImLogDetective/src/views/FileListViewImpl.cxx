@@ -1,5 +1,5 @@
-#include "views/FileListView.h"
-#include "views/IListTreeFactory.h"
+#include "views/FileListViewImpl.h"
+#include "views/ListTreeFactory.h"
 #include "dearimgui/IListTreeWidget.h"
 #include "ImLogDetectiveDefs.h"
 #include <memory>
@@ -7,29 +7,29 @@
 namespace ImLogDetective
 {
 
-struct FileListView::Impl
+struct FileListViewImpl::Impl
 {
-    Impl(IListTreeFactory& listTreeFactory);
+    Impl(ListTreeFactory& listTreeFactory);
     ~Impl() = default;
 
-    IListTreeFactory& listTreeFactory;
+    ListTreeFactory& listTreeFactory;
 };
 
-FileListView::Impl::Impl(IListTreeFactory& listTreeFactory) :
+FileListViewImpl::Impl::Impl(ListTreeFactory& listTreeFactory) :
     listTreeFactory{listTreeFactory}
 {
 
 }
 
-FileListView::FileListView(IListTreeFactory& listTreeFactory) :
+FileListViewImpl::FileListViewImpl(ListTreeFactory& listTreeFactory) :
     p{std::make_unique<Impl>(listTreeFactory)}
 {
 
 }
 
-FileListView::~FileListView() = default;
+FileListViewImpl::~FileListViewImpl() = default;
 
-void FileListView::draw(const std::vector<std::string>& fileList)
+void FileListViewImpl::draw(const std::vector<std::string>& fileList)
 {
     if(!fileList.empty())
     {

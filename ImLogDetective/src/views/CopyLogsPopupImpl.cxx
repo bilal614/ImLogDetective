@@ -1,20 +1,20 @@
-#include "views/CopyLogsPopup.h"
+#include "views/CopyLogsPopupImpl.h"
 #include "ImLogDetectiveDefs.h"
-#include "views/IModalPopupFactory.h"
+#include "views/ModalPopupFactory.h"
 #include "imgui.h"
 
 
 namespace ImLogDetective
 {
 
-struct CopyLogsPopup::Impl
+struct CopyLogsPopupImpl::Impl
 {
-    Impl(IModalPopupFactory& modalPopupFactory);
+    Impl(ModalPopupFactory& modalPopupFactory);
     ~Impl() = default;
 
     void resetInternalState();
 
-    IModalPopupFactory& modalPopupFactory;
+    ModalPopupFactory& modalPopupFactory;
 
     bool copyClicked;
     bool closeClicked;
@@ -22,7 +22,7 @@ struct CopyLogsPopup::Impl
     CopyLogs copyLogsInput;
 };
 
-CopyLogsPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
+CopyLogsPopupImpl::Impl::Impl(ModalPopupFactory& modalPopupFactory) :
     modalPopupFactory{modalPopupFactory},
     copyClicked{false},
     closeClicked{false},
@@ -30,7 +30,7 @@ CopyLogsPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
 {
 }
 
-void CopyLogsPopup::Impl::resetInternalState()
+void CopyLogsPopupImpl::Impl::resetInternalState()
 {
     copyLogsInput = CopyLogs{};
     copyClicked = false;
@@ -38,20 +38,20 @@ void CopyLogsPopup::Impl::resetInternalState()
     opened = false;
 }
 
-CopyLogsPopup::CopyLogsPopup(IModalPopupFactory& modalPopupFactory) :
+CopyLogsPopupImpl::CopyLogsPopupImpl(ModalPopupFactory& modalPopupFactory) :
     p{std::make_unique<Impl>(modalPopupFactory)}
 {
 }
 
-CopyLogsPopup::~CopyLogsPopup() = default;
+CopyLogsPopupImpl::~CopyLogsPopupImpl() = default;
 
-void CopyLogsPopup::open(const ImVec2& popupPosition, const ImVec2& popupSize)
+void CopyLogsPopupImpl::open(const ImVec2& popupPosition, const ImVec2& popupSize)
 {
     p->modalPopupFactory.open(popupPosition, popupSize, CopyLogsDefs::Name);
     p->opened = true;
 }
 
-void CopyLogsPopup::initInput(const CopyLogs& input)
+void CopyLogsPopupImpl::initInput(const CopyLogs& input)
 {
     p->copyLogsInput = CopyLogs{};
     p->copyLogsInput.dstDirectory.insert(0, input.dstDirectory);
@@ -62,7 +62,7 @@ void CopyLogsPopup::initInput(const CopyLogs& input)
     p->copyLogsInput.keyFile2.insert(0, input.keyFile2);
 }
 
-void CopyLogsPopup::draw()
+void CopyLogsPopupImpl::draw()
 {
     if(p->opened)
     {
@@ -95,28 +95,28 @@ void CopyLogsPopup::draw()
     }
 }
 
-bool CopyLogsPopup::isOpen()
+bool CopyLogsPopupImpl::isOpen()
 {
     return p->modalPopupFactory.isPopupOpen();
 }
 
-bool CopyLogsPopup::okBtnClicked()
+bool CopyLogsPopupImpl::okBtnClicked()
 {
     return p->copyClicked;
 }
 
-bool CopyLogsPopup::closeBtnClicked()
+bool CopyLogsPopupImpl::closeBtnClicked()
 {
     return p->closeClicked;
 }
 
-void CopyLogsPopup::close()
+void CopyLogsPopupImpl::close()
 {
     p->resetInternalState();
     p->modalPopupFactory.close();
 }
 
-CopyLogs CopyLogsPopup::getInput()
+CopyLogs CopyLogsPopupImpl::getInput()
 {
     return p->copyLogsInput;
 }

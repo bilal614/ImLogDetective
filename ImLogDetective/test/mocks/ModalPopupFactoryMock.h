@@ -1,12 +1,14 @@
-#pragma once
 
-#include "views/IModalPopupFactory.h"
+#ifndef IMLOGDETECTIVE_VIEWS_MODALPOPUPFACTORYMOCK_H
+#define IMLOGDETECTIVE_VIEWS_MODALPOPUPFACTORYMOCK_H
+
+#include "views/ModalPopupFactory.h"
 #include "ImVec.h"
 #include "gmock/gmock.h"
 
 namespace TestImLogDetective {
 
-class ModalPopupFactoryMock : public ImLogDetective::IModalPopupFactory 
+class ModalPopupFactoryMock : public ImLogDetective::ModalPopupFactory 
 {
 public:
     MOCK_METHOD(void, open, (ImVec2, ImVec2, const std::string&));
@@ -27,3 +29,5 @@ public:
 };
 
 }
+
+#endif

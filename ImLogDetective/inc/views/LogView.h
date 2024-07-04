@@ -1,23 +1,22 @@
-#pragma once
 
-#include "views/ILogView.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_VIEWS_LOGVIEW_H
+#define IMLOGDETECTIVE_VIEWS_LOGVIEW_H
+
+#include <string_view>
 
 namespace ImLogDetective
 {
 
-class ITextWidgetFactory;
 struct LogLine;
+enum class TextColor;
 
-class LogView : public ILogView
+class LogView
 {
 public:
-    LogView(ITextWidgetFactory& textWidgetFactory);
-    ~LogView();
-    void drawLogLineText(LogLine& logLine) override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~LogView() = default;
+    virtual void drawLogLineText(LogLine& logLine) = 0;
 };
 
 }
+
+#endif

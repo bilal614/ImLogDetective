@@ -1,11 +1,11 @@
-#include "views/SelectionMenuBar.h"
+#include "views/SelectionMenuBarImpl.h"
 #include "dearimgui/ScopedImGuiMenuBar.hpp"
 #include "ImLogDetectiveDefs.h"
 
 namespace ImLogDetective
 {
 
-struct SelectionMenuBar::Impl
+struct SelectionMenuBarImpl::Impl
 {
     Impl(IImGuiMenuBarWrapper& wrapper);
     ~Impl() = default;
@@ -18,7 +18,7 @@ struct SelectionMenuBar::Impl
     std::unique_ptr<ScopedImGuiMenuBar> menuBar;
 };
 
-SelectionMenuBar::Impl::Impl(IImGuiMenuBarWrapper& wrapper) :
+SelectionMenuBarImpl::Impl::Impl(IImGuiMenuBarWrapper& wrapper) :
     folderSelectionClicked{false},
     fetchRemoteLogsClicked{false},
     configureHighlightingClicked{false},
@@ -28,14 +28,14 @@ SelectionMenuBar::Impl::Impl(IImGuiMenuBarWrapper& wrapper) :
 {
 }
 
-SelectionMenuBar::SelectionMenuBar(IImGuiMenuBarWrapper& wrapper) :
+SelectionMenuBarImpl::SelectionMenuBarImpl(IImGuiMenuBarWrapper& wrapper) :
     p{std::make_unique<Impl>(wrapper)}
 {
 }
 
-SelectionMenuBar::~SelectionMenuBar() = default;
+SelectionMenuBarImpl::~SelectionMenuBarImpl() = default;
 
-void SelectionMenuBar::drawSelectionMenuBar()
+void SelectionMenuBarImpl::drawSelectionMenuBar()
 {
     ScopedImGuiMenuBar(p->menuBarWrapper,{
         {MenuBarOptions::SelectFolder, std::ref(p->folderSelectionClicked)},
@@ -44,29 +44,29 @@ void SelectionMenuBar::drawSelectionMenuBar()
     }, p->scaleFactor);
 }
 
-bool SelectionMenuBar::selectFolderClicked()
+bool SelectionMenuBarImpl::selectFolderClicked()
 {
     return p->folderSelectionClicked;
 }
 
-void SelectionMenuBar::selectionFolderClosed()
+void SelectionMenuBarImpl::selectionFolderClosed()
 {
     p->folderSelectionClicked = false;
 }
 
-float SelectionMenuBar::getInputScaleFactor()
+float SelectionMenuBarImpl::getInputScaleFactor()
 {
     return std::min(
         Scaling::ScaleFactorLowerBound + (p->scaleFactor * 10.0f) / 100.f, 
         Scaling::ScaleFactorUpperBound);
 }
 
-bool SelectionMenuBar::copyRemoteLogsClicked()
+bool SelectionMenuBarImpl::copyRemoteLogsClicked()
 {
     return p->fetchRemoteLogsClicked;
 }
 
-void SelectionMenuBar::copyRemoteLogsClosed()
+void SelectionMenuBarImpl::copyRemoteLogsClosed()
 {
     p->fetchRemoteLogsClicked = false;
 }

@@ -1,4 +1,4 @@
-#include "views/WidgetFactory.h"
+#include "views/WidgetFactoryImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "dearimgui/IMainViewPort.h"
 #include "dearimgui/IScopedImGuiWindow.h"
@@ -12,9 +12,9 @@
 namespace ImLogDetective
 {
 
-struct WidgetFactory::Impl
+struct WidgetFactoryImpl::Impl
 {
-    Impl(IWidgetFactory& widgetFactory, 
+    Impl(WidgetFactory& widgetFactory, 
         const IMainViewPort& mainViewPort,
         IImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~Impl() = default;
@@ -36,11 +36,11 @@ struct WidgetFactory::Impl
     void drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal = true);
 
     std::unordered_map<TextColor, ImVec4> colorMap;
-    IWidgetFactory& parent;
+    WidgetFactory& parent;
     IImGuiWidgetWrapper& imGuiWidgetWrapper;
 };
 
-WidgetFactory::Impl::Impl(IWidgetFactory& widgetFactory, 
+WidgetFactoryImpl::Impl::Impl(WidgetFactory& widgetFactory, 
     const IMainViewPort& mainViewport, 
     IImGuiWidgetWrapper& imGuiWidgetWrapper) :
         parent{widgetFactory},
@@ -64,7 +64,7 @@ WidgetFactory::Impl::Impl(IWidgetFactory& widgetFactory,
     childWindowFlags = ImGuiWindowFlags_HorizontalScrollbar;
 }
 
-std::unique_ptr<IScopedImGuiWindow> WidgetFactory::Impl::addWindow()
+std::unique_ptr<IScopedImGuiWindow> WidgetFactoryImpl::Impl::addWindow()
 {
     return std::make_unique<ScopedImGuiWindow>(
         parent,
@@ -76,26 +76,26 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::Impl::addWindow()
         WindowType::MainWindow);
 }
 
-void WidgetFactory::Impl::createPopupButton(const std::string& button, bool& clicked)
+void WidgetFactoryImpl::Impl::createPopupButton(const std::string& button, bool& clicked)
 {
     clicked = imGuiWidgetWrapper.button(button);
 }
 
-void WidgetFactory::Impl::createInputTextBox(const std::string& label, std::string& input, float width)
+void WidgetFactoryImpl::Impl::createInputTextBox(const std::string& label, std::string& input, float width)
 {
     imGuiWidgetWrapper.pushItemWidth(width);
     imGuiWidgetWrapper.inputText(label, input.data(), width);
     imGuiWidgetWrapper.popItemWidth();
 }
 
-void WidgetFactory::Impl::createProtectedInputTextBox(const std::string& label, std::string& input, float width)
+void WidgetFactoryImpl::Impl::createProtectedInputTextBox(const std::string& label, std::string& input, float width)
 {
     imGuiWidgetWrapper.pushItemWidth(width);
     imGuiWidgetWrapper.inputPassword(label, input.data(), width);
     imGuiWidgetWrapper.popItemWidth();
 }
 
-void WidgetFactory::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal)
+void WidgetFactoryImpl::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal)
 {
     for(auto it = inputTextBoxes.begin(); it != inputTextBoxes.end(); ++it)
     {
@@ -111,19 +111,19 @@ void WidgetFactory::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextBox>&
     }
 }
 
-WidgetFactory::WidgetFactory(const IMainViewPort& mainViewport, IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+WidgetFactoryImpl::WidgetFactoryImpl(const IMainViewPort& mainViewport, IImGuiWidgetWrapper& imGuiWidgetWrapper) :
     p{std::make_unique<Impl>(*this, mainViewport, imGuiWidgetWrapper)}
 {
 }
 
-WidgetFactory::~WidgetFactory() = default;
+WidgetFactoryImpl::~WidgetFactoryImpl() = default;
 
-std::unique_ptr<IScopedImGuiWindow> WidgetFactory::createWindow()
+std::unique_ptr<IScopedImGuiWindow> WidgetFactoryImpl::createWindow()
 {
     return p->addWindow();
 }
 
-std::unique_ptr<IScopedImGuiWindow> WidgetFactory::createChildWindow(
+std::unique_ptr<IScopedImGuiWindow> WidgetFactoryImpl::createChildWindow(
     const std::string& windowName,
     const ImVec2& position,
     const ImVec2& size)
@@ -139,12 +139,12 @@ std::unique_ptr<IScopedImGuiWindow> WidgetFactory::createChildWindow(
     );
 }
 
-void WidgetFactory::createUnformattedText(const std::string& text)
+void WidgetFactoryImpl::createUnformattedText(const std::string& text)
 {
     p->imGuiWidgetWrapper.textUnformatted(text);
 }
 
-void WidgetFactory::createTextColored(std::string_view text, const TextColor& color)
+void WidgetFactoryImpl::createTextColored(std::string_view text, const TextColor& color)
 {
     auto textColor = p->colorMap.find(color);
     if(textColor != p->colorMap.end())
@@ -153,7 +153,7 @@ void WidgetFactory::createTextColored(std::string_view text, const TextColor& co
     }
 }
 
-bool WidgetFactory::createSelectedTextColored(std::string_view text, const TextColor& color, bool selected)
+bool WidgetFactoryImpl::createSelectedTextColored(std::string_view text, const TextColor& color, bool selected)
 {
     auto textColor = p->colorMap.find(color);
     if(textColor != p->colorMap.end())
@@ -168,17 +168,17 @@ bool WidgetFactory::createSelectedTextColored(std::string_view text, const TextC
     return false;
 }
 
-std::unique_ptr<IListTreeWidget> WidgetFactory::createListTreeWidget()
+std::unique_ptr<IListTreeWidget> WidgetFactoryImpl::createListTreeWidget()
 {
     return std::make_unique<ListTreeWidget>();
 }
 
-void WidgetFactory::onSameLine()
+void WidgetFactoryImpl::onSameLine()
 {
     p->imGuiWidgetWrapper.sameLine();
 }
 
-void WidgetFactory::open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name)
+void WidgetFactoryImpl::open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name)
 {
     p->imGuiWidgetWrapper.openPopup(name);
     p->imGuiWidgetWrapper.setNextWindowPos(popupPosition);
@@ -186,13 +186,13 @@ void WidgetFactory::open(ImVec2 popupPosition, ImVec2 popupSize, const std::stri
     p->modalPopupWindowOpened = true;
 }
 
-void WidgetFactory::beginLayout(const std::string& name)
+void WidgetFactoryImpl::beginLayout(const std::string& name)
 {
     p->currentPopUp = name;
     p->modalPopupLayout[p->currentPopUp] = p->imGuiWidgetWrapper.beginPopupModal(p->currentPopUp);
 }
 
-bool WidgetFactory::createButton(PopupButton& button)
+bool WidgetFactoryImpl::createButton(PopupButton& button)
 {
     if(p->modalPopupLayout[p->currentPopUp])
     {
@@ -203,7 +203,7 @@ bool WidgetFactory::createButton(PopupButton& button)
     return false;
 }
 
-bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
+bool WidgetFactoryImpl::createButtonGroup(std::vector<PopupButton>& buttons)
 {
     if(p->modalPopupLayout[p->currentPopUp])
     {
@@ -221,7 +221,7 @@ bool WidgetFactory::createButtonGroup(std::vector<PopupButton>& buttons)
     return false;
 }
 
-bool WidgetFactory::createInputTextBox(const std::string& label, std::string& input, float width)
+bool WidgetFactoryImpl::createInputTextBox(const std::string& label, std::string& input, float width)
 {
     if(p->modalPopupLayout[p->currentPopUp])
     {
@@ -232,7 +232,7 @@ bool WidgetFactory::createInputTextBox(const std::string& label, std::string& in
     return false;
 }
 
-bool WidgetFactory::createProtectedInputTextBox(const std::string& label, std::string& input, float width)
+bool WidgetFactoryImpl::createProtectedInputTextBox(const std::string& label, std::string& input, float width)
 {
     if(p->modalPopupLayout[p->currentPopUp])
     {
@@ -243,7 +243,7 @@ bool WidgetFactory::createProtectedInputTextBox(const std::string& label, std::s
     return false;
 }
 
-bool WidgetFactory::createInputTextBoxGroup(
+bool WidgetFactoryImpl::createInputTextBoxGroup(
     std::vector<PopupInputTextBox>& inputTextBoxes,
     const std::string& title, 
     bool horizontal,
@@ -267,7 +267,7 @@ bool WidgetFactory::createInputTextBoxGroup(
     return false;
 }
 
-bool WidgetFactory::showErrorText(const std::string& errorMessage)
+bool WidgetFactoryImpl::showErrorText(const std::string& errorMessage)
 {
     if(p->modalPopupLayout[p->currentPopUp])
     {
@@ -277,7 +277,7 @@ bool WidgetFactory::showErrorText(const std::string& errorMessage)
     return false;
 }
 
-void WidgetFactory::endLayout()
+void WidgetFactoryImpl::endLayout()
 {
     if(p->modalPopupLayout[p->currentPopUp])
     {
@@ -286,14 +286,14 @@ void WidgetFactory::endLayout()
     }
 }
 
-void WidgetFactory::close()
+void WidgetFactoryImpl::close()
 {
     p->imGuiWidgetWrapper.closeCurrentPopup();
     p->currentPopUp = std::string{};
     p->modalPopupWindowOpened = false;
 }
 
-bool WidgetFactory::isPopupOpen()
+bool WidgetFactoryImpl::isPopupOpen()
 {
     return p->modalPopupWindowOpened;
 }

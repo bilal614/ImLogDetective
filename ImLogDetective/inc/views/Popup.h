@@ -1,4 +1,6 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_VIEWS_POPUP_H
+#define IMLOGDETECTIVE_VIEWS_POPUP_H
 
 #include <string>
 
@@ -8,10 +10,10 @@ namespace ImLogDetective
 {
 
 template <class T>
-class IPopup
+class Popup
 {
 public:
-    virtual ~IPopup() = default;
+    virtual ~Popup() = default;
     virtual void open(const ImVec2& popupPosition, const ImVec2& popupSize) = 0;
     virtual void draw() = 0;
     virtual void close() = 0;
@@ -22,3 +24,5 @@ public:
 };
 
 }
+
+#endif

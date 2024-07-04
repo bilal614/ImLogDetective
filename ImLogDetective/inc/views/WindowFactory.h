@@ -1,4 +1,7 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_VIEWS_WINDOWFACTORY_H
+#define IMLOGDETECTIVE_VIEWS_WINDOWFACTORY_H
+
 
 #include "dearimgui/IScopedImGuiWindow.h"
 #include <memory>
@@ -9,10 +12,10 @@ struct ImVec2;
 namespace ImLogDetective
 {
 
-class IWindowFactory
+class WindowFactory
 {
 public:
-    virtual ~IWindowFactory() = default;
+    virtual ~WindowFactory() = default;
     virtual std::unique_ptr<IScopedImGuiWindow> createWindow() = 0;
     virtual std::unique_ptr<IScopedImGuiWindow> createChildWindow(
         const std::string& windowName, 
@@ -21,3 +24,5 @@ public:
 };
 
 }
+
+#endif

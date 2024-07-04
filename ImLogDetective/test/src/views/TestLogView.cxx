@@ -1,4 +1,4 @@
-#include "views/LogView.h"
+#include "views/LogViewImpl.h"
 #include "TextWidgetFactoryMock.h"
 #include "models/LogLine.h"
 #include <gtest/gtest.h>
@@ -18,7 +18,7 @@ protected:
     ~TestLogView() = default;
 
     StrictMock<TextWidgetFactoryMock> textWidgetFactoryMock;
-    ImLogDetective::LogView logView;
+    ImLogDetective::LogViewImpl logView;
 };
 
 TestLogView::TestLogView() :

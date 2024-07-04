@@ -1,27 +1,25 @@
-#pragma once
 
-#include "views/IFolderSelectionPopup.h"
-#include <memory>
-#include <string>
+#ifndef IMLOGDETECTIVE_VIEWS_FOLDERSELECTIONPOPUP_H
+#define IMLOGDETECTIVE_VIEWS_FOLDERSELECTIONPOPUP_H
+
+#include <filesystem>
+#include <utility>
+
+struct ImVec2;
 
 namespace ImLogDetective
 {
 
-class IModalPopupFactory;
-
-class FolderSelectionPopup : public IFolderSelectionPopup
+class FolderSelectionPopup
 {
 public:
-    FolderSelectionPopup(IModalPopupFactory& modalPopup);
-    ~FolderSelectionPopup();
-    bool setInitialSelectedFolderPath(const std::string& path) final;
-    void drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize) final;
-    std::pair<bool, std::filesystem::path> getSelectedFolder() final;
-    bool popupOpen() final;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
-
+    virtual ~FolderSelectionPopup() = default;
+    virtual bool setInitialSelectedFolderPath(const std::string& path) = 0;
+    virtual void drawFolderSelectionModalPopup(ImVec2 popupPosition, ImVec2 popupSize) = 0;
+    virtual std::pair<bool, std::filesystem::path> getSelectedFolder() = 0;
+    virtual bool popupOpen() = 0;
 };
 
 }
+
+#endif

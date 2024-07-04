@@ -11,15 +11,15 @@ if(${ZLIB_FOUND})
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/ListTreeWidget.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/MainViewPort.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/dearimgui/TabBar.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/CopyLogsPopup.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/FileListView.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/FolderSelectionPopup.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/ProtectedInputPopup.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/SelectionMenuBar.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/WidgetFactory.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/CopyLogsPopupImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/FileListViewImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/FolderSelectionPopupImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/ProtectedInputPopupImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/SelectionMenuBarImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/WidgetFactoryImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/ImLogDetectiveDefs.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/LogFilterView.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/views/LogView.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/LogFilterViewImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/views/LogViewImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/presenters/CopyLogsPresenter.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/presenters/MainPresenter.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/presenters/FileListPresenter.cxx

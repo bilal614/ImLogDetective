@@ -1,11 +1,11 @@
-#include "views/LogFilterView.h"
+#include "views/LogFilterViewImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "dearimgui/IImGuiTextFilterWrapper.h"
 #include "dearimgui/IImGuiWidgetWrapper.h"
 
 namespace ImLogDetective
 {
-struct LogFilterView::Impl
+struct LogFilterViewImpl::Impl
 {
     Impl(
         IImGuiTextFilterWrapper& textFilterWrapper,
@@ -21,7 +21,7 @@ struct LogFilterView::Impl
     
 };
 
-LogFilterView::Impl::Impl(
+LogFilterViewImpl::Impl::Impl(
     IImGuiTextFilterWrapper& textFilterWrapper,
     IImGuiWidgetWrapper& imGuiWidgetWrapper) :
         debugBoxChecked{true},
@@ -33,16 +33,16 @@ LogFilterView::Impl::Impl(
 {
 }
 
-LogFilterView::LogFilterView(
+LogFilterViewImpl::LogFilterViewImpl(
     IImGuiTextFilterWrapper& textFilterWrapper, 
     IImGuiWidgetWrapper& imGuiWidgetWrapper) :
         p{std::make_unique<Impl>(textFilterWrapper, imGuiWidgetWrapper)}
 {
 }
 
-LogFilterView::~LogFilterView() = default;
+LogFilterViewImpl::~LogFilterViewImpl() = default;
 
-void LogFilterView::drawFilterCheckBoxes() const
+void LogFilterViewImpl::drawFilterCheckBoxes() const
 {
     p->imGuiWidgetWrapper.sameLine();
     p->imGuiWidgetWrapper.checkBox(LogFilterDefs::DebugCheckBoxLabel, p->debugBoxChecked);
@@ -56,22 +56,22 @@ void LogFilterView::drawFilterCheckBoxes() const
     p->textFilterWrapper.draw();
 }
 
-bool LogFilterView::getDebugChecked() const
+bool LogFilterViewImpl::getDebugChecked() const
 {
     return p->debugBoxChecked;
 }
 
-bool LogFilterView::getInfoChecked() const
+bool LogFilterViewImpl::getInfoChecked() const
 {
     return p->infoBoxChecked;
 }
 
-bool LogFilterView::getWarningChecked() const
+bool LogFilterViewImpl::getWarningChecked() const
 {
     return p->warningBoxChecked;
 }
 
-bool LogFilterView::getErrorChecked() const
+bool LogFilterViewImpl::getErrorChecked() const
 {
     return p->errorBoxChecked;
 } 

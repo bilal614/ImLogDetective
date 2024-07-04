@@ -1,6 +1,6 @@
 
-#include "views/ProtectedInputPopup.h"
-#include "views/IModalPopupFactory.h"
+#include "views/ProtectedInputPopupImpl.h"
+#include "views/ModalPopupFactory.h"
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -12,12 +12,12 @@ struct ImVec2;
 namespace ImLogDetective
 {
 
-struct ProtectedInputPopup::Impl
+struct ProtectedInputPopupImpl::Impl
 {
-    Impl(IModalPopupFactory& modalPopupFactory);
+    Impl(ModalPopupFactory& modalPopupFactory);
     ~Impl() = default;
 
-    IModalPopupFactory& modalPopupFactory;
+    ModalPopupFactory& modalPopupFactory;
 
     bool okClicked;
     bool closeClicked;
@@ -28,7 +28,7 @@ struct ProtectedInputPopup::Impl
     std::string passInput;
 };
 
-ProtectedInputPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
+ProtectedInputPopupImpl::Impl::Impl(ModalPopupFactory& modalPopupFactory) :
     okClicked{false},
     closeClicked{false},
     opened{false},
@@ -38,14 +38,14 @@ ProtectedInputPopup::Impl::Impl(IModalPopupFactory& modalPopupFactory) :
 
 }
 
-ProtectedInputPopup::ProtectedInputPopup(IModalPopupFactory& modalPopupFactory) :
+ProtectedInputPopupImpl::ProtectedInputPopupImpl(ModalPopupFactory& modalPopupFactory) :
     p{std::make_unique<Impl>(modalPopupFactory)}
 {
 }
 
-ProtectedInputPopup::~ProtectedInputPopup() = default;
+ProtectedInputPopupImpl::~ProtectedInputPopupImpl() = default;
 
-void ProtectedInputPopup::open(const ImVec2& popupPosition, const ImVec2& popupSize)
+void ProtectedInputPopupImpl::open(const ImVec2& popupPosition, const ImVec2& popupSize)
 {
     p->modalPopupFactory.open(popupPosition, popupSize, ProtectedInputDefs::Name);
     if(!p->opened)
@@ -55,12 +55,12 @@ void ProtectedInputPopup::open(const ImVec2& popupPosition, const ImVec2& popupS
     }
 }
 
-void ProtectedInputPopup::setPrompt(const std::string& prompt)
+void ProtectedInputPopupImpl::setPrompt(const std::string& prompt)
 {
     p->prompt = ProtectedInputDefs::Prompt + prompt;
 }
 
-void ProtectedInputPopup::draw()
+void ProtectedInputPopupImpl::draw()
 {
     if(p->opened)
     {
@@ -82,7 +82,7 @@ void ProtectedInputPopup::draw()
     }
 }
 
-void ProtectedInputPopup::close()
+void ProtectedInputPopupImpl::close()
 {
     p->passInput = std::string(1024, '\0');
     p->okClicked = false;
@@ -91,22 +91,22 @@ void ProtectedInputPopup::close()
     p->modalPopupFactory.close();
 }
 
-bool ProtectedInputPopup::isOpen()
+bool ProtectedInputPopupImpl::isOpen()
 {
     return p->modalPopupFactory.isPopupOpen() && p->opened;
 }
 
-bool ProtectedInputPopup::okBtnClicked()
+bool ProtectedInputPopupImpl::okBtnClicked()
 {
     return p->okClicked;
 }
 
-bool ProtectedInputPopup::closeBtnClicked()
+bool ProtectedInputPopupImpl::closeBtnClicked()
 {
     return p->closeClicked;
 }
 
-std::string ProtectedInputPopup::getInput()
+std::string ProtectedInputPopupImpl::getInput()
 {
     p->passInput.erase(p->passInput.find('\0'));
     return p->passInput;

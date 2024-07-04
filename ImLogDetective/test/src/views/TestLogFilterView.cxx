@@ -1,4 +1,4 @@
-#include "views/LogFilterView.h"
+#include "views/LogFilterViewImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "ImGuiTextFilterWrapperMock.h"
 #include "ImGuiWidgetWrapperMock.h"
@@ -22,7 +22,7 @@ protected:
 
     StrictMock<ImGuiTextFilterWrapperMock> imGuiTextFilterWrapperMock;
     StrictMock<ImGuiWidgetWrapperMock> imGuiWidgetWrapperMock;
-    ImLogDetective::LogFilterView logFilterView;
+    ImLogDetective::LogFilterViewImpl logFilterView;
 };
 
 TestLogFilterView::TestLogFilterView() :

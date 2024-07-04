@@ -4,11 +4,11 @@
 #include "ScpWrapper/IScpExecutor.h"
 #include "models/IMini.h"
 #include "presenters/CopyLogsPresenter.h"
-#include "views/ICopyLogsPopup.h"
-#include "views/IProtectedInputPopup.h"
+#include "views/CopyLogsPopup.h"
+#include "views/ProtectedInputPopup.h"
 #include "ImLogDetectiveDefs.h"
 #include <map>
-#include "views/IPopup.h"
+#include "views/Popup.h"
 
 
 namespace ImLogDetective
@@ -90,8 +90,8 @@ struct PopupManager{
 
 struct CopyLogsPresenter::Impl
 {
-    Impl(ICopyLogsPopup& copyPopupLogs,
-        IProtectedInputPopup& protectedInputPopup,
+    Impl(CopyLogsPopup& copyPopupLogs,
+        ProtectedInputPopup& protectedInputPopup,
         ImLogDetective::IScpExecutor& scpExecutor,
         IMini& mini);
     ~Impl() = default;
@@ -99,8 +99,8 @@ struct CopyLogsPresenter::Impl
     void processPopupInput();
     void cleanInput(std::string& input);
 
-    ICopyLogsPopup& copyPopupLogs;
-    IProtectedInputPopup& protectedInputPopup;
+    CopyLogsPopup& copyPopupLogs;
+    ProtectedInputPopup& protectedInputPopup;
     ImLogDetective::IScpExecutor& scpExecutor;
     IMini& mini;
     bool downloadInit;
@@ -109,8 +109,8 @@ struct CopyLogsPresenter::Impl
     //PopupManager popupManager;
 };
 
-CopyLogsPresenter::Impl::Impl(ICopyLogsPopup& copyPopupLogs,
-    IProtectedInputPopup& protectedInputPopup,
+CopyLogsPresenter::Impl::Impl(CopyLogsPopup& copyPopupLogs,
+    ProtectedInputPopup& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
     IMini& mini) :
         copyPopupLogs{copyPopupLogs},
@@ -208,8 +208,8 @@ void CopyLogsPresenter::Impl::processPopupInput()
 
 }
 
-CopyLogsPresenter::CopyLogsPresenter(ICopyLogsPopup& copyPopupLogs, 
-    IProtectedInputPopup& protectedInputPopup,
+CopyLogsPresenter::CopyLogsPresenter(CopyLogsPopup& copyPopupLogs, 
+    ProtectedInputPopup& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
     IMini& mini) :
         p{std::make_unique<Impl>(copyPopupLogs, protectedInputPopup, scpExecutor, mini)}

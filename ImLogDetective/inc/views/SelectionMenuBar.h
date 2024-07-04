@@ -1,28 +1,23 @@
-#pragma once
 
-#include "views/ISelectionMenuBar.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_VIEWS_SELECTIONMENUBAR_H
+#define IMLOGDETECTIVE_VIEWS_SELECTIONMENUBAR_H
 
 namespace ImLogDetective
 {
 
-class IImGuiMenuBarWrapper;
-
-class SelectionMenuBar : public ISelectionMenuBar
+class SelectionMenuBar
 {
 public:
-    SelectionMenuBar(IImGuiMenuBarWrapper& wrapper);
-    ~SelectionMenuBar();
-    void drawSelectionMenuBar() override;
-    bool selectFolderClicked() override;
-    void selectionFolderClosed() override;
-    float getInputScaleFactor() override;
-    bool copyRemoteLogsClicked() override;
-    void copyRemoteLogsClosed() override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~SelectionMenuBar() = default;
+    virtual void drawSelectionMenuBar() = 0;
+    virtual bool selectFolderClicked() = 0;
+    virtual void selectionFolderClosed() = 0;
+    virtual float getInputScaleFactor() = 0;
+    virtual bool copyRemoteLogsClicked() = 0;
+    virtual void copyRemoteLogsClosed() = 0;
 
 };
 
 }
+
+#endif

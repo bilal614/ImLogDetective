@@ -2,10 +2,10 @@
 #include "ImLogDetectiveDefs.h"
 #include "presenters/ILogFileTabsPresenter.h"
 #include "presenters/IFileListPresenter.h"
-#include "views/IFolderSelectionPopup.h"
+#include "views/FolderSelectionPopup.h"
 #include "models/IMini.h"
 #include "presenters/ICopyLogsPresenter.h"
-#include "views/IWindowFactory.h"
+#include "views/WindowFactory.h"
 #include "dearimgui/IMainViewPort.h"
 #include "dearimgui/IScopedImGuiWindow.h"
 #include "imgui.h"
@@ -18,10 +18,10 @@ namespace ImLogDetective
 
 struct MainPresenter::Impl
 {
-    Impl(IWindowFactory& windowFactory,
+    Impl(WindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        ISelectionMenuBar& selectionMenuBar,
-        IFolderSelectionPopup& folderSelectionPopup,
+        SelectionMenuBar& selectionMenuBar,
+        FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,
@@ -35,20 +35,20 @@ struct MainPresenter::Impl
     void showMainBody(const ImVec2& mainWindowSize, 
         const ImVec2& mainWindowPos);
 
-    IWindowFactory& windowFactory;
+    WindowFactory& windowFactory;
     IMainViewPort& mainViewPort;
     IFileListPresenter& fileListPresenter;
-    ISelectionMenuBar& selectionMenuBar;
-    IFolderSelectionPopup& folderSelectionPopup;
+    SelectionMenuBar& selectionMenuBar;
+    FolderSelectionPopup& folderSelectionPopup;
     ILogFileTabsPresenter& logFileTabsPresenter;
     ICopyLogsPresenter& copyLogsPresenter;
     IMini& mini;
 };
 
-MainPresenter::Impl::Impl(IWindowFactory& windowFactory,
+MainPresenter::Impl::Impl(WindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        ISelectionMenuBar& selectionMenuBar,
-        IFolderSelectionPopup& folderSelectionPopup,
+        SelectionMenuBar& selectionMenuBar,
+        FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,
@@ -133,10 +133,10 @@ void MainPresenter::Impl::showMainBody(const ImVec2& mainWindowSize, const ImVec
     logFileTabsPresenter.update(fileListPresenter.getSelectedFiles());
 }
 
-MainPresenter::MainPresenter(IWindowFactory& windowFactory,
+MainPresenter::MainPresenter(WindowFactory& windowFactory,
         IMainViewPort& mainViewPort,
-        ISelectionMenuBar& selectionMenuBar,
-        IFolderSelectionPopup& folderSelectionPopup,
+        SelectionMenuBar& selectionMenuBar,
+        FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
         IFileListPresenter& fileListPresenter,
         ICopyLogsPresenter& copyLogsPresenter,

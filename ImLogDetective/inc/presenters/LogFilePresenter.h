@@ -2,7 +2,6 @@
 
 #include <memory>
 #include "presenters/ILogFilePresenter.h"
-#include "views/ILogView.h"
 
 namespace LogEventHandling 
 {
@@ -14,19 +13,19 @@ namespace ImLogDetective
 
 class ILogDataModel;
 class ILogFileParser;
-class ILogFilterView;
-class ILogView;
+class LogFilterView;
+class LogView;
 class IImGuiTextFilterWrapper;
-class IWindowFactory;
+class WindowFactory;
 
 class LogFilePresenter : public ILogFilePresenter
 {
 public:
     LogFilePresenter(
-        IWindowFactory& windowFactory,
+        WindowFactory& windowFactory,
         LogEventHandling::IEventLoop& eventLoop,
-        ILogFilterView& logFilterView, 
-        ILogView& logView,
+        LogFilterView& logFilterView, 
+        LogView& logView,
         ILogFileParser& logFileParser,
         IImGuiTextFilterWrapper& textFilterWrapper);
     ~LogFilePresenter();
