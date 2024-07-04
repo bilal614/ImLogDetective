@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "dearimgui/IMainViewPort.h"
+#include "dearimgui/MainViewPort.h"
 #include "presenters/ILogFilePresenter.h"
 #include "presenters/IMainPresenter.h"
 #include "views/SelectionMenuBar.h"
@@ -14,7 +14,7 @@ class ISelectionMenuBar;
 class ICopyLogsPresenter;
 class FolderSelectionPopup;
 class ILogFileTabsPresenter;
-class IMainViewPort;
+class MainViewPort;
 class IMini;
 class WindowFactory;
 
@@ -22,7 +22,7 @@ class MainPresenter : public IMainPresenter
 {
 public:
     MainPresenter(WindowFactory& windowFactory,
-        IMainViewPort& mainViewPort,
+        MainViewPort& mainViewPort,
         SelectionMenuBar& selectionMenuBar,
         FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,

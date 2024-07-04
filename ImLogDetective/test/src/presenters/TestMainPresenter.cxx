@@ -110,7 +110,7 @@ void TestMainPresenter::SetUp()
 
 ScopedImGuiWindowMock* TestMainPresenter::checkMainWindowAndMenuBarCreation(const float inputScaleFactor)
 {
-    std::unique_ptr<ImLogDetective::IScopedImGuiWindow> guiWindowMock = std::make_unique<ScopedImGuiWindowMock>();
+    std::unique_ptr<ImLogDetective::ScopedImGuiWindow> guiWindowMock = std::make_unique<ScopedImGuiWindowMock>();
     ScopedImGuiWindowMock* guiWindowMockRef{dynamic_cast<ScopedImGuiWindowMock*>(guiWindowMock.get())};
 
     EXPECT_CALL(selectionMenuBarMock, getInputScaleFactor()).WillOnce(Return(inputScaleFactor));

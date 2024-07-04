@@ -1,41 +1,41 @@
-#include "dearimgui/MainViewPort.h"
+#include "dearimgui/MainViewPortImpl.h"
 #include "ImLogDetectiveDefs.h"
-#include "dearimgui/IIOContext.h"
+#include "dearimgui/IOContext.h"
 #include "imgui.h"
 
 namespace ImLogDetective
 {
 
-struct MainViewPort::Impl
+struct MainViewPortImpl::Impl
 {
     bool scaleFactorWithinLimits(const float scaleFactor);
 
-    Impl(IIOContext& ioContext);
+    Impl(IOContext& ioContext);
     const ImGuiViewport* imGuiViewport;
-    IIOContext& ioContext;
+    IOContext& ioContext;
     float viewportScaleFactor;
 };
 
-MainViewPort::Impl::Impl(IIOContext& ioContext) :
+MainViewPortImpl::Impl::Impl(IOContext& ioContext) :
     imGuiViewport{ImGui::GetMainViewport()},
     ioContext{ioContext},
     viewportScaleFactor{Scaling::ScaleFactorLowerBound}
 {
 }
 
-bool MainViewPort::Impl::scaleFactorWithinLimits(const float scaleFactor)
+bool MainViewPortImpl::Impl::scaleFactorWithinLimits(const float scaleFactor)
 {
     return scaleFactor >= Scaling::ScaleFactorLowerBound && scaleFactor <= Scaling::ScaleFactorUpperBound;
 }
 
-MainViewPort::MainViewPort(IIOContext& ioContext) :
+MainViewPortImpl::MainViewPortImpl(IOContext& ioContext) :
     p{std::make_unique<Impl>(ioContext)}
 {
 }
 
-MainViewPort::~MainViewPort() = default;
+MainViewPortImpl::~MainViewPortImpl() = default;
 
-ImVec2 MainViewPort::getAreaSize() const
+ImVec2 MainViewPortImpl::getAreaSize() const
 {
     if(p->imGuiViewport != nullptr)
     {
@@ -44,7 +44,7 @@ ImVec2 MainViewPort::getAreaSize() const
     return ImVec2{};
 }
 
-ImVec2 MainViewPort::getWorkAreaSize() const
+ImVec2 MainViewPortImpl::getWorkAreaSize() const
 {
     if(p->imGuiViewport != nullptr)
     {
@@ -53,7 +53,7 @@ ImVec2 MainViewPort::getWorkAreaSize() const
     return ImVec2{};
 }
 
-ImVec2 MainViewPort::getViewportPosition() const
+ImVec2 MainViewPortImpl::getViewportPosition() const
 {
     if(p->imGuiViewport != nullptr)
     {
@@ -62,12 +62,12 @@ ImVec2 MainViewPort::getViewportPosition() const
     return ImVec2{};
 }
 
-ImVec2 MainViewPort::getViewportCenter() const
+ImVec2 MainViewPortImpl::getViewportCenter() const
 {
     return p->imGuiViewport->GetCenter();
 }
 
-void MainViewPort::setViewportScale(const float scaleFactor)
+void MainViewPortImpl::setViewportScale(const float scaleFactor)
 {
     if(scaleFactor > (p->viewportScaleFactor + LayoutBounds::ScaleFactorChangeSensitivity) ||
         scaleFactor < (p->viewportScaleFactor - LayoutBounds::ScaleFactorChangeSensitivity))

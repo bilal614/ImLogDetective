@@ -1,8 +1,10 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_DEARIMGUI_SCOPEDIMGUIMENUBAR_H
+#define IMLOGDETECTIVE_DEARIMGUI_SCOPEDIMGUIMENUBAR_H
 
 #include "imgui.h"
 #include "ImLogDetectiveDefs.h"
-#include "dearimgui/IImGuiMenuBarWrapper.h"
+#include "dearimgui/ImGuiMenuBarWrapper.h"
 #include <string>
 #include <initializer_list>
 
@@ -12,7 +14,7 @@ namespace ImLogDetective
 struct ScopedImGuiMenuBar
 {
     ScopedImGuiMenuBar(
-        IImGuiMenuBarWrapper& wrapper, 
+        ImGuiMenuBarWrapper& wrapper, 
         std::initializer_list<std::pair<std::string, bool&>> menuItems, 
         int& scaleFactor) :
         menuBarWrapper{wrapper}
@@ -38,7 +40,9 @@ struct ScopedImGuiMenuBar
         menuBarWrapper.endMenuBar();
     }
 
-    IImGuiMenuBarWrapper& menuBarWrapper;
+    ImGuiMenuBarWrapper& menuBarWrapper;
 };
 
 }
+
+#endif

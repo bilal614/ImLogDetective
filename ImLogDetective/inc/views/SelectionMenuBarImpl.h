@@ -8,12 +8,12 @@
 namespace ImLogDetective
 {
 
-class IImGuiMenuBarWrapper;
+class ImGuiMenuBarWrapper;
 
 class SelectionMenuBarImpl : public SelectionMenuBar
 {
 public:
-    SelectionMenuBarImpl(IImGuiMenuBarWrapper& wrapper);
+    SelectionMenuBarImpl(ImGuiMenuBarWrapper& wrapper);
     ~SelectionMenuBarImpl();
     void drawSelectionMenuBar() override;
     bool selectFolderClicked() override;

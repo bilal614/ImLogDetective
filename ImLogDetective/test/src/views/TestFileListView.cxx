@@ -31,7 +31,7 @@ TestFileListView::TestFileListView() :
 TEST_F(TestFileListView, test_FileListView_draw) {
 
     const std::vector<std::string>& fileList{"foo", "bar", "lorem", "ipsum"};
-    std::unique_ptr<IListTreeWidget> listTreeWidgetMock = std::make_unique<ListTreeWidgetMock>();
+    std::unique_ptr<ListTreeWidget> listTreeWidgetMock = std::make_unique<ListTreeWidgetMock>();
     ListTreeWidgetMock* listTreeWidgetMockRef{dynamic_cast<ListTreeWidgetMock*>(listTreeWidgetMock.get())};
 
     EXPECT_CALL(listTreeFactoryMock, createListTreeWidget()).WillOnce(Return(ByMove(std::move(listTreeWidgetMock))));

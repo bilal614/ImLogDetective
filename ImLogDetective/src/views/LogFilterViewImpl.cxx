@@ -1,29 +1,29 @@
 #include "views/LogFilterViewImpl.h"
 #include "ImLogDetectiveDefs.h"
-#include "dearimgui/IImGuiTextFilterWrapper.h"
-#include "dearimgui/IImGuiWidgetWrapper.h"
+#include "dearimgui/ImGuiTextFilterWrapper.h"
+#include "dearimgui/ImGuiWidgetWrapper.h"
 
 namespace ImLogDetective
 {
 struct LogFilterViewImpl::Impl
 {
     Impl(
-        IImGuiTextFilterWrapper& textFilterWrapper,
-        IImGuiWidgetWrapper& imGuiWidgetWrapper);
+        ImGuiTextFilterWrapper& textFilterWrapper,
+        ImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~Impl() = default;
 
     bool debugBoxChecked;
     bool infoBoxChecked;
     bool warningBoxChecked;
     bool errorBoxChecked;
-    IImGuiTextFilterWrapper& textFilterWrapper;
-    IImGuiWidgetWrapper& imGuiWidgetWrapper; 
+    ImGuiTextFilterWrapper& textFilterWrapper;
+    ImGuiWidgetWrapper& imGuiWidgetWrapper; 
     
 };
 
 LogFilterViewImpl::Impl::Impl(
-    IImGuiTextFilterWrapper& textFilterWrapper,
-    IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+    ImGuiTextFilterWrapper& textFilterWrapper,
+    ImGuiWidgetWrapper& imGuiWidgetWrapper) :
         debugBoxChecked{true},
         infoBoxChecked{true},
         warningBoxChecked{true},
@@ -34,8 +34,8 @@ LogFilterViewImpl::Impl::Impl(
 }
 
 LogFilterViewImpl::LogFilterViewImpl(
-    IImGuiTextFilterWrapper& textFilterWrapper, 
-    IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+    ImGuiTextFilterWrapper& textFilterWrapper, 
+    ImGuiWidgetWrapper& imGuiWidgetWrapper) :
         p{std::make_unique<Impl>(textFilterWrapper, imGuiWidgetWrapper)}
 {
 }

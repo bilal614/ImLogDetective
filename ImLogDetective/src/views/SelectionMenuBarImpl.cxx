@@ -7,18 +7,18 @@ namespace ImLogDetective
 
 struct SelectionMenuBarImpl::Impl
 {
-    Impl(IImGuiMenuBarWrapper& wrapper);
+    Impl(ImGuiMenuBarWrapper& wrapper);
     ~Impl() = default;
 
     bool folderSelectionClicked;
     bool fetchRemoteLogsClicked;
     bool configureHighlightingClicked;
     int scaleFactor;
-    IImGuiMenuBarWrapper& menuBarWrapper;
+    ImGuiMenuBarWrapper& menuBarWrapper;
     std::unique_ptr<ScopedImGuiMenuBar> menuBar;
 };
 
-SelectionMenuBarImpl::Impl::Impl(IImGuiMenuBarWrapper& wrapper) :
+SelectionMenuBarImpl::Impl::Impl(ImGuiMenuBarWrapper& wrapper) :
     folderSelectionClicked{false},
     fetchRemoteLogsClicked{false},
     configureHighlightingClicked{false},
@@ -28,7 +28,7 @@ SelectionMenuBarImpl::Impl::Impl(IImGuiMenuBarWrapper& wrapper) :
 {
 }
 
-SelectionMenuBarImpl::SelectionMenuBarImpl(IImGuiMenuBarWrapper& wrapper) :
+SelectionMenuBarImpl::SelectionMenuBarImpl(ImGuiMenuBarWrapper& wrapper) :
     p{std::make_unique<Impl>(wrapper)}
 {
 }

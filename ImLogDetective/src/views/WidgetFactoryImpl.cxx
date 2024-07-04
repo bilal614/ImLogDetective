@@ -1,10 +1,10 @@
 #include "views/WidgetFactoryImpl.h"
 #include "ImLogDetectiveDefs.h"
-#include "dearimgui/IMainViewPort.h"
-#include "dearimgui/IScopedImGuiWindow.h"
-#include "dearimgui/IImGuiWidgetWrapper.h"
-#include "dearimgui/ListTreeWidget.h"
-#include "dearimgui/ScopedImGuiWindow.hpp"
+#include "dearimgui/MainViewPort.h"
+#include "dearimgui/ScopedImGuiWindow.h"
+#include "dearimgui/ImGuiWidgetWrapper.h"
+#include "dearimgui/ListTreeWidgetImpl.h"
+#include "dearimgui/ScopedImGuiWindowImpl.hpp"
 #include "dearimgui/TextColor.h"
 #include <unordered_map>
 #include <iostream>
@@ -15,13 +15,13 @@ namespace ImLogDetective
 struct WidgetFactoryImpl::Impl
 {
     Impl(WidgetFactory& widgetFactory, 
-        const IMainViewPort& mainViewPort,
-        IImGuiWidgetWrapper& imGuiWidgetWrapper);
+        const MainViewPort& mainViewPort,
+        ImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~Impl() = default;
-    std::unique_ptr<IScopedImGuiWindow> addWindow();
+    std::unique_ptr<ScopedImGuiWindow> addWindow();
     
 
-    const IMainViewPort& mainViewPort;
+    const MainViewPort& mainViewPort;
     std::unique_ptr<bool> openCloseWidgetPresent;
     ImGuiWindowFlags mainWindowFlags;
     ImGuiWindowFlags childWindowFlags;
@@ -37,12 +37,12 @@ struct WidgetFactoryImpl::Impl
 
     std::unordered_map<TextColor, ImVec4> colorMap;
     WidgetFactory& parent;
-    IImGuiWidgetWrapper& imGuiWidgetWrapper;
+    ImGuiWidgetWrapper& imGuiWidgetWrapper;
 };
 
 WidgetFactoryImpl::Impl::Impl(WidgetFactory& widgetFactory, 
-    const IMainViewPort& mainViewport, 
-    IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+    const MainViewPort& mainViewport, 
+    ImGuiWidgetWrapper& imGuiWidgetWrapper) :
         parent{widgetFactory},
         imGuiWidgetWrapper{imGuiWidgetWrapper},
         mainViewPort{mainViewport},
@@ -64,9 +64,9 @@ WidgetFactoryImpl::Impl::Impl(WidgetFactory& widgetFactory,
     childWindowFlags = ImGuiWindowFlags_HorizontalScrollbar;
 }
 
-std::unique_ptr<IScopedImGuiWindow> WidgetFactoryImpl::Impl::addWindow()
+std::unique_ptr<ScopedImGuiWindow> WidgetFactoryImpl::Impl::addWindow()
 {
-    return std::make_unique<ScopedImGuiWindow>(
+    return std::make_unique<ScopedImGuiWindowImpl>(
         parent,
         WindowDefs::ApplicationName, 
         mainViewPort.getAreaSize(), 
@@ -111,24 +111,24 @@ void WidgetFactoryImpl::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextB
     }
 }
 
-WidgetFactoryImpl::WidgetFactoryImpl(const IMainViewPort& mainViewport, IImGuiWidgetWrapper& imGuiWidgetWrapper) :
+WidgetFactoryImpl::WidgetFactoryImpl(const MainViewPort& mainViewport, ImGuiWidgetWrapper& imGuiWidgetWrapper) :
     p{std::make_unique<Impl>(*this, mainViewport, imGuiWidgetWrapper)}
 {
 }
 
 WidgetFactoryImpl::~WidgetFactoryImpl() = default;
 
-std::unique_ptr<IScopedImGuiWindow> WidgetFactoryImpl::createWindow()
+std::unique_ptr<ScopedImGuiWindow> WidgetFactoryImpl::createWindow()
 {
     return p->addWindow();
 }
 
-std::unique_ptr<IScopedImGuiWindow> WidgetFactoryImpl::createChildWindow(
+std::unique_ptr<ScopedImGuiWindow> WidgetFactoryImpl::createChildWindow(
     const std::string& windowName,
     const ImVec2& position,
     const ImVec2& size)
 {
-    return std::make_unique<ScopedImGuiWindow>(
+    return std::make_unique<ScopedImGuiWindowImpl>(
         p->parent,
         windowName, 
         size, 
@@ -168,9 +168,9 @@ bool WidgetFactoryImpl::createSelectedTextColored(std::string_view text, const T
     return false;
 }
 
-std::unique_ptr<IListTreeWidget> WidgetFactoryImpl::createListTreeWidget()
+std::unique_ptr<ListTreeWidget> WidgetFactoryImpl::createListTreeWidget()
 {
-    return std::make_unique<ListTreeWidget>();
+    return std::make_unique<ListTreeWidgetImpl>();
 }
 
 void WidgetFactoryImpl::onSameLine()

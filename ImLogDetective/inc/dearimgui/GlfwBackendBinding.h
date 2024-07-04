@@ -1,4 +1,7 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_DEARIMGUI_GLFWBACKENDBINDING_H
+#define IMLOGDETECTIVE_DEARIMGUI_GLFWBACKENDBINDING_H
+
 #include <memory>
 
 namespace ImLogDetective
@@ -16,3 +19,5 @@ private:
 };
 
 }
+
+#endif

@@ -1,6 +1,6 @@
 #include "presenters/LogFilePresenter.h"
 #include "ImLogDetectiveDefs.h"
-#include "dearimgui/IImGuiTextFilterWrapper.h"
+#include "dearimgui/ImGuiTextFilterWrapper.h"
 #include "views/WindowFactory.h"
 #include "models/ILogFileParser.h"
 #include "models/LogLine.h"
@@ -21,7 +21,7 @@ struct LogFilePresenter::Impl
         LogFilterView& logFilterView, 
         LogView& logView,
         ILogFileParser& logFileParser,
-        IImGuiTextFilterWrapper& textFilterWrapper);
+        ImGuiTextFilterWrapper& textFilterWrapper);
     ~Impl() = default;
     bool checkLogLineFiltered(const LogLine& line);
     void updateLogData(const std::filesystem::path& filePath, bool readLogFile, ILogDataModel& logDataModel);
@@ -31,7 +31,7 @@ struct LogFilePresenter::Impl
     LogFilterView& logFilterView;
     LogView& logView;
     ILogFileParser& logFileParser;
-    IImGuiTextFilterWrapper& textFilterWrapper;
+    ImGuiTextFilterWrapper& textFilterWrapper;
 };
 
 LogFilePresenter::Impl::Impl(
@@ -40,7 +40,7 @@ LogFilePresenter::Impl::Impl(
     LogFilterView& logFilterView, 
     LogView& logView,
     ILogFileParser& logFileParser,
-    IImGuiTextFilterWrapper& textFilterWrapper) :
+    ImGuiTextFilterWrapper& textFilterWrapper) :
         windowFactory{windowFactory},
         eventLoop{eventLoop},
         logFilterView{logFilterView},
@@ -110,7 +110,7 @@ LogFilePresenter::LogFilePresenter(
         LogFilterView& logFilterView, 
         LogView& logView,
         ILogFileParser& logFileParser,
-        IImGuiTextFilterWrapper& textFilterWrapper) : 
+        ImGuiTextFilterWrapper& textFilterWrapper) : 
     p {std::make_unique<Impl>(windowFactory, eventLoop, logFilterView, logView, logFileParser, textFilterWrapper)}
 {
 }

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "dearimgui/IImGuiWidgetWrapper.h"
+#include "dearimgui/ImGuiWidgetWrapper.h"
 #include "gmock/gmock.h"
 #include "ImVec.h"
 #include <string>
 
 namespace TestImLogDetective {
 
-class ImGuiWidgetWrapperMock : public ImLogDetective::IImGuiWidgetWrapper 
+class ImGuiWidgetWrapperMock : public ImLogDetective::ImGuiWidgetWrapper 
 {
 public:
     MOCK_METHOD(bool, beginPopupModal, (const std::string&));

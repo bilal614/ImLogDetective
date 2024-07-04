@@ -2,7 +2,7 @@
 #ifndef IMLOGDETECTIVE_VIEWS_WIDGETFACTORYIMPL_H
 #define IMLOGDETECTIVE_VIEWS_WIDGETFACTORYIMPL_H
 
-#include "dearimgui/IMainViewPort.h"
+#include "dearimgui/MainViewPort.h"
 #include "views/WidgetFactory.h"
 #include <memory>
 #include <string>
@@ -10,17 +10,18 @@
 
 namespace ImLogDetective
 {
-class IMainViewPort;
-class IImGuiWidgetWrapper;
+class MainViewPort;
+class ImGuiWidgetWrapper;
+class ScopedImGuiWindow;
 
 class WidgetFactoryImpl : public WidgetFactory
 {
 public:
-    WidgetFactoryImpl(const IMainViewPort& mainViewport, IImGuiWidgetWrapper& imGuiWidgetWrapper);
+    WidgetFactoryImpl(const MainViewPort& mainViewport, ImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~WidgetFactoryImpl();
     // Window creation specific functions
-    std::unique_ptr<IScopedImGuiWindow> createWindow() override;
-    std::unique_ptr<IScopedImGuiWindow> createChildWindow(
+    std::unique_ptr<ScopedImGuiWindow> createWindow() override;
+    std::unique_ptr<ScopedImGuiWindow> createChildWindow(
         const std::string& windowName, 
         const ImVec2& position,
         const ImVec2& size) override;
@@ -31,7 +32,7 @@ public:
     bool createSelectedTextColored(std::string_view text, const TextColor& color, bool selected) override;
 
     //List tree widget
-    std::unique_ptr<IListTreeWidget> createListTreeWidget() override;
+    std::unique_ptr<ListTreeWidget> createListTreeWidget() override;
 
     //Layout manipulation
     void onSameLine() override;

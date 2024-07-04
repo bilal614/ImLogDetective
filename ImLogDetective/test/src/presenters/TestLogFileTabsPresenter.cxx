@@ -1,5 +1,5 @@
 #include "ImLogDetectiveDefs.h"
-#include "dearimgui/ITabBar.h"
+#include "dearimgui/TabBar.h"
 #include "presenters/LogFileTabsPresenter.h"
 #include "EventMock.h"
 #include "LogFilePresenterMock.h"

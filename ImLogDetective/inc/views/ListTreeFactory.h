@@ -7,13 +7,13 @@
 namespace ImLogDetective
 {
 
-class IListTreeWidget;
+class ListTreeWidget;
 
 class ListTreeFactory
 {
 public:
     virtual ~ListTreeFactory() = default;
-    virtual std::unique_ptr<IListTreeWidget> createListTreeWidget() = 0;
+    virtual std::unique_ptr<ListTreeWidget> createListTreeWidget() = 0;
 };
 
 }

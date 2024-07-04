@@ -1,4 +1,6 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_DEARIMGUI_SCOPEDIMGUIWINDOW_H
+#define IMLOGDETECTIVE_DEARIMGUI_SCOPEDIMGUIWINDOW_H
 
 #include <string>
 
@@ -13,9 +15,9 @@ enum class WindowType
     ChildWindow
 };
 
-struct IScopedImGuiWindow
+struct ScopedImGuiWindow
 {
-    virtual ~IScopedImGuiWindow() = default;
+    virtual ~ScopedImGuiWindow() = default;
     virtual WindowType getWindowType() = 0;
     virtual ImVec2 getWindowPosition() = 0;
     virtual ImVec2 getWindowSize() = 0;
@@ -23,3 +25,5 @@ struct IScopedImGuiWindow
 };
 
 }
+
+#endif

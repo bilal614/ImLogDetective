@@ -6,8 +6,8 @@
 #include "models/IMini.h"
 #include "presenters/ICopyLogsPresenter.h"
 #include "views/WindowFactory.h"
-#include "dearimgui/IMainViewPort.h"
-#include "dearimgui/IScopedImGuiWindow.h"
+#include "dearimgui/MainViewPort.h"
+// #include "dearimgui/ScopedImGuiWindow.h"
 #include "imgui.h"
 
 #include <iostream>
@@ -19,7 +19,7 @@ namespace ImLogDetective
 struct MainPresenter::Impl
 {
     Impl(WindowFactory& windowFactory,
-        IMainViewPort& mainViewPort,
+        MainViewPort& mainViewPort,
         SelectionMenuBar& selectionMenuBar,
         FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
@@ -36,7 +36,7 @@ struct MainPresenter::Impl
         const ImVec2& mainWindowPos);
 
     WindowFactory& windowFactory;
-    IMainViewPort& mainViewPort;
+    MainViewPort& mainViewPort;
     IFileListPresenter& fileListPresenter;
     SelectionMenuBar& selectionMenuBar;
     FolderSelectionPopup& folderSelectionPopup;
@@ -46,7 +46,7 @@ struct MainPresenter::Impl
 };
 
 MainPresenter::Impl::Impl(WindowFactory& windowFactory,
-        IMainViewPort& mainViewPort,
+        MainViewPort& mainViewPort,
         SelectionMenuBar& selectionMenuBar,
         FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,
@@ -134,7 +134,7 @@ void MainPresenter::Impl::showMainBody(const ImVec2& mainWindowSize, const ImVec
 }
 
 MainPresenter::MainPresenter(WindowFactory& windowFactory,
-        IMainViewPort& mainViewPort,
+        MainViewPort& mainViewPort,
         SelectionMenuBar& selectionMenuBar,
         FolderSelectionPopup& folderSelectionPopup,
         ILogFileTabsPresenter& logFileTabsPresenter,

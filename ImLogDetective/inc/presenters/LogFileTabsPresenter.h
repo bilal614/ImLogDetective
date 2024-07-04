@@ -8,7 +8,7 @@ namespace ImLogDetective
 
 class ILogFilePresenter;
 class ILogDataModelFactory;
-class ITabBar;
+class TabBar;
 
 class LogFileTabsPresenter : public ILogFileTabsPresenter
 {
@@ -16,7 +16,7 @@ public:
     LogFileTabsPresenter(
         ILogFilePresenter&, 
         ILogDataModelFactory&, 
-        ITabBar&,
+        TabBar&,
         std::unique_ptr<LogEventHandling::IEvent<const std::string&>>);
     ~LogFileTabsPresenter();
     void update(const std::vector<std::filesystem::path>& filePaths) override;

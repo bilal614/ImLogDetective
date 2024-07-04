@@ -1,23 +1,22 @@
-#pragma once
 
-#include "IIOContext.h"
+#ifndef IMLOGDETECTIVE_DEARIMGUI_IOCONTEXT_H
+#define IMLOGDETECTIVE_DEARIMGUI_IOCONTEXT_H
+
 #include <memory>
+#include <filesystem>
 
 namespace ImLogDetective
 {
 
-class IOContext : public IIOContext
+class IOContext
 {
 public:
-    IOContext();
-    ~IOContext();
-    void unsetIniFile() final;
-    void setFontScale(const float scaleFactor) final;
-    bool setFontFromTtfFile(const std::filesystem::path& path) final;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
-    
+    virtual ~IOContext() = default;
+    virtual void unsetIniFile() = 0;
+    virtual void setFontScale(const float scaleFactor) = 0;
+    virtual bool setFontFromTtfFile(const std::filesystem::path& path) = 0;
 };
 
 }
+
+#endif

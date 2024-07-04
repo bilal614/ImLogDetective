@@ -1,13 +1,13 @@
 #pragma once
 
-#include "dearimgui/IImGuiTextFilterWrapper.h"
+#include "dearimgui/ImGuiTextFilterWrapper.h"
 #include <gmock/gmock.h>
 #include <string>
 #include <vector>
 
 namespace TestImLogDetective {
 
-class ImGuiTextFilterWrapperMock : public ImLogDetective::IImGuiTextFilterWrapper 
+class ImGuiTextFilterWrapperMock : public ImLogDetective::ImGuiTextFilterWrapper 
 {
 public:
     MOCK_METHOD(void, draw, ());

@@ -3,7 +3,7 @@
 #include "presenters/ILogFilePresenter.h"
 #include "presenters/ILogDataModelFactory.h"
 #include "models/ILogDataModel.h"
-#include "dearimgui/ITabBar.h"
+#include "dearimgui/TabBar.h"
 
 #include <algorithm>
 #include <functional>
@@ -49,7 +49,7 @@ struct LogFileTabsPresenter::Impl
     };
     Impl(ILogFilePresenter& logFilePresenter, 
         ILogDataModelFactory& logDataModelFactory, 
-        ITabBar& tabBar, 
+        TabBar& tabBar, 
         std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpenedEvent);
     ~Impl() = default;
 
@@ -57,7 +57,7 @@ struct LogFileTabsPresenter::Impl
     void removeUnselectedTabs(const std::vector<std::filesystem::path>& selectedFiles);
 
     std::filesystem::path folderPath;
-    ITabBar& tabBar;
+    TabBar& tabBar;
     ILogDataModelFactory& logDataModelFactory;
     std::unordered_map<std::string, std::unique_ptr<LogFileTab>> logFileTabs;
     std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpened;
@@ -66,7 +66,7 @@ struct LogFileTabsPresenter::Impl
 
 LogFileTabsPresenter::Impl::Impl(ILogFilePresenter& logFilePresenter, 
     ILogDataModelFactory& logDataModelFactory, 
-    ITabBar& tabBar,
+    TabBar& tabBar,
     std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpenedEvent) :
         folderPath{},
         tabBar{tabBar},
@@ -115,7 +115,7 @@ void LogFileTabsPresenter::Impl::removeUnselectedTabs(const std::vector<std::fil
 
 LogFileTabsPresenter::LogFileTabsPresenter(ILogFilePresenter& logFilePresenter, 
     ILogDataModelFactory& logDataModelFactory, 
-    ITabBar& tabBar,
+    TabBar& tabBar,
     std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpenedEvent) :
         p{std::make_unique<Impl>(logFilePresenter, logDataModelFactory, tabBar, std::move(tabsOpenedEvent))}
 {

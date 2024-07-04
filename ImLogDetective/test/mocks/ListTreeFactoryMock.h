@@ -13,7 +13,7 @@ namespace ImLogDetective
 class ListTreeFactoryMock : public ListTreeFactory
 {
 public:
-    MOCK_METHOD(std::unique_ptr<IListTreeWidget>, createListTreeWidget,());
+    MOCK_METHOD(std::unique_ptr<ListTreeWidget>, createListTreeWidget,());
 };
 
 }

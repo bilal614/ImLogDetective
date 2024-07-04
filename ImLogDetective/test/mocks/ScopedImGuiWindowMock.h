@@ -1,12 +1,12 @@
 #pragma once
 
-#include "dearimgui/IScopedImGuiWindow.h"
+#include "dearimgui/ScopedImGuiWindow.h"
 #include "gmock/gmock.h"
 #include "ImVec.h"
 
 namespace TestImLogDetective {
 
-class ScopedImGuiWindowMock : public ImLogDetective::IScopedImGuiWindow 
+class ScopedImGuiWindowMock : public ImLogDetective::ScopedImGuiWindow 
 {
 public:
     MOCK_METHOD(ImLogDetective::WindowType, getWindowType, ());

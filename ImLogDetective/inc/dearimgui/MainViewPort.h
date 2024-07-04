@@ -1,25 +1,22 @@
-#pragma once
 
-#include "IMainViewPort.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_DEARIMGUI_MAINVIEWPORT_H
+#define IMLOGDETECTIVE_DEARIMGUI_MAINVIEWPORT_H
+
+struct ImVec2;
 
 namespace ImLogDetective
 {
-class IIOContext;
-
-class MainViewPort : public IMainViewPort 
+class MainViewPort  
 {
 public:
-    MainViewPort(IIOContext& ioContext);
-    ~MainViewPort();
-    ImVec2 getAreaSize() const override;
-    ImVec2 getWorkAreaSize() const override;
-    ImVec2 getViewportPosition() const override;
-    ImVec2 getViewportCenter() const override;
-    void setViewportScale(const float scaleFactor) override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~MainViewPort() = default;
+    virtual ImVec2 getAreaSize() const = 0;
+    virtual ImVec2 getWorkAreaSize() const = 0;
+    virtual ImVec2 getViewportPosition() const = 0;
+    virtual ImVec2 getViewportCenter() const  = 0;
+    virtual void setViewportScale(const float scaleFactor) = 0;
 };
 
 }
+
+#endif

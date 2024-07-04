@@ -1,20 +1,29 @@
-#pragma once
 
-#include "dearimgui/ITabBar.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_DEARIMGUI_TABBAR_H
+#define IMLOGDETECTIVE_DEARIMGUI_TABBAR_H
+
+#include <functional>
+#include <string>
+#include <tuple>
+#include <vector>
 
 namespace ImLogDetective
 {
 
-class TabBar : public ITabBar
+struct TabBarItem
+{
+    std::string name;
+    bool isOpen;
+    std::function<void()> draw;
+};
+
+class TabBar
 {
 public:
-    TabBar(const std::string& tabBarName);
-    ~TabBar();
-    void drawTabBar(std::vector<std::reference_wrapper<TabBarItem>> tabItemsToDraw) override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~TabBar() = default;
+    virtual void drawTabBar(std::vector<std::reference_wrapper<TabBarItem>> tabItemsToDraw) = 0;
 };
 
 }
+
+#endif

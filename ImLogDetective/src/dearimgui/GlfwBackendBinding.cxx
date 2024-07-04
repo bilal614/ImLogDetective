@@ -1,15 +1,14 @@
 
 #include "dearimgui/GlfwBackendBinding.h"
-#include "dearimgui/IOContext.h"
-#include "dearimgui/MainViewPort.h"
+#include "dearimgui/IOContextImpl.h"
+#include "dearimgui/MainViewPortImpl.h"
 #include "views/WidgetFactoryImpl.h"
-#include "dearimgui/ImGuiMenuBarWrapper.h"
-#include "dearimgui/ImGuiTextFilterWrapper.h"
-#include "dearimgui/ImGuiWidgetWrapper.h"
-#include "dearimgui/TabBar.h"
+#include "dearimgui/ImGuiMenuBarWrapperImpl.h"
+#include "dearimgui/ImGuiTextFilterWrapperImpl.h"
+#include "dearimgui/ImGuiWidgetWrapperImpl.h"
+#include "dearimgui/TabBarImpl.h"
 #include "views/TextWidgetFactory.h"
 #include "views/WindowFactory.h"
-#include "dearimgui/ITabBar.h"
 #include "EventHandling/EventLoop.h"
 #include "EventHandling/Event.hpp"
 #include "ImLogDetectiveDefs.h"
@@ -63,14 +62,14 @@ struct GlfwBackendBinding::Impl
 
     std::string glShaderLanguageVersion;
     GLFWwindow* window;
-    std::unique_ptr<IMainViewPort> mainViewPort;
+    std::unique_ptr<MainViewPort> mainViewPort;
     std::unique_ptr<AssetsConfigurator> assetsConfigurator;
-    std::unique_ptr<IIOContext> ioContext;
+    std::unique_ptr<IOContext> ioContext;
     std::unique_ptr<LogEventHandling::IEventLoop> eventLoop;
-    std::unique_ptr<IImGuiWidgetWrapper> imGuiWidgetWrapper;
+    std::unique_ptr<ImGuiWidgetWrapper> imGuiWidgetWrapper;
     std::unique_ptr<WidgetFactory> widgetFactory;
-    std::unique_ptr<IImGuiTextFilterWrapper> textFilterWrapper;
-    std::unique_ptr<IImGuiMenuBarWrapper> imGuiMenuBarWrapper;
+    std::unique_ptr<ImGuiTextFilterWrapper> textFilterWrapper;
+    std::unique_ptr<ImGuiMenuBarWrapper> imGuiMenuBarWrapper;
     std::unique_ptr<SelectionMenuBar> selectionMenuBar;
     std::unique_ptr<FolderSelectionPopup> folderSelectionPopup;
     std::unique_ptr<CopyLogsPopup> copyLogsPopup;
@@ -86,7 +85,7 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<ILogFilePresenter> logFilePresenter;
     std::unique_ptr<ILogFileTabsPresenter> logFileTabsPresenter;
     std::unique_ptr<ILogDataModelFactory> logDataModelFactory;
-    std::unique_ptr<ITabBar> tabBar;
+    std::unique_ptr<TabBar> tabBar;
     std::unique_ptr<MainPresenter> mainPresenter;
     std::unique_ptr<ImLogDetective::IScpExecutor> scpExecutor;
     ImLogDetective::AuthenticationWorkFlow authenticationWorkFlow;
@@ -175,12 +174,12 @@ GlfwBackendBinding::Impl::Impl() :
         ImGui_ImplOpenGL3_Init(glShaderLanguageVersion.c_str());
     }
 
-    ioContext = std::make_unique<IOContext>();
+    ioContext = std::make_unique<IOContextImpl>();
     ioContext->unsetIniFile();
     ioContext->setFontFromTtfFile(assetsConfigurator->getDefaultTtfFile());
-    mainViewPort = std::make_unique<MainViewPort>(*ioContext);
-    imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapper>();
-    imGuiMenuBarWrapper = std::make_unique<ImGuiMenuBarWrapper>();
+    mainViewPort = std::make_unique<MainViewPortImpl>(*ioContext);
+    imGuiWidgetWrapper = std::make_unique<ImGuiWidgetWrapperImpl>();
+    imGuiMenuBarWrapper = std::make_unique<ImGuiMenuBarWrapperImpl>();
     widgetFactory  = std::make_unique<WidgetFactoryImpl>(*mainViewPort, *imGuiWidgetWrapper);
     eventLoop = std::make_unique<LogEventHandling::EventLoop>();
     scpExecutor = std::make_unique<ImLogDetective::ScpExecutor>(*eventLoop, authenticationWorkFlow);
@@ -188,9 +187,9 @@ GlfwBackendBinding::Impl::Impl() :
     folderSelectionPopup = std::make_unique<FolderSelectionPopupImpl>(dynamic_cast<ModalPopupFactory&>(*widgetFactory));
     copyLogsPopup = std::make_unique<CopyLogsPopupImpl>(dynamic_cast<ModalPopupFactory&>(*widgetFactory));
     protectedInputPopup = std::make_unique<ProtectedInputPopupImpl>(dynamic_cast<ModalPopupFactory&>(*widgetFactory));
-    textFilterWrapper = std::make_unique<ImGuiTextFilterWrapper>("Filter", -100);
+    textFilterWrapper = std::make_unique<ImGuiTextFilterWrapperImpl>("Filter", -100);
     logFilterView = std::make_unique<LogFilterViewImpl>(*textFilterWrapper, *imGuiWidgetWrapper);
-    tabBar = std::make_unique<TabBar>("LogFileTabs");
+    tabBar = std::make_unique<TabBarImpl>("LogFileTabs");
     logView = std::make_unique<LogViewImpl>(dynamic_cast<TextWidgetFactory&>(*widgetFactory));
     fileListView = std::make_unique<FileListViewImpl>(dynamic_cast<ListTreeFactory&>(*widgetFactory));
     gzipFile = std::make_unique<GzipFile>();

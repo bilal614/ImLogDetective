@@ -1,12 +1,12 @@
 #pragma once
-#include "dearimgui/IImGuiMenuBarWrapper.h"
+#include "dearimgui/ImGuiMenuBarWrapper.h"
 #include <gmock/gmock.h>
 #include <string>
 
 namespace TestImLogDetective
 {
 
-class ImGuiMenuBarWrapperMock : public ImLogDetective::IImGuiMenuBarWrapper
+class ImGuiMenuBarWrapperMock : public ImLogDetective::ImGuiMenuBarWrapper
 {
 public:
     MOCK_METHOD(bool, beginMenuBar, (), (const));

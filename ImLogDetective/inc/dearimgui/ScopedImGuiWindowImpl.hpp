@@ -1,6 +1,9 @@
-#pragma once
 
-#include "dearimgui/IScopedImGuiWindow.h"
+
+#ifndef IMLOGDETECTIVE_DEARIMGUI_SCOPEDIMGUIWINDOWIMPL_H
+#define IMLOGDETECTIVE_DEARIMGUI_SCOPEDIMGUIWINDOWIMPL_H
+
+#include "dearimgui/ScopedImGuiWindow.h"
 #include "views/WidgetFactory.h"
 #include "imgui.h"
 #include <string>
@@ -8,7 +11,7 @@
 namespace ImLogDetective
 {
 
-struct ScopedImGuiWindow : public IScopedImGuiWindow
+struct ScopedImGuiWindowImpl : public ScopedImGuiWindow
 {
     WindowType windowType;
     ImVec2 windowSize;
@@ -35,7 +38,7 @@ struct ScopedImGuiWindow : public IScopedImGuiWindow
         widgetFactory.onSameLine();
     }
 
-    ScopedImGuiWindow(WidgetFactory& widgetFactory, 
+    ScopedImGuiWindowImpl(WidgetFactory& widgetFactory, 
         const std::string& windowName, 
         const ImVec2& size, 
         const ImVec2& position, 
@@ -60,7 +63,7 @@ struct ScopedImGuiWindow : public IScopedImGuiWindow
         }
     }
 
-    ~ScopedImGuiWindow()
+    ~ScopedImGuiWindowImpl()
     {
         if(windowType == WindowType::MainWindow)
         {
@@ -74,3 +77,5 @@ struct ScopedImGuiWindow : public IScopedImGuiWindow
 };
 
 }
+
+#endif

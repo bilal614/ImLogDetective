@@ -10,8 +10,8 @@ namespace TestImLogDetective {
 class WindowFactoryMock : public ImLogDetective::WindowFactory 
 {
 public:
-    MOCK_METHOD(std::unique_ptr<ImLogDetective::IScopedImGuiWindow>, createWindow, ());
-    MOCK_METHOD(std::unique_ptr<ImLogDetective::IScopedImGuiWindow>, createChildWindow, (
+    MOCK_METHOD(std::unique_ptr<ImLogDetective::ScopedImGuiWindow>, createWindow, ());
+    MOCK_METHOD(std::unique_ptr<ImLogDetective::ScopedImGuiWindow>, createChildWindow, (
         const std::string&, 
         const ImVec2&,
         const ImVec2&));

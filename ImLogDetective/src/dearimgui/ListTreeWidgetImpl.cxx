@@ -1,5 +1,5 @@
 
-#include "dearimgui/ListTreeWidget.h"
+#include "dearimgui/ListTreeWidgetImpl.h"
 #include <exception>
 #include <memory>
 #include <vector>
@@ -8,7 +8,7 @@
 namespace ImLogDetective
 {
 
-struct ListTreeWidget::Impl
+struct ListTreeWidgetImpl::Impl
 {
     Impl();
     ~Impl() = default;
@@ -17,7 +17,7 @@ struct ListTreeWidget::Impl
     ImGuiTreeNodeFlags nodeFlags;
 };
 
-ListTreeWidget::Impl::Impl() :
+ListTreeWidgetImpl::Impl::Impl() :
     nodeFlags{ImGuiTreeNodeFlags_OpenOnArrow | 
         ImGuiTreeNodeFlags_OpenOnDoubleClick | 
         ImGuiTreeNodeFlags_SpanAvailWidth | 
@@ -26,14 +26,14 @@ ListTreeWidget::Impl::Impl() :
 {
 }
 
-ListTreeWidget::ListTreeWidget() :
+ListTreeWidgetImpl::ListTreeWidgetImpl() :
     p{std::make_unique<Impl>()}
 {
 }
 
-ListTreeWidget::~ListTreeWidget() = default;
+ListTreeWidgetImpl::~ListTreeWidgetImpl() = default;
 
-void ListTreeWidget::addNode(const std::string& nodeId, std::function<void()> nodeClickedCallback)
+void ListTreeWidgetImpl::addNode(const std::string& nodeId, std::function<void()> nodeClickedCallback)
 {
     p->nodeList.emplace_back(nodeId);
     ImGui::TreeNodeEx(nodeId.c_str(), p->nodeFlags);

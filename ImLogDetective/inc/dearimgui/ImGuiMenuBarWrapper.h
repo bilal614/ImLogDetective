@@ -1,18 +1,24 @@
-#pragma once
-#include "dearimgui/IImGuiMenuBarWrapper.h"
+
+#ifndef IMLOGDETECTIVE_DEARIMGUI_IMGUIMENUBARWRAPPER_H
+#define IMLOGDETECTIVE_DEARIMGUI_IMGUIMENUBARWRAPPER_H
+
+#include <string>
 
 namespace ImLogDetective
 {
 
-class ImGuiMenuBarWrapper : public IImGuiMenuBarWrapper
+class ImGuiMenuBarWrapper
 {
 public:
-    bool beginMenuBar() const final;
-    bool beginMenu(std::string_view label) const final;
-    void endMenuBar() const final;
-    void endMenu() const final;
-    bool menuItem(std::string_view label, bool& selected) final;
-    bool slider(std::string_view label, int& val, int min, int max) final;
+    virtual ~ImGuiMenuBarWrapper() = default;
+    virtual bool beginMenuBar() const = 0;
+    virtual bool beginMenu(std::string_view label) const = 0;
+    virtual void endMenuBar() const = 0;
+    virtual void endMenu() const = 0;
+    virtual bool menuItem(std::string_view label, bool& selected) = 0;
+    virtual bool slider(std::string_view label, int& val, int min, int max) = 0;
 };
 
 }
+
+#endif

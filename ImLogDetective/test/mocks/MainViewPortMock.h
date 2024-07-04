@@ -1,12 +1,12 @@
 #pragma once
 
-#include "dearimgui/IMainViewPort.h"
+#include "dearimgui/MainViewPort.h"
 #include "gmock/gmock.h"
 #include "ImVec.h"
 
 namespace TestImLogDetective {
 
-class MainViewPortMock : public ImLogDetective::IMainViewPort 
+class MainViewPortMock : public ImLogDetective::MainViewPort 
 {
 public:
     MOCK_METHOD(ImVec2, getAreaSize, (), (const));

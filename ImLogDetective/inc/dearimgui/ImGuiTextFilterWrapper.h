@@ -1,21 +1,21 @@
-#pragma once
-#include "dearimgui/IImGuiTextFilterWrapper.h"
-#include <memory>
+
+#ifndef IMLOGDETECTIVE_DEARIMGUI_IMGUITEXTFILTERWRAPPER_H
+#define IMLOGDETECTIVE_DEARIMGUI_IMGUITEXTFILTERWRAPPER_H
+
+#include <string>
 
 namespace ImLogDetective
 {
 
-class ImGuiTextFilterWrapper : public IImGuiTextFilterWrapper 
+class ImGuiTextFilterWrapper
 {
 public:
-    ImGuiTextFilterWrapper(const std::string& label, float width);
-    ~ImGuiTextFilterWrapper();
-    void draw() override;
-    bool isActive() const override;
-    bool passFilter(std::string_view text) override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~ImGuiTextFilterWrapper() = default;
+    virtual void draw() = 0;
+    virtual bool isActive() const = 0;
+    virtual bool passFilter(std::string_view text) = 0;
 };
 
 }
+
+#endif

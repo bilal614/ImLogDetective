@@ -8,15 +8,15 @@
 namespace ImLogDetective
 {
 
-class IImGuiTextFilterWrapper;
-class IImGuiWidgetWrapper;
+class ImGuiTextFilterWrapper;
+class ImGuiWidgetWrapper;
 
 class LogFilterViewImpl : public LogFilterView
 {
 public:
     LogFilterViewImpl(
-        IImGuiTextFilterWrapper& textFilterWrapper, 
-        IImGuiWidgetWrapper& imGuiWidgetWrapper);
+        ImGuiTextFilterWrapper& textFilterWrapper, 
+        ImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~LogFilterViewImpl();
     void drawFilterCheckBoxes() const override;
     bool getDebugChecked() const override;
