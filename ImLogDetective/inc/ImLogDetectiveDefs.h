@@ -1,4 +1,6 @@
-#pragma once
+
+#ifndef IMLOGDETECTIVE_IMLOGDETECTIVEDEFS_H
+#define IMLOGDETECTIVE_IMLOGDETECTIVEDEFS_H
 
 #include <stddef.h>
 
@@ -113,3 +115,5 @@ namespace ImLogDetective
     }
 
 }
+
+#endif

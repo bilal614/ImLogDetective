@@ -20,12 +20,12 @@ if(${ZLIB_FOUND})
         ${IM_LOG_DETECTIVE_DIR}/src/ImLogDetectiveDefs.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/views/LogFilterViewImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/views/LogViewImpl.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/presenters/CopyLogsPresenter.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/presenters/MainPresenter.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/presenters/FileListPresenter.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogFilePresenter.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogDataModelFactory.cxx
-        ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogFileTabsPresenter.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/presenters/CopyLogsPresenterImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/presenters/MainPresenterImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/presenters/FileListPresenterImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogFilePresenterImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogDataModelFactoryImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/src/presenters/LogFileTabsPresenterImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/AssetsConfiguratorImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/GzipFileImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/src/models/LogDataModelImpl.cxx

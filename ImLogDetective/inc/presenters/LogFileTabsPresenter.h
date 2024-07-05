@@ -1,28 +1,21 @@
-#pragma once
 
-#include <memory>
-#include "presenters/ILogFileTabsPresenter.h"
+#ifndef IMLOGDETECTIVE_PRESENTERS_LOGFILETABSPRESENTER_H
+#define IMLOGDETECTIVE_PRESENTERS_LOGFILETABSPRESENTER_H
+
+#include "EventHandling/IEvent.h"
+#include <filesystem>
+#include <vector>
 
 namespace ImLogDetective
 {
-
-class ILogFilePresenter;
-class ILogDataModelFactory;
-class TabBar;
-
-class LogFileTabsPresenter : public ILogFileTabsPresenter
+class LogFileTabsPresenter
 {
 public:
-    LogFileTabsPresenter(
-        ILogFilePresenter&, 
-        ILogDataModelFactory&, 
-        TabBar&,
-        std::unique_ptr<LogEventHandling::IEvent<const std::string&>>);
-    ~LogFileTabsPresenter();
-    void update(const std::vector<std::filesystem::path>& filePaths) override;
-    LogEventHandling::IEvent<const std::string&>& getTabsOpenedEvent() override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~LogFileTabsPresenter() = default;
+    virtual void update(const std::vector<std::filesystem::path>& filePaths) = 0;
+    virtual LogEventHandling::IEvent<const std::string&>& getTabsOpenedEvent() = 0;
 };
+
 }
+
+#endif

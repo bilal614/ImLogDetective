@@ -1,10 +1,10 @@
-#include "presenters/MainPresenter.h"
+#include "presenters/MainPresenterImpl.h"
 #include "ImLogDetectiveDefs.h"
-#include "presenters/ILogFileTabsPresenter.h"
-#include "presenters/IFileListPresenter.h"
+#include "presenters/LogFileTabsPresenter.h"
+#include "presenters/FileListPresenter.h"
 #include "views/FolderSelectionPopup.h"
 #include "models/Mini.h"
-#include "presenters/ICopyLogsPresenter.h"
+#include "presenters/CopyLogsPresenter.h"
 #include "views/WindowFactory.h"
 #include "dearimgui/MainViewPort.h"
 #include "imgui.h"
@@ -15,15 +15,15 @@
 namespace ImLogDetective
 {
 
-struct MainPresenter::Impl
+struct MainPresenterImpl::Impl
 {
     Impl(WindowFactory& windowFactory,
         MainViewPort& mainViewPort,
         SelectionMenuBar& selectionMenuBar,
         FolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter,
-        IFileListPresenter& fileListPresenter,
-        ICopyLogsPresenter& copyLogsPresenter,
+        LogFileTabsPresenter& logFileTabsPresenter,
+        FileListPresenter& fileListPresenter,
+        CopyLogsPresenter& copyLogsPresenter,
         Mini& mini);
     ~Impl() = default;
 
@@ -36,21 +36,21 @@ struct MainPresenter::Impl
 
     WindowFactory& windowFactory;
     MainViewPort& mainViewPort;
-    IFileListPresenter& fileListPresenter;
+    FileListPresenter& fileListPresenter;
     SelectionMenuBar& selectionMenuBar;
     FolderSelectionPopup& folderSelectionPopup;
-    ILogFileTabsPresenter& logFileTabsPresenter;
-    ICopyLogsPresenter& copyLogsPresenter;
+    LogFileTabsPresenter& logFileTabsPresenter;
+    CopyLogsPresenter& copyLogsPresenter;
     Mini& mini;
 };
 
-MainPresenter::Impl::Impl(WindowFactory& windowFactory,
+MainPresenterImpl::Impl::Impl(WindowFactory& windowFactory,
         MainViewPort& mainViewPort,
         SelectionMenuBar& selectionMenuBar,
         FolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter,
-        IFileListPresenter& fileListPresenter,
-        ICopyLogsPresenter& copyLogsPresenter,
+        LogFileTabsPresenter& logFileTabsPresenter,
+        FileListPresenter& fileListPresenter,
+        CopyLogsPresenter& copyLogsPresenter,
         Mini& mini) :
     mainViewPort{mainViewPort},
     folderSelectionPopup{folderSelectionPopup},
@@ -69,7 +69,7 @@ MainPresenter::Impl::Impl(WindowFactory& windowFactory,
     }
 }
 
-void MainPresenter::Impl::showFolderSelectionPopup()
+void MainPresenterImpl::Impl::showFolderSelectionPopup()
 {
     auto popupSize = mainViewPort.getWorkAreaSize();
     popupSize.x *= LayoutBounds::SmallPopupWindowRelativeToMain_X;
@@ -90,7 +90,7 @@ void MainPresenter::Impl::showFolderSelectionPopup()
     }
 }
 
-void MainPresenter::Impl::showCopyRemoteLogsPopup(bool openPopup)
+void MainPresenterImpl::Impl::showCopyRemoteLogsPopup(bool openPopup)
 {
     auto popupSize = mainViewPort.getWorkAreaSize();
     popupSize.x *= LayoutBounds::LargePopupWindowRelativeToMain_X;
@@ -102,7 +102,7 @@ void MainPresenter::Impl::showCopyRemoteLogsPopup(bool openPopup)
     }
 }
 
-void MainPresenter::Impl::showLogFilterSidebar(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
+void MainPresenterImpl::Impl::showLogFilterSidebar(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
 {
     ImVec2 fileListBoxPosition{mainWindowPos.x, mainWindowPos.y};
     ImVec2 fileListBoxSize{
@@ -117,7 +117,7 @@ void MainPresenter::Impl::showLogFilterSidebar(const ImVec2& mainWindowSize, con
     }
 }
 
-void MainPresenter::Impl::showMainBody(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
+void MainPresenterImpl::Impl::showMainBody(const ImVec2& mainWindowSize, const ImVec2& mainWindowPos)
 {
     ImVec2 mainContentBoxPosition{
         mainWindowPos.x*LayoutBounds::MainBodyRelativeToMainWinPos_X,
@@ -132,13 +132,13 @@ void MainPresenter::Impl::showMainBody(const ImVec2& mainWindowSize, const ImVec
     logFileTabsPresenter.update(fileListPresenter.getSelectedFiles());
 }
 
-MainPresenter::MainPresenter(WindowFactory& windowFactory,
+MainPresenterImpl::MainPresenterImpl(WindowFactory& windowFactory,
         MainViewPort& mainViewPort,
         SelectionMenuBar& selectionMenuBar,
         FolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter,
-        IFileListPresenter& fileListPresenter,
-        ICopyLogsPresenter& copyLogsPresenter,
+        LogFileTabsPresenter& logFileTabsPresenter,
+        FileListPresenter& fileListPresenter,
+        CopyLogsPresenter& copyLogsPresenter,
         Mini& mini) : 
     p {std::make_unique<Impl>(windowFactory,
         mainViewPort,
@@ -151,9 +151,9 @@ MainPresenter::MainPresenter(WindowFactory& windowFactory,
 {
 }
 
-MainPresenter::~MainPresenter() = default;
+MainPresenterImpl::~MainPresenterImpl() = default;
 
-void MainPresenter::update()
+void MainPresenterImpl::update()
 {
     // Create\Draw GUI widgets here in sequential order
     p->mainViewPort.setViewportScale(p->selectionMenuBar.getInputScaleFactor());

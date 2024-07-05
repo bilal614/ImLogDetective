@@ -1,5 +1,5 @@
 #include "ImLogDetectiveDefs.h"
-#include "presenters/LogFilePresenter.h"
+#include "presenters/LogFilePresenterImpl.h"
 #include "dearimgui/TextColor.h"
 #include "EventLoopMock.h"
 #include "ImGuiTextFilterWrapperMock.h"
@@ -41,7 +41,7 @@ protected:
     TestLogFilePresenter();
     ~TestLogFilePresenter() = default;
 
-    ImLogDetective::LogFilePresenter logFilePresenter;
+    ImLogDetective::LogFilePresenterImpl logFilePresenter;
 };
 
 TestLogFilePresenter::TestLogFilePresenter() :

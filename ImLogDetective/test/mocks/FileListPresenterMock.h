@@ -1,11 +1,11 @@
 #pragma once
 
-#include "presenters/IFileListPresenter.h"
+#include "presenters/FileListPresenter.h"
 #include "gmock/gmock.h"
 
 namespace TestImLogDetective {
 
-class FileListPresenterMock : public ImLogDetective::IFileListPresenter 
+class FileListPresenterMock : public ImLogDetective::FileListPresenter 
 {
 public:
     MOCK_METHOD(std::vector<std::filesystem::path>, getSelectedFiles,());

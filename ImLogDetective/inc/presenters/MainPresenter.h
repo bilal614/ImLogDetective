@@ -1,38 +1,17 @@
-#pragma once
 
-#include <memory>
-#include "dearimgui/MainViewPort.h"
-#include "presenters/ILogFilePresenter.h"
-#include "presenters/IMainPresenter.h"
-#include "views/SelectionMenuBar.h"
-#include "views/LogView.h"
+#ifndef IMLOGDETECTIVE_PRESENTERS_MAINPRESENTER_H
+#define IMLOGDETECTIVE_PRESENTERS_MAINPRESENTER_H
 
 namespace ImLogDetective
 {
-class IFileListPresenter;
-class ISelectionMenuBar;
-class ICopyLogsPresenter;
-class FolderSelectionPopup;
-class ILogFileTabsPresenter;
-class MainViewPort;
-class Mini;
-class WindowFactory;
 
-class MainPresenter : public IMainPresenter
+class MainPresenter
 {
 public:
-    MainPresenter(WindowFactory& windowFactory,
-        MainViewPort& mainViewPort,
-        SelectionMenuBar& selectionMenuBar,
-        FolderSelectionPopup& folderSelectionPopup,
-        ILogFileTabsPresenter& logFileTabsPresenter,
-        IFileListPresenter& fileListPresenter,
-        ICopyLogsPresenter& copyLogsPresenter,
-        Mini& mini);
-    ~MainPresenter();
-    void update() override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~MainPresenter() = default;
+    virtual void update() = 0;
 };
+
 }
+
+#endif

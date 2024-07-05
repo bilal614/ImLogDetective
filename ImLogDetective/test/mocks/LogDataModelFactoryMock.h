@@ -1,13 +1,13 @@
 #pragma once
 
-#include "presenters/ILogDataModelFactory.h"
+#include "presenters/LogDataModelFactory.h"
 #include "gmock/gmock.h"
 #include <string>
 #include <vector>
 
 namespace TestImLogDetective {
 
-class LogDataModelFactoryMock : public ImLogDetective::ILogDataModelFactory 
+class LogDataModelFactoryMock : public ImLogDetective::LogDataModelFactory 
 {
 public:
     MOCK_METHOD(std::unique_ptr<ImLogDetective::LogDataModel>, createLogDataModel, (const std::string&));

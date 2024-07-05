@@ -1,31 +1,21 @@
-#pragma once
-#include "ICopyLogsPresenter.h"
-#include <memory>
 
-namespace ImLogDetective {
-    class IScpExecutor;
-}
+#ifndef IMLOGDETECTIVE_PRESENTERS_COPYLOGSPRESENTER_H
+#define IMLOGDETECTIVE_PRESENTERS_COPYLOGSPRESENTER_H
+
+struct ImVec2;
 
 namespace ImLogDetective
 {
-class CopyLogsPopup;
-class Mini;
-class ProtectedInputPopup;
 
-class CopyLogsPresenter : public ICopyLogsPresenter
+class CopyLogsPresenter
 {
 public:
-    CopyLogsPresenter(CopyLogsPopup& copyLogsPopup,
-        ProtectedInputPopup& protectedInputPopup,
-        ImLogDetective::IScpExecutor& scpExecutor,
-        Mini& mini);
-    ~CopyLogsPresenter();
-    void update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize) final;
-    void monitorCopyLogs() final;
-    bool isClosed();
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~CopyLogsPresenter() = default;
+    virtual void update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize) = 0;
+    virtual void monitorCopyLogs() = 0;
+    virtual bool isClosed() = 0;
 };
 
 }
+
+#endif

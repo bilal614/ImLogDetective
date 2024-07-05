@@ -1,6 +1,6 @@
 #include "ImLogDetectiveDefs.h"
 #include "dearimgui/TabBar.h"
-#include "presenters/LogFileTabsPresenter.h"
+#include "presenters/LogFileTabsPresenterImpl.h"
 #include "EventMock.h"
 #include "LogFilePresenterMock.h"
 #include "LogDataModelFactoryMock.h"
@@ -29,7 +29,7 @@ protected:
     std::filesystem::path filePath;
     std::vector<std::filesystem::path> dummyTempFilePaths;
 
-    ImLogDetective::LogFileTabsPresenter logFileTabsPresenter;
+    ImLogDetective::LogFileTabsPresenterImpl logFileTabsPresenter;
 
     void SetUp() override;
     void TearDown() override;

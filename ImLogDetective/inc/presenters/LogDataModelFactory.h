@@ -1,16 +1,22 @@
-#pragma once
 
-#include "presenters/ILogDataModelFactory.h"
+#ifndef IMLOGDETECTIVE_PRESENTERS_LOGDATAMODELFACTORY_H
+#define IMLOGDETECTIVE_PRESENTERS_LOGDATAMODELFACTORY_H
+
 #include <memory>
+#include <string>
 
 namespace ImLogDetective
 {
 
-class LogDataModelFactory : public ILogDataModelFactory
+class LogDataModel;
+
+class LogDataModelFactory
 {
 public:
-    std::unique_ptr<LogDataModel> createLogDataModel(const std::string& source) override;
-
+    virtual ~LogDataModelFactory() = default;
+    virtual std::unique_ptr<LogDataModel> createLogDataModel(const std::string& source) = 0;
 };
 
 }
+
+#endif

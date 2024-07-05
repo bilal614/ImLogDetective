@@ -1,5 +1,5 @@
-#include "presenters/FileListPresenter.h"
-#include "presenters/ILogFileTabsPresenter.h"
+#include "presenters/FileListPresenterImpl.h"
+#include "presenters/LogFileTabsPresenter.h"
 #include "views/FileListView.h"
 #include <memory>
 
@@ -9,9 +9,9 @@
 namespace ImLogDetective
 {
 
-struct FileListPresenter::Impl
+struct FileListPresenterImpl::Impl
 {
-    Impl(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView);
+    Impl(LogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView);
     ~Impl() = default;
 
     FileListView& fileListView;
@@ -19,10 +19,10 @@ struct FileListPresenter::Impl
 
     std::unordered_map<std::string, std::filesystem::path> logFiles;
     std::vector<std::string> logFilesList;
-    ILogFileTabsPresenter& fileTabsPresenter;
+    LogFileTabsPresenter& fileTabsPresenter;
 };
 
-FileListPresenter::Impl::Impl(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView) :
+FileListPresenterImpl::Impl::Impl(LogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView) :
     fileListView{fileListView},
     folderPath{},
     fileTabsPresenter{fileTabsPresenter}
@@ -32,14 +32,14 @@ FileListPresenter::Impl::Impl(ILogFileTabsPresenter& fileTabsPresenter, FileList
     };
 }
 
-FileListPresenter::FileListPresenter(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView) :
+FileListPresenterImpl::FileListPresenterImpl(LogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView) :
     p{std::make_unique<Impl>(fileTabsPresenter, fileListView)}
 {
 }
 
-FileListPresenter::~FileListPresenter() = default;
+FileListPresenterImpl::~FileListPresenterImpl() = default;
 
-void FileListPresenter::update(const std::filesystem::path& folderPath, bool forced)
+void FileListPresenterImpl::update(const std::filesystem::path& folderPath, bool forced)
 {
     bool folderPathChanged = false;
     if(p->folderPath != folderPath || forced)
@@ -66,7 +66,7 @@ void FileListPresenter::update(const std::filesystem::path& folderPath, bool for
     p->fileListView.draw(p->logFilesList);
 }
 
-std::vector<std::filesystem::path> FileListPresenter::getSelectedFiles()
+std::vector<std::filesystem::path> FileListPresenterImpl::getSelectedFiles()
 {
     std::vector<std::filesystem::path> selectedFiles;
     std::transform(p->logFiles.begin(), p->logFiles.end(), 

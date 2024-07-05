@@ -1,3 +1,4 @@
+#include "presenters/MainPresenterImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "FileListPresenterMock.h"
 #include "FolderSelectionPopupMock.h"
@@ -81,7 +82,7 @@ TestMainPresenter::TestMainPresenter() :
 {
     EXPECT_CALL(miniMock, get(_, _));
     EXPECT_CALL(folderSelectionPopupMock , setInitialSelectedFolderPath(_));
-    mainPresenter = std::make_unique<ImLogDetective::MainPresenter>(
+    mainPresenter = std::make_unique<ImLogDetective::MainPresenterImpl>(
         windowFactoryMock,
         mainViewPortMock,
         selectionMenuBarMock,

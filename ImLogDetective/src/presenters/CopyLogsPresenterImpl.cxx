@@ -1,14 +1,14 @@
-#include <memory>
-#include "imgui.h"
+#include "presenters/CopyLogsPresenterImpl.h"
 #include "ScpWrapper/IAuthenticationWorkFlow.h"
 #include "ScpWrapper/IScpExecutor.h"
 #include "models/Mini.h"
-#include "presenters/CopyLogsPresenter.h"
 #include "views/CopyLogsPopup.h"
 #include "views/ProtectedInputPopup.h"
 #include "ImLogDetectiveDefs.h"
-#include <map>
+#include "imgui.h"
 #include "views/Popup.h"
+#include <map>
+#include <memory>
 
 
 namespace ImLogDetective
@@ -88,7 +88,7 @@ struct PopupManager{
     }
 };
 
-struct CopyLogsPresenter::Impl
+struct CopyLogsPresenterImpl::Impl
 {
     Impl(CopyLogsPopup& copyPopupLogs,
         ProtectedInputPopup& protectedInputPopup,
@@ -109,7 +109,7 @@ struct CopyLogsPresenter::Impl
     //PopupManager popupManager;
 };
 
-CopyLogsPresenter::Impl::Impl(CopyLogsPopup& copyPopupLogs,
+CopyLogsPresenterImpl::Impl::Impl(CopyLogsPopup& copyPopupLogs,
     ProtectedInputPopup& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
     Mini& mini) :
@@ -124,12 +124,12 @@ CopyLogsPresenter::Impl::Impl(CopyLogsPopup& copyPopupLogs,
 {
 }
 
-void CopyLogsPresenter::Impl::cleanInput(std::string& input)
+void CopyLogsPresenterImpl::Impl::cleanInput(std::string& input)
 {
     input.erase(input.find('\0'));
 }
 
-void CopyLogsPresenter::Impl::processPopupInput()
+void CopyLogsPresenterImpl::Impl::processPopupInput()
 {
     if (copyPopupLogs.closeBtnClicked())
     {
@@ -208,7 +208,7 @@ void CopyLogsPresenter::Impl::processPopupInput()
 
 }
 
-CopyLogsPresenter::CopyLogsPresenter(CopyLogsPopup& copyPopupLogs, 
+CopyLogsPresenterImpl::CopyLogsPresenterImpl(CopyLogsPopup& copyPopupLogs, 
     ProtectedInputPopup& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
     Mini& mini) :
@@ -216,9 +216,9 @@ CopyLogsPresenter::CopyLogsPresenter(CopyLogsPopup& copyPopupLogs,
 {
 }
 
-CopyLogsPresenter::~CopyLogsPresenter() = default;
+CopyLogsPresenterImpl::~CopyLogsPresenterImpl() = default;
 
-void CopyLogsPresenter::update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize)
+void CopyLogsPresenterImpl::update(bool openPopup, const ImVec2& popupPosition, const ImVec2& popupSize)
 {
     if(openPopup)
     {
@@ -264,7 +264,7 @@ void CopyLogsPresenter::update(bool openPopup, const ImVec2& popupPosition, cons
     }
 }
 
-void CopyLogsPresenter::monitorCopyLogs()
+void CopyLogsPresenterImpl::monitorCopyLogs()
 {
     if(p->downloadInit && !p->scpExecutor.downloadStarted())
     {
@@ -290,7 +290,7 @@ void CopyLogsPresenter::monitorCopyLogs()
     }
 }
 
-bool CopyLogsPresenter::isClosed()
+bool CopyLogsPresenterImpl::isClosed()
 {
     return p->isClosed;
 }

@@ -1,24 +1,21 @@
-#pragma once
 
-#include "presenters/IFileListPresenter.h"
-#include <memory>
+#ifndef IMLOGDETECTIVE_PRESENTERS_FILELISTPRESENTER_H
+#define IMLOGDETECTIVE_PRESENTERS_FILELISTPRESENTER_H
+
+#include <filesystem>
+#include <vector>
 
 namespace ImLogDetective
 {
 
-class FileListView;
-class ILogFileTabsPresenter;
-
-class FileListPresenter : public IFileListPresenter
+class FileListPresenter
 {
 public:
-    FileListPresenter(ILogFileTabsPresenter& fileTabsPresenter, FileListView& fileListView);
-    ~FileListPresenter();
-    void update(const std::filesystem::path& folderPath, bool forced) override;
-    std::vector<std::filesystem::path> getSelectedFiles() override;
-private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    virtual ~FileListPresenter() = default;
+    virtual std::vector<std::filesystem::path> getSelectedFiles() = 0;
+    virtual void update(const std::filesystem::path& filePath, bool forced) = 0;
 };
 
 }
+
+#endif

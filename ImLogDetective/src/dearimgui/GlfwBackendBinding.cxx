@@ -18,12 +18,12 @@
 #include "models/GzipFileImpl.h"
 #include "models/LogFileParserImpl.h"
 #include "models/MiniImpl.h"
-#include "presenters/CopyLogsPresenter.h"
-#include "presenters/FileListPresenter.h"
-#include "presenters/LogFilePresenter.h"
-#include "presenters/LogDataModelFactory.h"
-#include "presenters/LogFileTabsPresenter.h"
-#include "presenters/MainPresenter.h"
+#include "presenters/CopyLogsPresenterImpl.h"
+#include "presenters/FileListPresenterImpl.h"
+#include "presenters/LogFilePresenterImpl.h"
+#include "presenters/LogDataModelFactoryImpl.h"
+#include "presenters/LogFileTabsPresenterImpl.h"
+#include "presenters/MainPresenterImpl.h"
 #include "views/FileListViewImpl.h"
 #include "views/SelectionMenuBarImpl.h"
 #include "views/FolderSelectionPopupImpl.h"
@@ -80,11 +80,11 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<GzipFile> gzipFile;
     std::unique_ptr<Mini> mini;
     std::unique_ptr<LogFileParser> logFileParser;
-    std::unique_ptr<ICopyLogsPresenter> copyLogsPresenter;
-    std::unique_ptr<IFileListPresenter> fileListPresenter;
-    std::unique_ptr<ILogFilePresenter> logFilePresenter;
-    std::unique_ptr<ILogFileTabsPresenter> logFileTabsPresenter;
-    std::unique_ptr<ILogDataModelFactory> logDataModelFactory;
+    std::unique_ptr<CopyLogsPresenter> copyLogsPresenter;
+    std::unique_ptr<FileListPresenter> fileListPresenter;
+    std::unique_ptr<LogFilePresenter> logFilePresenter;
+    std::unique_ptr<LogFileTabsPresenter> logFileTabsPresenter;
+    std::unique_ptr<LogDataModelFactory> logDataModelFactory;
     std::unique_ptr<TabBar> tabBar;
     std::unique_ptr<MainPresenter> mainPresenter;
     std::unique_ptr<ImLogDetective::IScpExecutor> scpExecutor;
@@ -195,18 +195,18 @@ GlfwBackendBinding::Impl::Impl() :
     gzipFile = std::make_unique<GzipFileImpl>();
     mini = std::make_unique<MiniImpl>(IniDefs::IniFile);
     logFileParser = std::make_unique<LogFileParserImpl>(*gzipFile);
-    copyLogsPresenter = std::make_unique<CopyLogsPresenter>(*copyLogsPopup, *protectedInputPopup, *scpExecutor, *mini);
-    logFilePresenter = std::make_unique<LogFilePresenter>(
+    copyLogsPresenter = std::make_unique<CopyLogsPresenterImpl>(*copyLogsPopup, *protectedInputPopup, *scpExecutor, *mini);
+    logFilePresenter = std::make_unique<LogFilePresenterImpl>(
         dynamic_cast<WindowFactory&>(*widgetFactory), 
         *eventLoop, 
         *logFilterView, 
         *logView,
         *logFileParser,
         *textFilterWrapper);
-    logDataModelFactory = std::make_unique<LogDataModelFactory>();
-    logFileTabsPresenter = std::make_unique<LogFileTabsPresenter>(*logFilePresenter, *logDataModelFactory, *tabBar, std::make_unique<LogEventHandling::Event<const std::string&>>());
-    fileListPresenter = std::make_unique<FileListPresenter>(*logFileTabsPresenter, *fileListView);
-    mainPresenter = std::make_unique<MainPresenter>(dynamic_cast<WindowFactory&>(*widgetFactory),
+    logDataModelFactory = std::make_unique<LogDataModelFactoryImpl>();
+    logFileTabsPresenter = std::make_unique<LogFileTabsPresenterImpl>(*logFilePresenter, *logDataModelFactory, *tabBar, std::make_unique<LogEventHandling::Event<const std::string&>>());
+    fileListPresenter = std::make_unique<FileListPresenterImpl>(*logFileTabsPresenter, *fileListView);
+    mainPresenter = std::make_unique<MainPresenterImpl>(dynamic_cast<WindowFactory&>(*widgetFactory),
         *mainViewPort,
         *selectionMenuBar,
         *folderSelectionPopup,

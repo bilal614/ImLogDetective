@@ -1,7 +1,7 @@
-#include "presenters/LogFileTabsPresenter.h"
+#include "presenters/LogFileTabsPresenterImpl.h"
 #include "EventHandling/IEvent.h"
-#include "presenters/ILogFilePresenter.h"
-#include "presenters/ILogDataModelFactory.h"
+#include "presenters/LogFilePresenter.h"
+#include "presenters/LogDataModelFactory.h"
 #include "models/LogDataModel.h"
 #include "dearimgui/TabBar.h"
 
@@ -13,7 +13,7 @@
 namespace ImLogDetective
 {
 
-struct LogFileTabsPresenter::Impl
+struct LogFileTabsPresenterImpl::Impl
 {
     struct LogFileTab
     {
@@ -22,7 +22,7 @@ struct LogFileTabsPresenter::Impl
             bool read, 
             bool isOpen, 
             std::unique_ptr<LogDataModel> dataModel,
-            ILogFilePresenter& logFilePresenter) :
+            LogFilePresenter& logFilePresenter) :
                 filePath{path},
                 readLogFile{read},
                 logDataModel{std::move(dataModel)},
@@ -45,10 +45,10 @@ struct LogFileTabsPresenter::Impl
         bool readLogFile;
         std::unique_ptr<LogDataModel> logDataModel;
         TabBarItem tabBarItem;
-        ILogFilePresenter& logFilePresenter;
+        LogFilePresenter& logFilePresenter;
     };
-    Impl(ILogFilePresenter& logFilePresenter, 
-        ILogDataModelFactory& logDataModelFactory, 
+    Impl(LogFilePresenter& logFilePresenter, 
+        LogDataModelFactory& logDataModelFactory, 
         TabBar& tabBar, 
         std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpenedEvent);
     ~Impl() = default;
@@ -58,14 +58,14 @@ struct LogFileTabsPresenter::Impl
 
     std::filesystem::path folderPath;
     TabBar& tabBar;
-    ILogDataModelFactory& logDataModelFactory;
+    LogDataModelFactory& logDataModelFactory;
     std::unordered_map<std::string, std::unique_ptr<LogFileTab>> logFileTabs;
     std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpened;
-    ILogFilePresenter& logFilePresenter;
+    LogFilePresenter& logFilePresenter;
 };
 
-LogFileTabsPresenter::Impl::Impl(ILogFilePresenter& logFilePresenter, 
-    ILogDataModelFactory& logDataModelFactory, 
+LogFileTabsPresenterImpl::Impl::Impl(LogFilePresenter& logFilePresenter, 
+    LogDataModelFactory& logDataModelFactory, 
     TabBar& tabBar,
     std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpenedEvent) :
         folderPath{},
@@ -76,7 +76,7 @@ LogFileTabsPresenter::Impl::Impl(ILogFilePresenter& logFilePresenter,
 {
 }
 
-void LogFileTabsPresenter::Impl::addTabBarItem(
+void LogFileTabsPresenterImpl::Impl::addTabBarItem(
     const std::string& name, 
     bool open, 
     const std::filesystem::path& filePath)
@@ -98,7 +98,7 @@ void LogFileTabsPresenter::Impl::addTabBarItem(
     }
 }
 
-void LogFileTabsPresenter::Impl::removeUnselectedTabs(const std::vector<std::filesystem::path>& selectedFiles)
+void LogFileTabsPresenterImpl::Impl::removeUnselectedTabs(const std::vector<std::filesystem::path>& selectedFiles)
 {
     for (auto it = logFileTabs.cbegin(); it != logFileTabs.cend();) 
     {
@@ -113,17 +113,17 @@ void LogFileTabsPresenter::Impl::removeUnselectedTabs(const std::vector<std::fil
     }
 }
 
-LogFileTabsPresenter::LogFileTabsPresenter(ILogFilePresenter& logFilePresenter, 
-    ILogDataModelFactory& logDataModelFactory, 
+LogFileTabsPresenterImpl::LogFileTabsPresenterImpl(LogFilePresenter& logFilePresenter, 
+    LogDataModelFactory& logDataModelFactory, 
     TabBar& tabBar,
     std::unique_ptr<LogEventHandling::IEvent<const std::string&>> tabsOpenedEvent) :
         p{std::make_unique<Impl>(logFilePresenter, logDataModelFactory, tabBar, std::move(tabsOpenedEvent))}
 {
 }
 
-LogFileTabsPresenter::~LogFileTabsPresenter() = default;
+LogFileTabsPresenterImpl::~LogFileTabsPresenterImpl() = default;
 
-void LogFileTabsPresenter::update(const std::vector<std::filesystem::path>& filePaths)
+void LogFileTabsPresenterImpl::update(const std::vector<std::filesystem::path>& filePaths)
 {
     p->removeUnselectedTabs(filePaths);
 
@@ -145,7 +145,7 @@ void LogFileTabsPresenter::update(const std::vector<std::filesystem::path>& file
     }
 }
 
-LogEventHandling::IEvent<const std::string&>& LogFileTabsPresenter::getTabsOpenedEvent()
+LogEventHandling::IEvent<const std::string&>& LogFileTabsPresenterImpl::getTabsOpenedEvent()
 {
     return *p->tabsOpened;
 }

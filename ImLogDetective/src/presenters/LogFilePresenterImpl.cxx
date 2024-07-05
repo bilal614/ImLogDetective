@@ -1,4 +1,4 @@
-#include "presenters/LogFilePresenter.h"
+#include "presenters/LogFilePresenterImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "dearimgui/ImGuiTextFilterWrapper.h"
 #include "views/WindowFactory.h"
@@ -14,7 +14,7 @@
 namespace ImLogDetective
 {
 
-struct LogFilePresenter::Impl
+struct LogFilePresenterImpl::Impl
 {
     Impl(WindowFactory& windowFactory,
         LogEventHandling::IEventLoop& eventLoop,
@@ -34,7 +34,7 @@ struct LogFilePresenter::Impl
     ImGuiTextFilterWrapper& textFilterWrapper;
 };
 
-LogFilePresenter::Impl::Impl(
+LogFilePresenterImpl::Impl::Impl(
     WindowFactory& windowFactory,
     LogEventHandling::IEventLoop& eventLoop,
     LogFilterView& logFilterView, 
@@ -50,7 +50,7 @@ LogFilePresenter::Impl::Impl(
 {
 }
 
-bool LogFilePresenter::Impl::checkLogLineFiltered(const LogLine& line)
+bool LogFilePresenterImpl::Impl::checkLogLineFiltered(const LogLine& line)
 {
     if(textFilterWrapper.passFilter(line.logLine))
     {
@@ -78,7 +78,7 @@ bool LogFilePresenter::Impl::checkLogLineFiltered(const LogLine& line)
     return false;
 }
 
-void LogFilePresenter::Impl::updateLogData(
+void LogFilePresenterImpl::Impl::updateLogData(
     const std::filesystem::path& filePath, 
     bool readLogFile, 
     LogDataModel& logDataModel)
@@ -104,7 +104,7 @@ void LogFilePresenter::Impl::updateLogData(
     }
 }
 
-LogFilePresenter::LogFilePresenter(
+LogFilePresenterImpl::LogFilePresenterImpl(
         WindowFactory& windowFactory,
         LogEventHandling::IEventLoop& eventLoop,
         LogFilterView& logFilterView, 
@@ -115,9 +115,9 @@ LogFilePresenter::LogFilePresenter(
 {
 }
 
-LogFilePresenter::~LogFilePresenter() = default;
+LogFilePresenterImpl::~LogFilePresenterImpl() = default;
 
-void LogFilePresenter::update(const std::filesystem::path& filePath, bool readLogFile, LogDataModel& logDataModel)
+void LogFilePresenterImpl::update(const std::filesystem::path& filePath, bool readLogFile, LogDataModel& logDataModel)
 {
     auto logFilterWindow = p->windowFactory.createChildWindow(WindowDefs::LogFilterChildWindow, ImVec2{0, 0}, ImVec2{0, 0});
     p->logFilterView.drawFilterCheckBoxes();
