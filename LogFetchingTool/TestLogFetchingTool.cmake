@@ -1,16 +1,12 @@
-set(TEST_LOG_FETCHING_TOOL test_log_fetching_tool)
-set(LOG_FETCHING_TOOL_DIR ${PROJECT_SOURCE_DIR}/log_fetching_tool)
-set(TEST_LOG_FETCHING_TOOL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/log_fetching_tool/test)
+set(TEST_LOG_FETCHING_TOOL TestLogFetchingTool)
 
 message(LOG_FETCHING_TOOL_DIR="${LOG_FETCHING_TOOL_DIR}")
 
 enable_testing()
 
-find_package(libssh2 CONFIG REQUIRED)
-
 find_package(GTest REQUIRED)
 
-if(GTest_FOUND AND libssh2_FOUND)
+if(GTest_FOUND AND LIBSSH2_FOUND)
     add_executable(${TEST_LOG_FETCHING_TOOL}
         ${LOG_FETCHING_TOOL_DIR}/src/Authentication.cxx
         ${LOG_FETCHING_TOOL_DIR}/src/ForwardChannel.cxx
@@ -25,19 +21,16 @@ if(GTest_FOUND AND libssh2_FOUND)
 
     target_include_directories(${TEST_LOG_FETCHING_TOOL} PUBLIC 
         ${LOG_FETCHING_TOOL_DIR}/inc/
-        ${TEST_LOG_FETCHING_TOOL_INCLUDE_DIR}
     )
 
     target_link_libraries(${TEST_LOG_FETCHING_TOOL}
-        ssh
-        -pthread
+        ${LIBSSH2_LIBRARIES}
+        Threads::Threads
         GTest::gtest 
         GTest::gtest_main 
         GTest::gmock 
-        GTest::gmock_main
-        libssh2::libssh2)
+        GTest::gmock_main)
 
-    include(GoogleTest)
-    gtest_discover_tests(${TEST_LOG_FETCHING_TOOL})
+    gtest_discover_tests(${TEST_LOG_FETCHING_TOOL} WORKING_DIRECTORY  ${TEST_LOG_FETCHING_TOOL_DIR})
 
 endif()

@@ -2,13 +2,13 @@ cmake_minimum_required (VERSION 3.16)
 
 set(IM_LOG_DETECTIVE ImLogDetective)
 set(IM_LOG_DETECTIVE_LIB ImLogDetective_lib)
-set(IM_LOG_DETECTIVE_DIR ${PROJECT_SOURCE_DIR}/ImLogDetective)
+set(IM_LOG_DETECTIVE_DIR ${PROJECT_ROOT}/ImLogDetective)
 
 #ImLogDetective
-include(${PROJECT_ROOT}/ImLogDetective/ImLogDetective.cmake)
+include(${IM_LOG_DETECTIVE_DIR}/ImLogDetective.cmake)
 
 #TestImLogDetective
-include(${PROJECT_ROOT}/ImLogDetective/TestImLogDetective.cmake)
+include(${IM_LOG_DETECTIVE_DIR}/TestImLogDetective.cmake)
 
 #Post-build
 set(FONTS_DIR ${IM_LOG_DETECTIVE_DIR}/assets/fonts)

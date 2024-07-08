@@ -20,7 +20,8 @@ endif()
 set(DEARIMGUI_MODULE ${PROJECT_SOURCE_DIR}/ext/imgui/)
 set(STB_MODULE ${PROJECT_SOURCE_DIR}/ext/stb/)
 set(MINI_MODULE ${PROJECT_SOURCE_DIR}/ext/mINI/)
-
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -64,9 +65,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     set(PROJECT_LINK_LIBRARIES imgui_glfw_opengl
         ${OPENGL_LIBRARIES}
         ${GLFW3_LIBRARIES}
-        ${CMAKE_DL_LIBS} #link to dl lib for dynamic loading
-        -lX11 #Needed by glfw3
-        -pthread
+        Threads::Threads
     )
 
     # Definitions for ScpWrapper_lib
@@ -92,11 +91,8 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
     #ImLogDetective
     add_subdirectory(${PROJECT_ROOT}/ImLogDetective)
 
-    #log_fetching_tool
-    #include(${PROJECT_ROOT}/log_fetching_tool/log_fetching_tool.cmake)
-
-    #include test_log_fetching_tool
-    #include(${PROJECT_ROOT}/log_fetching_tool/test_log_fetching_tool.cmake)
+    #LogFetchingTool
+    add_subdirectory(${PROJECT_ROOT}/LogFetchingTool)
 
     #test app
     add_executable(test_app

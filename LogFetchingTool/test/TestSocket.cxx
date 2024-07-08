@@ -11,7 +11,7 @@ namespace TestLogFetchingTool
 TEST(TestSocket, TestSocket) {
 
     const auto server_ip = "127.0.0.1";
-    LogFetchingTool::Socket socket{server_ip, 8080}; //On my machine I have Jenkins running on that port
+    LogFetchingTool::Socket socket{server_ip, 8080};
     ASSERT_TRUE(socket.connect());
 }
 

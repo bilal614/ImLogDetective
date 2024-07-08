@@ -1,8 +1,6 @@
 set(TEST_SCP_WRAPPER TestScpWrapper)
 set(TEST_SCP_WRAPPER_DIR ${SCP_WRAPPER_DIR}/test)
 
-include(${PROJECT_ROOT}/ScpWrapper/find_libssh2.cmake)
-
 find_package(GTest REQUIRED)
 
 if(GTest_FOUND AND LIBSSH2_FOUND)
@@ -18,7 +16,7 @@ if(GTest_FOUND AND LIBSSH2_FOUND)
 
     target_link_libraries(${TEST_SCP_WRAPPER}
         ${SCP_WRAPPER_LIB}
-        -pthread
+        Threads::Threads
         GTest::gtest 
         GTest::gtest_main 
         GTest::gmock 
