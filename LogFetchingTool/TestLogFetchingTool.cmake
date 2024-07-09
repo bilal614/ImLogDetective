@@ -1,8 +1,5 @@
 set(TEST_LOG_FETCHING_TOOL TestLogFetchingTool)
 
-message(LOG_FETCHING_TOOL_DIR="${LOG_FETCHING_TOOL_DIR}")
-
-enable_testing()
 
 find_package(GTest REQUIRED)
 
@@ -31,6 +28,6 @@ if(GTest_FOUND AND LIBSSH2_FOUND)
         GTest::gmock 
         GTest::gmock_main)
 
-    gtest_discover_tests(${TEST_LOG_FETCHING_TOOL} WORKING_DIRECTORY  ${TEST_LOG_FETCHING_TOOL_DIR})
+    gtest_discover_tests(${TEST_LOG_FETCHING_TOOL} WORKING_DIRECTORY ${LOG_FETCHING_TOOL_DIR})
 
 endif()
