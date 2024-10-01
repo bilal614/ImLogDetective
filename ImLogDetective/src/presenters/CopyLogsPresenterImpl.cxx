@@ -7,6 +7,7 @@
 #include "ImLogDetectiveDefs.h"
 #include "imgui.h"
 #include "views/Popup.h"
+#include <algorithm>
 #include <map>
 #include <memory>
 

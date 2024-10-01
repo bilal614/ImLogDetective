@@ -3,6 +3,7 @@ find_package(GTest REQUIRED)
 if(GTest_FOUND)
     add_executable(${TEST_EVENT_HANDLING}
         ${EVENT_HANDLING_DIR}/test/src/TestEventLoop.cxx
+        ${EVENT_HANDLING_DIR}/test/src/TestEvent.cxx
         ${EVENT_HANDLING_DIR}/test/main.cxx
     )
 

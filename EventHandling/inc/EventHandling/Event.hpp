@@ -38,7 +38,7 @@ public:
     {
         for(auto& delegate : m_delegates)
         {
-            delegate(std::forward<A>(args)...);
+            delegate(args...);
         }
         if(m_eventCompletionHandler)
         {
