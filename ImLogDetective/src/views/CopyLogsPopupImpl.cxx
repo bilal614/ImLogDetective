@@ -13,6 +13,7 @@ struct CopyLogsPopupImpl::Impl
     ~Impl() = default;
 
     void resetInternalState();
+    bool validateInput();
 
     ModalPopupFactory& modalPopupFactory;
 
@@ -38,6 +39,19 @@ void CopyLogsPopupImpl::Impl::resetInternalState()
     opened = false;
 }
 
+bool CopyLogsPopupImpl::Impl::validateInput()
+{
+    auto inputs = copyLogsInput.getAllInputs();
+    for(const auto& input : inputs)
+    {
+        if(input.find_first_not_of('\0') == std::string::npos)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 CopyLogsPopupImpl::CopyLogsPopupImpl(ModalPopupFactory& modalPopupFactory) :
     p{std::make_unique<Impl>(modalPopupFactory)}
 {
@@ -54,12 +68,12 @@ void CopyLogsPopupImpl::open(const ImVec2& popupPosition, const ImVec2& popupSiz
 void CopyLogsPopupImpl::initInput(const CopyLogs& input)
 {
     p->copyLogsInput = CopyLogs{};
-    p->copyLogsInput.dstDirectory.insert(0, input.dstDirectory);
-    p->copyLogsInput.srcHostPath.insert(0, input.srcHostPath);
-    p->copyLogsInput.jumpHostPath1.insert(0, input.jumpHostPath1);
-    p->copyLogsInput.jumpHostPath2.insert(0, input.jumpHostPath2);
-    p->copyLogsInput.keyFile1.insert(0, input.keyFile1);
-    p->copyLogsInput.keyFile2.insert(0, input.keyFile2);
+    p->copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath).insert(0, input.getInputValue(CopyLogsDefs::SrcHostPath));
+    p->copyLogsInput.getInputRef(CopyLogsDefs::DestDir).insert(0, input.getInputValue(CopyLogsDefs::DestDir));
+    p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost1).insert(0, input.getInputValue(CopyLogsDefs::JumpHost1));
+    p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost2).insert(0, input.getInputValue(CopyLogsDefs::JumpHost2));
+    p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath1).insert(0, input.getInputValue(CopyLogsDefs::KeyFilePath1));
+    p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath2).insert(0, input.getInputValue(CopyLogsDefs::KeyFilePath2));
 }
 
 void CopyLogsPopupImpl::draw()
@@ -74,18 +88,18 @@ void CopyLogsPopupImpl::draw()
         p->modalPopupFactory.createButtonGroup(popupButtons);
 
         std::vector<PopupInputTextBox> popupSrcDestFolders{
-            PopupInputTextBox{CopyLogsDefs::SrcHostPath, p->copyLogsInput.srcHostPath, CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{CopyLogsDefs::DestDir, p->copyLogsInput.dstDirectory, CopyLogsDefs::TextBoxWidth}};
+            PopupInputTextBox{CopyLogsDefs::SrcHostPath, p->copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::DestDir, p->copyLogsInput.getInputRef(CopyLogsDefs::DestDir), CopyLogsDefs::TextBoxWidth}};
         p->modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, CopyLogsDefs::SrcDestGroup, true);
 
         std::vector<PopupInputTextBox> jumpHosts{
-            PopupInputTextBox{"Jump Host 1", p->copyLogsInput.jumpHostPath1, CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{"Jump Host 2", p->copyLogsInput.jumpHostPath2, CopyLogsDefs::TextBoxWidth}};
+            PopupInputTextBox{CopyLogsDefs::JumpHost1, p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost1), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::JumpHost2, p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost2), CopyLogsDefs::TextBoxWidth}};
         p->modalPopupFactory.createInputTextBoxGroup(jumpHosts, CopyLogsDefs::JumpHostGroup, false, true);
 
         std::vector<PopupInputTextBox> keyFiles{
-            PopupInputTextBox{"Key File Path 1", p->copyLogsInput.keyFile1, CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{"Key File Path 2", p->copyLogsInput.keyFile2, CopyLogsDefs::TextBoxWidth}};
+            PopupInputTextBox{CopyLogsDefs::KeyFilePath1, p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath1), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::KeyFilePath2, p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath2), CopyLogsDefs::TextBoxWidth}};
         p->modalPopupFactory.createInputTextBoxGroup(keyFiles, "Key File Paths", false, true);
 
         p->copyClicked = popupButtons[0].clicked;

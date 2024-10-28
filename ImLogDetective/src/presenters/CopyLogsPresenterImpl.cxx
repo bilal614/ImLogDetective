@@ -147,53 +147,59 @@ void CopyLogsPresenterImpl::Impl::processPopupInput()
         if(!downloadInit)
         {
             auto input = copyPopupLogs.getInput();
-            if(input.srcHostPath.find_first_not_of('\0') != std::string::npos)
+            //auto srcHostPath = input.getInputRef(CopyLogsDefs::SrcHostPath);
+            if(auto srcHostPath = input.getInputValue(CopyLogsDefs::SrcHostPath); !srcHostPath.empty())
             {
-                cleanInput(input.srcHostPath);
+                cleanInput(srcHostPath);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::SrcHostPath, 
-                    input.srcHostPath);
-                scpExecutor.setSourceRemoteHostPath(input.srcHostPath);
+                    srcHostPath);
+                scpExecutor.setSourceRemoteHostPath(srcHostPath);
             }
-            if(input.dstDirectory.find_first_not_of('\0') != std::string::npos)
+            auto dstDirectory = input.getInputRef(CopyLogsDefs::DestDir);
+            if(dstDirectory.find_first_not_of('\0') != std::string::npos)
             {
-                cleanInput(input.dstDirectory);
+                cleanInput(dstDirectory);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::DestinationPath, 
-                    input.dstDirectory);
-                scpExecutor.setDestinationLocalPath(input.dstDirectory);
+                    dstDirectory);
+                scpExecutor.setDestinationLocalPath(dstDirectory);
             }
-            if(input.jumpHostPath1.find_first_not_of('\0') != std::string::npos)
+            auto jumpHostPath1 = input.getInputRef(CopyLogsDefs::JumpHost1);
+            if(jumpHostPath1.find_first_not_of('\0') != std::string::npos)
             {
-                cleanInput(input.jumpHostPath1);
+                cleanInput(jumpHostPath1);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::JumpHost1, 
-                    input.jumpHostPath1);
-                scpExecutor.addJumpHost(input.jumpHostPath1);
+                    jumpHostPath1);
+                scpExecutor.addJumpHost(jumpHostPath1);
             }
-            if(input.jumpHostPath2.find_first_not_of('\0') != std::string::npos)
+            auto jumpHostPath2 = input.getInputRef(CopyLogsDefs::JumpHost2);
+            if(jumpHostPath2.find_first_not_of('\0') != std::string::npos)
             {
-                cleanInput(input.jumpHostPath2);
+                cleanInput(jumpHostPath2);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::JumpHost2, 
-                    input.jumpHostPath2);
-                scpExecutor.addJumpHost(input.jumpHostPath2);
+                    jumpHostPath2);
+                scpExecutor.addJumpHost(jumpHostPath2);
             }
-            if(input.keyFile1.find_first_not_of('\0') != std::string::npos)
+            auto keyFile1 = input.getInputRef(CopyLogsDefs::KeyFilePath1);
+            if(keyFile1.find_first_not_of('\0') != std::string::npos)
             {
-                cleanInput(input.keyFile1);
+                cleanInput(keyFile1);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::KeyFilePath1, 
-                    input.keyFile1);
-                scpExecutor.addIdentityFile(input.keyFile1);
+                    keyFile1);
+                scpExecutor.addIdentityFile(keyFile1);
             }
-            if(input.keyFile2.find_first_not_of('\0') != std::string::npos)
+            auto keyFile2 = input.getInputRef(CopyLogsDefs::KeyFilePath2);
+            if(keyFile2.find_first_not_of('\0') != std::string::npos)
             {
-                cleanInput(input.keyFile2);
+                cleanInput(keyFile2);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::KeyFilePath2, 
-                    input.keyFile2);
-                scpExecutor.addIdentityFile(input.keyFile2);
+                    keyFile2);
+                scpExecutor.addIdentityFile(keyFile2);
             }
             scpExecutor.download();
             downloadInit = true;
@@ -226,12 +232,12 @@ void CopyLogsPresenterImpl::update(bool openPopup, const ImVec2& popupPosition, 
         if(p->isClosed)
         {
             CopyLogs initialCopyLogs;
-            initialCopyLogs.srcHostPath = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::SrcHostPath);
-            initialCopyLogs.dstDirectory = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::DestinationPath);
-            initialCopyLogs.jumpHostPath1 = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost1);
-            initialCopyLogs.jumpHostPath2 = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost2);
-            initialCopyLogs.keyFile1 = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath1);
-            initialCopyLogs.keyFile2 = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath2);
+            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::SrcHostPath) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::SrcHostPath);
+            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::DestinationPath) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::DestinationPath);
+            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::JumpHost1) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost1);
+            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::JumpHost2) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost2);
+            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::KeyFilePath1) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath1);
+            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::KeyFilePath2) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath2);
             p->copyPopupLogs.initInput(initialCopyLogs);
         }
         p->isClosed = false;

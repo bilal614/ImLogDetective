@@ -65,6 +65,10 @@ namespace ImLogDetective
         const char* SrcHostPath{"Source Host Path"};
         const char* DestDir{"Destination Directory"};
         const char* JumpHostGroup{"Jump Host"};
+        const char* JumpHost1{"Jump Host 1"};
+        const char* JumpHost2{"Jump Host 2"};
+        const char* KeyFilePath1{"Key File Path 1"};
+        const char* KeyFilePath2{"Key File Path 2"};
     }
 
     namespace ProtectedInputDefs{

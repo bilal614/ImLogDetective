@@ -3,8 +3,12 @@
 #define IMLOGDETECTIVE_VIEWS_COPYLOGSPOPUP_H
 
 #include "views/Popup.h"
+#include "ImLogDetectiveDefs.h"
+#include <algorithm>
 #include <filesystem>
+#include <map>
 #include <utility>
+#include <vector>
 
 struct ImVec2;
 
@@ -13,21 +17,45 @@ namespace ImLogDetective
 
 struct CopyLogs{
     CopyLogs() :
-        srcHostPath(1024, '\0'),
-        dstDirectory(1024, '\0'),
-        jumpHostPath1(1024, '\0'),
-        jumpHostPath2(1024, '\0'),
-        keyFile1(1024, '\0'),
-        keyFile2(1024, '\0')
+        popInputs{
+            {CopyLogsDefs::SrcHostPath, std::string(1024, '\0')},
+            {CopyLogsDefs::DestDir, std::string(1024, '\0')},
+            {CopyLogsDefs::JumpHost1, std::string(1024, '\0')},
+            {CopyLogsDefs::JumpHost2, std::string(1024, '\0')},
+            {CopyLogsDefs::KeyFilePath1, std::string(1024, '\0')},
+            {CopyLogsDefs::KeyFilePath2, std::string(1024, '\0')},
+        }
     {}
-    std::string srcHostPath;
-    std::string dstDirectory;
+    std::map<std::string, std::string> popInputs;
+    inline std::string& getInputRef(const std::string& key)
+    {
+        if(popInputs.find(key) != popInputs.end())
+        {
+            return popInputs[key];
+        }
+        throw std::exception();
+    }
 
-    std::string jumpHostPath1;
-    std::string jumpHostPath2;
+    inline std::string getInputValue(const std::string& key) const
+    {
+        if(popInputs.find(key) != popInputs.end())
+        {
+            return popInputs.find(key)->second;
+        }
+        throw std::exception();
+    }
 
-    std::string keyFile1;
-    std::string keyFile2;
+    inline const std::vector<std::string> getAllInputs()
+    {
+        std::vector<std::string> inputValues;
+        std::transform( 
+            popInputs.begin(), 
+            popInputs.end(),
+            std::back_inserter(inputValues),
+            [](auto &kv){ return kv.second;} 
+        );
+        return inputValues;
+    }
 };
 
 class ICachedCopyLogsPopupInput 
