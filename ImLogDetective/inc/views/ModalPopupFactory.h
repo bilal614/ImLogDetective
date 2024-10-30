@@ -17,6 +17,10 @@ struct PopupButton {
     {} 
     std::string name;
     bool clicked;
+
+    bool operator==(const PopupButton& other) const {
+        return name == other.name && clicked == other.clicked;
+    }
 };
 
 struct PopupInputTextBox {

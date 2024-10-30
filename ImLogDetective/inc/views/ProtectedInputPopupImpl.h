@@ -13,18 +13,18 @@ namespace ImLogDetective
 
 class ModalPopupFactory;
 
-class ProtectedInputPopupImpl : public ProtectedInputPopup
+class ProtectedInputPopupImpl : public Popup<std::string, NotCachedPopupInput>, ProtectedInputPopup
 {
 public:
     ProtectedInputPopupImpl(ModalPopupFactory& modalPopupFactory);
     ~ProtectedInputPopupImpl();
-    void open(const ImVec2& popupPosition, const ImVec2& popupSize) final;
-    void draw() final;
-    void close() final;
-    bool isOpen() final;
-    bool okBtnClicked() final;
-    bool closeBtnClicked() final;
-    std::string getInput() final;
+    void open(const ImVec2& popupPosition, const ImVec2& popupSize);
+    void draw();
+    void close();
+    bool isOpen();
+    bool okBtnClicked();
+    bool closeBtnClicked();
+    std::string getInput();
     void setPrompt(const std::string& prompt) final;
 private:
     struct Impl;

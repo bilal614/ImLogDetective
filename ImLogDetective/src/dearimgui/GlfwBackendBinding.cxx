@@ -72,8 +72,8 @@ struct GlfwBackendBinding::Impl
     std::unique_ptr<ImGuiMenuBarWrapper> imGuiMenuBarWrapper;
     std::unique_ptr<SelectionMenuBar> selectionMenuBar;
     std::unique_ptr<FolderSelectionPopup> folderSelectionPopup;
-    std::unique_ptr<CopyLogsPopup> copyLogsPopup;
-    std::unique_ptr<ProtectedInputPopup> protectedInputPopup;
+    std::unique_ptr<CopyLogsPopupImpl> copyLogsPopup;
+    std::unique_ptr<ProtectedInputPopupImpl> protectedInputPopup;
     std::unique_ptr<FileListView> fileListView;
     std::unique_ptr<LogFilterView> logFilterView;
     std::unique_ptr<LogView> logView;

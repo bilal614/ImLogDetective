@@ -13,6 +13,8 @@ struct RemoteHost;
 struct RemoteHostPath;
 struct RemoteHostHash;
 
+using JumpHostsSet = std::unordered_set<ImLogDetective::RemoteHost, ImLogDetective::RemoteHostHash>;
+
 // Uni-directional scp'ing from remote host to local host
 class IScpExecutor
 {
@@ -25,7 +27,7 @@ public:
     virtual bool addIdentityFile(const std::filesystem::path& identityFilePath) = 0;
     virtual std::unordered_set<std::filesystem::path> getIdentityFiles() = 0;
     virtual bool addJumpHost(const std::string& remoteHost) = 0;
-    virtual std::unordered_set<RemoteHost, RemoteHostHash> getJumpHosts() = 0;
+    virtual JumpHostsSet getJumpHosts() = 0;
     virtual void download() = 0;
     virtual bool downloadStarted() = 0;
     virtual bool downloadFinished() = 0;

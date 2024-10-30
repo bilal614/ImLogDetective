@@ -10,7 +10,7 @@ struct ImVec2;
 namespace ImLogDetective
 {
 
-class ProtectedInputPopup : public Popup<std::string>
+class ProtectedInputPopup
 {
 public:
     virtual void setPrompt(const std::string& prompt) = 0;

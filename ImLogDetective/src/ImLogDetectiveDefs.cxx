@@ -67,6 +67,7 @@ namespace ImLogDetective
         const char* JumpHostGroup{"Jump Host"};
         const char* JumpHost1{"Jump Host 1"};
         const char* JumpHost2{"Jump Host 2"};
+        const char* KeyFileGroup{"Key File Paths"};
         const char* KeyFilePath1{"Key File Path 1"};
         const char* KeyFilePath2{"Key File Path 2"};
     }

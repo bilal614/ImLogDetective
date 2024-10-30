@@ -2,8 +2,8 @@
 #include "ScpWrapper/IAuthenticationWorkFlow.h"
 #include "ScpWrapper/IScpExecutor.h"
 #include "models/Mini.h"
-#include "views/CopyLogsPopup.h"
-#include "views/ProtectedInputPopup.h"
+#include "views/ProtectedInputPopupImpl.h"
+#include "views/CopyLogsPopupImpl.h"
 #include "ImLogDetectiveDefs.h"
 #include "imgui.h"
 #include "views/Popup.h"
@@ -91,8 +91,8 @@ struct PopupManager{
 
 struct CopyLogsPresenterImpl::Impl
 {
-    Impl(CopyLogsPopup& copyPopupLogs,
-        ProtectedInputPopup& protectedInputPopup,
+    Impl(CopyLogsPopupImpl& copyPopupLogs,
+        ProtectedInputPopupImpl& protectedInputPopup,
         ImLogDetective::IScpExecutor& scpExecutor,
         Mini& mini);
     ~Impl() = default;
@@ -100,8 +100,8 @@ struct CopyLogsPresenterImpl::Impl
     void processPopupInput();
     void cleanInput(std::string& input);
 
-    CopyLogsPopup& copyPopupLogs;
-    ProtectedInputPopup& protectedInputPopup;
+    CopyLogsPopupImpl& copyPopupLogs;
+    ProtectedInputPopupImpl& protectedInputPopup;
     ImLogDetective::IScpExecutor& scpExecutor;
     Mini& mini;
     bool downloadInit;
@@ -110,8 +110,8 @@ struct CopyLogsPresenterImpl::Impl
     //PopupManager popupManager;
 };
 
-CopyLogsPresenterImpl::Impl::Impl(CopyLogsPopup& copyPopupLogs,
-    ProtectedInputPopup& protectedInputPopup,
+CopyLogsPresenterImpl::Impl::Impl(CopyLogsPopupImpl& copyPopupLogs,
+    ProtectedInputPopupImpl& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
     Mini& mini) :
         copyPopupLogs{copyPopupLogs},
@@ -123,11 +123,6 @@ CopyLogsPresenterImpl::Impl::Impl(CopyLogsPopup& copyPopupLogs,
         mini{mini}
         //popupManager{}
 {
-}
-
-void CopyLogsPresenterImpl::Impl::cleanInput(std::string& input)
-{
-    input.erase(input.find('\0'));
 }
 
 void CopyLogsPresenterImpl::Impl::processPopupInput()
@@ -146,56 +141,44 @@ void CopyLogsPresenterImpl::Impl::processPopupInput()
     {
         if(!downloadInit)
         {
-            auto input = copyPopupLogs.getInput();
-            //auto srcHostPath = input.getInputRef(CopyLogsDefs::SrcHostPath);
-            if(auto srcHostPath = input.getInputValue(CopyLogsDefs::SrcHostPath); !srcHostPath.empty())
+            if(auto srcHostPath = copyPopupLogs.getInputValue(CopyLogsDefs::SrcHostPath); !srcHostPath.empty())
             {
-                cleanInput(srcHostPath);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::SrcHostPath, 
                     srcHostPath);
                 scpExecutor.setSourceRemoteHostPath(srcHostPath);
             }
-            auto dstDirectory = input.getInputRef(CopyLogsDefs::DestDir);
-            if(dstDirectory.find_first_not_of('\0') != std::string::npos)
+            if(auto dstDirectory = copyPopupLogs.getInputValue(CopyLogsDefs::DestDir); !dstDirectory.empty())
             {
-                cleanInput(dstDirectory);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::DestinationPath, 
                     dstDirectory);
                 scpExecutor.setDestinationLocalPath(dstDirectory);
             }
-            auto jumpHostPath1 = input.getInputRef(CopyLogsDefs::JumpHost1);
-            if(jumpHostPath1.find_first_not_of('\0') != std::string::npos)
+            if(auto jumpHostPath1 = copyPopupLogs.getInputValue(CopyLogsDefs::JumpHost1); !jumpHostPath1.empty())
             {
-                cleanInput(jumpHostPath1);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::JumpHost1, 
                     jumpHostPath1);
                 scpExecutor.addJumpHost(jumpHostPath1);
             }
-            auto jumpHostPath2 = input.getInputRef(CopyLogsDefs::JumpHost2);
-            if(jumpHostPath2.find_first_not_of('\0') != std::string::npos)
+            if(auto jumpHostPath2 = copyPopupLogs.getInputValue(CopyLogsDefs::JumpHost2); !jumpHostPath2.empty())
             {
-                cleanInput(jumpHostPath2);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::JumpHost2, 
                     jumpHostPath2);
                 scpExecutor.addJumpHost(jumpHostPath2);
             }
-            auto keyFile1 = input.getInputRef(CopyLogsDefs::KeyFilePath1);
-            if(keyFile1.find_first_not_of('\0') != std::string::npos)
+            
+            if(auto keyFile1 = copyPopupLogs.getInputValue(CopyLogsDefs::KeyFilePath1); !keyFile1.empty())
             {
-                cleanInput(keyFile1);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::KeyFilePath1, 
                     keyFile1);
                 scpExecutor.addIdentityFile(keyFile1);
             }
-            auto keyFile2 = input.getInputRef(CopyLogsDefs::KeyFilePath2);
-            if(keyFile2.find_first_not_of('\0') != std::string::npos)
+            if(auto keyFile2 = copyPopupLogs.getInputValue(CopyLogsDefs::KeyFilePath2); !keyFile2.empty())
             {
-                cleanInput(keyFile2);
                 mini.set(IniDefs::CopyLogsSection::Name, 
                     IniDefs::CopyLogsSection::KeyFilePath2, 
                     keyFile2);
@@ -212,11 +195,10 @@ void CopyLogsPresenterImpl::Impl::processPopupInput()
         // }
         return;
     }
-
 }
 
-CopyLogsPresenterImpl::CopyLogsPresenterImpl(CopyLogsPopup& copyPopupLogs, 
-    ProtectedInputPopup& protectedInputPopup,
+CopyLogsPresenterImpl::CopyLogsPresenterImpl(CopyLogsPopupImpl& copyPopupLogs, 
+    ProtectedInputPopupImpl& protectedInputPopup,
     ImLogDetective::IScpExecutor& scpExecutor,
     Mini& mini) :
         p{std::make_unique<Impl>(copyPopupLogs, protectedInputPopup, scpExecutor, mini)}
@@ -232,12 +214,12 @@ void CopyLogsPresenterImpl::update(bool openPopup, const ImVec2& popupPosition, 
         if(p->isClosed)
         {
             CopyLogs initialCopyLogs;
-            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::SrcHostPath) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::SrcHostPath);
-            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::DestinationPath) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::DestinationPath);
-            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::JumpHost1) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost1);
-            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::JumpHost2) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost2);
-            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::KeyFilePath1) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath1);
-            initialCopyLogs.getInputRef(IniDefs::CopyLogsSection::KeyFilePath2) = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath2);
+            initialCopyLogs.getInputRef(CopyLogsDefs::SrcHostPath)  =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::SrcHostPath);
+            initialCopyLogs.getInputRef(CopyLogsDefs::DestDir)      =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::DestinationPath);
+            initialCopyLogs.getInputRef(CopyLogsDefs::JumpHost1)    =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost1);
+            initialCopyLogs.getInputRef(CopyLogsDefs::JumpHost2)    =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost2);
+            initialCopyLogs.getInputRef(CopyLogsDefs::KeyFilePath1) =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath1);
+            initialCopyLogs.getInputRef(CopyLogsDefs::KeyFilePath2) =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath2);
             p->copyPopupLogs.initInput(initialCopyLogs);
         }
         p->isClosed = false;

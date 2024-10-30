@@ -2,7 +2,8 @@
 #ifndef IMLOGDETECTIVE_VIEWS_COPYLOGSPOPUPIMPL_H
 #define IMLOGDETECTIVE_VIEWS_COPYLOGSPOPUPIMPL_H
 
-#include "views/CopyLogsPopup.h"
+#include "views/Popup.h"
+#include "views/CopyLogs.h"
 #include <memory>
 #include <string>
 
@@ -12,22 +13,27 @@ namespace ImLogDetective
 
 class ModalPopupFactory;
 
-class CopyLogsPopupImpl : public CopyLogsPopup
+class CopyLogsPopupImpl : public Popup<CopyLogs, CachedCopyLogsPopupInput>
 {
 public:
     CopyLogsPopupImpl(ModalPopupFactory& modalPopup);
     ~CopyLogsPopupImpl();
-    void open(const ImVec2& popupPosition, const ImVec2& popupSize) final;
-    void draw() final;
-    void close() final;
-    bool isOpen() final;
-    bool okBtnClicked() final;
-    bool closeBtnClicked() final;
-    CopyLogs getInput() final;
-    void initInput(const CopyLogs& input) final;
+    void open(const ImVec2& popupPosition, const ImVec2& popupSize);
+    void draw();
+    void close();
+    bool isOpen();
+    bool okBtnClicked();
+    bool closeBtnClicked();
+    CopyLogs getInput();
 private:
-    struct Impl;
-    std::unique_ptr<Impl> p;
+    void resetInternalState();
+    bool validateInput();
+
+private:
+    ModalPopupFactory& modalPopupFactory;
+    bool copyClicked;
+    bool closeClicked;
+    bool opened;
 };
 
 }

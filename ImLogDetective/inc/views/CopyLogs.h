@@ -1,6 +1,6 @@
 
-#ifndef IMLOGDETECTIVE_VIEWS_COPYLOGSPOPUP_H
-#define IMLOGDETECTIVE_VIEWS_COPYLOGSPOPUP_H
+#ifndef IMLOGDETECTIVE_VIEWS_COPYLOGS_H
+#define IMLOGDETECTIVE_VIEWS_COPYLOGS_H
 
 #include "views/Popup.h"
 #include "ImLogDetectiveDefs.h"
@@ -56,17 +56,6 @@ struct CopyLogs{
         );
         return inputValues;
     }
-};
-
-class ICachedCopyLogsPopupInput 
-{
-    public:
-        virtual ~ICachedCopyLogsPopupInput() = default;
-        virtual void initInput(const CopyLogs& input) = 0;
-};
-
-class CopyLogsPopup : public Popup<CopyLogs>, public ICachedCopyLogsPopupInput
-{
 };
 
 }

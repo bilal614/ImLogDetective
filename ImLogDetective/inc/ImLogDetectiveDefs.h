@@ -94,6 +94,7 @@ namespace ImLogDetective
         extern const char* JumpHostGroup;
         extern const char* JumpHost1;
         extern const char* JumpHost2;
+        extern const char* KeyFileGroup;
         extern const char* KeyFilePath1;
         extern const char* KeyFilePath2;
         constexpr float TextBoxWidth = 350.0f;

@@ -11,15 +11,16 @@ namespace ImLogDetective {
 
 namespace ImLogDetective
 {
-class CopyLogsPopup;
+
+class CopyLogsPopupImpl;
 class Mini;
-class ProtectedInputPopup;
+class ProtectedInputPopupImpl;
 
 class CopyLogsPresenterImpl : public CopyLogsPresenter
 {
 public:
-    CopyLogsPresenterImpl(CopyLogsPopup& copyLogsPopup,
-        ProtectedInputPopup& protectedInputPopup,
+    CopyLogsPresenterImpl(CopyLogsPopupImpl& copyLogsPopup,
+        ProtectedInputPopupImpl& protectedInputPopup,
         ImLogDetective::IScpExecutor& scpExecutor,
         Mini& mini);
     ~CopyLogsPresenterImpl();

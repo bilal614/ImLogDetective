@@ -5,6 +5,10 @@ struct ImVec2
     float                                   x, y;
     constexpr ImVec2()                      : x(0.0f), y(0.0f) { }
     constexpr ImVec2(float _x, float _y)    : x(_x), y(_y) { }
+
+    bool operator==(const ImVec2& other) const {
+        return x == other.x && y == other.y;
+    }
 };
 
 struct ImVec4

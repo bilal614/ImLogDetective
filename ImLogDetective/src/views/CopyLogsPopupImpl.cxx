@@ -7,41 +7,18 @@
 namespace ImLogDetective
 {
 
-struct CopyLogsPopupImpl::Impl
+
+void CopyLogsPopupImpl::resetInternalState()
 {
-    Impl(ModalPopupFactory& modalPopupFactory);
-    ~Impl() = default;
-
-    void resetInternalState();
-    bool validateInput();
-
-    ModalPopupFactory& modalPopupFactory;
-
-    bool copyClicked;
-    bool closeClicked;
-    bool opened;
-    CopyLogs copyLogsInput;
-};
-
-CopyLogsPopupImpl::Impl::Impl(ModalPopupFactory& modalPopupFactory) :
-    modalPopupFactory{modalPopupFactory},
-    copyClicked{false},
-    closeClicked{false},
-    opened{false}
-{
-}
-
-void CopyLogsPopupImpl::Impl::resetInternalState()
-{
-    copyLogsInput = CopyLogs{};
+    initInput(CopyLogs{});
     copyClicked = false;
     closeClicked = false;
     opened = false;
 }
 
-bool CopyLogsPopupImpl::Impl::validateInput()
+bool CopyLogsPopupImpl::validateInput()
 {
-    auto inputs = copyLogsInput.getAllInputs();
+    auto inputs = getAllInputs();
     for(const auto& input : inputs)
     {
         if(input.find_first_not_of('\0') == std::string::npos)
@@ -53,7 +30,10 @@ bool CopyLogsPopupImpl::Impl::validateInput()
 }
 
 CopyLogsPopupImpl::CopyLogsPopupImpl(ModalPopupFactory& modalPopupFactory) :
-    p{std::make_unique<Impl>(modalPopupFactory)}
+    modalPopupFactory{modalPopupFactory},
+    copyClicked{false},
+    closeClicked{false},
+    opened{false}
 {
 }
 
@@ -61,78 +41,67 @@ CopyLogsPopupImpl::~CopyLogsPopupImpl() = default;
 
 void CopyLogsPopupImpl::open(const ImVec2& popupPosition, const ImVec2& popupSize)
 {
-    p->modalPopupFactory.open(popupPosition, popupSize, CopyLogsDefs::Name);
-    p->opened = true;
-}
-
-void CopyLogsPopupImpl::initInput(const CopyLogs& input)
-{
-    p->copyLogsInput = CopyLogs{};
-    p->copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath).insert(0, input.getInputValue(CopyLogsDefs::SrcHostPath));
-    p->copyLogsInput.getInputRef(CopyLogsDefs::DestDir).insert(0, input.getInputValue(CopyLogsDefs::DestDir));
-    p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost1).insert(0, input.getInputValue(CopyLogsDefs::JumpHost1));
-    p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost2).insert(0, input.getInputValue(CopyLogsDefs::JumpHost2));
-    p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath1).insert(0, input.getInputValue(CopyLogsDefs::KeyFilePath1));
-    p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath2).insert(0, input.getInputValue(CopyLogsDefs::KeyFilePath2));
+    modalPopupFactory.open(popupPosition, popupSize, CopyLogsDefs::Name);
+    opened = true;
 }
 
 void CopyLogsPopupImpl::draw()
 {
-    if(p->opened)
+    if(opened)
     {
-        p->modalPopupFactory.beginLayout(CopyLogsDefs::Name);
+        modalPopupFactory.beginLayout(CopyLogsDefs::Name);
 
         std::vector<PopupButton> popupButtons{
             PopupButton{Common::CopyBtn},
             PopupButton{Common::CloseBtn}};
-        p->modalPopupFactory.createButtonGroup(popupButtons);
+        modalPopupFactory.createButtonGroup(popupButtons);
 
         std::vector<PopupInputTextBox> popupSrcDestFolders{
-            PopupInputTextBox{CopyLogsDefs::SrcHostPath, p->copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath), CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{CopyLogsDefs::DestDir, p->copyLogsInput.getInputRef(CopyLogsDefs::DestDir), CopyLogsDefs::TextBoxWidth}};
-        p->modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, CopyLogsDefs::SrcDestGroup, true);
+            PopupInputTextBox{CopyLogsDefs::SrcHostPath, getInputRef(CopyLogsDefs::SrcHostPath), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::DestDir, getInputRef(CopyLogsDefs::DestDir), CopyLogsDefs::TextBoxWidth}};
+        modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, CopyLogsDefs::SrcDestGroup, true);
 
         std::vector<PopupInputTextBox> jumpHosts{
-            PopupInputTextBox{CopyLogsDefs::JumpHost1, p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost1), CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{CopyLogsDefs::JumpHost2, p->copyLogsInput.getInputRef(CopyLogsDefs::JumpHost2), CopyLogsDefs::TextBoxWidth}};
-        p->modalPopupFactory.createInputTextBoxGroup(jumpHosts, CopyLogsDefs::JumpHostGroup, false, true);
+            PopupInputTextBox{CopyLogsDefs::JumpHost1, getInputRef(CopyLogsDefs::JumpHost1), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::JumpHost2, getInputRef(CopyLogsDefs::JumpHost2), CopyLogsDefs::TextBoxWidth}};
+        modalPopupFactory.createInputTextBoxGroup(jumpHosts, CopyLogsDefs::JumpHostGroup, false, true);
 
         std::vector<PopupInputTextBox> keyFiles{
-            PopupInputTextBox{CopyLogsDefs::KeyFilePath1, p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath1), CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{CopyLogsDefs::KeyFilePath2, p->copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath2), CopyLogsDefs::TextBoxWidth}};
-        p->modalPopupFactory.createInputTextBoxGroup(keyFiles, "Key File Paths", false, true);
+            PopupInputTextBox{CopyLogsDefs::KeyFilePath1, getInputRef(CopyLogsDefs::KeyFilePath1), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::KeyFilePath2, getInputRef(CopyLogsDefs::KeyFilePath2), CopyLogsDefs::TextBoxWidth}};
+        modalPopupFactory.createInputTextBoxGroup(keyFiles, CopyLogsDefs::KeyFileGroup, false, true);
 
-        p->copyClicked = popupButtons[0].clicked;
-        p->closeClicked = popupButtons[1].clicked;
+        copyClicked = popupButtons[0].clicked;
+        closeClicked = popupButtons[1].clicked;
 
-        p->modalPopupFactory.endLayout();
+        modalPopupFactory.endLayout();
     }
 }
 
 bool CopyLogsPopupImpl::isOpen()
 {
-    return p->modalPopupFactory.isPopupOpen();
+    return modalPopupFactory.isPopupOpen();
 }
 
 bool CopyLogsPopupImpl::okBtnClicked()
 {
-    return p->copyClicked;
+    return copyClicked;
 }
 
 bool CopyLogsPopupImpl::closeBtnClicked()
 {
-    return p->closeClicked;
+    return closeClicked;
 }
 
 void CopyLogsPopupImpl::close()
 {
-    p->resetInternalState();
-    p->modalPopupFactory.close();
+    resetInternalState();
+    modalPopupFactory.close();
 }
 
 CopyLogs CopyLogsPopupImpl::getInput()
 {
-    return p->copyLogsInput;
+    return copyLogsInput;
 }
 
 }

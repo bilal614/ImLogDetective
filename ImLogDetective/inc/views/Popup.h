@@ -2,6 +2,7 @@
 #ifndef IMLOGDETECTIVE_VIEWS_POPUP_H
 #define IMLOGDETECTIVE_VIEWS_POPUP_H
 
+#include "views/CopyLogs.h"
 #include <string>
 
 struct ImVec2;
@@ -9,18 +10,71 @@ struct ImVec2;
 namespace ImLogDetective
 {
 
-template <class T>
-class Popup
+template <typename T>
+struct NotCachedPopupInput
+{
+    T copyLogsInput;
+    inline void initInput(const T& input)
+    {
+        return;
+    }
+    inline void setInputValue(const std::string& key, const std::string& value)
+    {
+        return;
+    }
+    inline std::string getInputValue(const std::string& key)
+    {
+        return std::string();
+    }
+    inline const std::vector<std::string> getAllInputs()
+    {
+        return std::vector<std::string>();
+    }
+};
+
+template <typename T>
+struct CachedCopyLogsPopupInput
+{
+    T copyLogsInput;
+    inline void initInput(const T& input)
+    {
+        copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath).insert(0, input.getInputValue(CopyLogsDefs::SrcHostPath));
+        copyLogsInput.getInputRef(CopyLogsDefs::DestDir).insert(0, input.getInputValue(CopyLogsDefs::DestDir));
+        copyLogsInput.getInputRef(CopyLogsDefs::JumpHost1).insert(0, input.getInputValue(CopyLogsDefs::JumpHost1));
+        copyLogsInput.getInputRef(CopyLogsDefs::JumpHost2).insert(0, input.getInputValue(CopyLogsDefs::JumpHost2));
+        copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath1).insert(0, input.getInputValue(CopyLogsDefs::KeyFilePath1));
+        copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath2).insert(0, input.getInputValue(CopyLogsDefs::KeyFilePath2));
+    }
+    inline void setInputValue(const std::string& key, const std::string& value)
+    {
+        copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath).insert(0, value);
+    }
+    inline std::string& getInputRef(const std::string& key)
+    {
+        return copyLogsInput.getInputRef(key);
+    }
+    inline std::string getInputValue(const std::string& key)
+    {
+        return copyLogsInput.getInputValue(key);
+    }
+    inline const std::vector<std::string> getAllInputs()
+    {
+        return copyLogsInput.getAllInputs();
+    }
+};
+
+template <class T, template <class> class CachePolicy>
+class Popup : public CachePolicy<T>
 {
 public:
-    virtual ~Popup() = default;
-    virtual void open(const ImVec2& popupPosition, const ImVec2& popupSize) = 0;
-    virtual void draw() = 0;
-    virtual void close() = 0;
-    virtual bool isOpen() = 0;
-    virtual bool okBtnClicked() = 0;
-    virtual bool closeBtnClicked() = 0;
-    virtual T getInput() = 0;
+    ~Popup() = default;
+    void open(const ImVec2& popupPosition, const ImVec2& popupSize);
+    void draw();
+    void close();
+    bool isOpen();
+    bool okBtnClicked();
+    bool closeBtnClicked();
+    T getInput();
 };
 
 }
