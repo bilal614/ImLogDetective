@@ -110,13 +110,19 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
             NAME "coverage-gcov"
             EXECUTABLE ctest
             BASE_DIRECTORY "${PROJECT_ROOT}"
-            EXCLUDE "/usr/*" "ext/*")
+            EXCLUDE "${PROJECT_ROOT}/EventHandling/test/mocks/*"
+                "${PROJECT_ROOT}/ImLogDetective/test/mocks/*"
+                "${PROJECT_ROOT}/ImLogDetective/src/dearimgui/*"
+                "/usr/*" "ext/*")
 
         setup_target_for_coverage_lcov(
             NAME "coverage-lcov"
             EXECUTABLE ctest
             BASE_DIRECTORY "${PROJECT_ROOT}"
-            EXCLUDE "/usr/*" "ext/*")
+            EXCLUDE "${PROJECT_ROOT}/EventHandling/test/mocks/*"
+             "${PROJECT_ROOT}/ImLogDetective/test/mocks/*"
+             "${PROJECT_ROOT}/ImLogDetective/src/dearimgui/*"
+             "/usr/*" "ext/*")
     endif()
 
 endif()
