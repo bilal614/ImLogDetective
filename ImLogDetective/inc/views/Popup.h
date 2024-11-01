@@ -55,7 +55,10 @@ struct CachedCopyLogsPopupInput
     }
     inline std::string getInputValue(const std::string& key)
     {
-        return copyLogsInput.getInputValue(key);
+        auto input = copyLogsInput.getInputValue(key);
+        if(auto pos = input.find('\0'); pos != std::string::npos)
+            input.erase(input.find('\0'));
+        return input;
     }
     inline const std::vector<std::string> getAllInputs()
     {
