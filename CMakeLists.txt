@@ -113,6 +113,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
             EXCLUDE "${PROJECT_ROOT}/EventHandling/test/mocks/*"
                 "${PROJECT_ROOT}/ImLogDetective/test/mocks/*"
                 "${PROJECT_ROOT}/ImLogDetective/src/dearimgui/*"
+                "${PROJECT_ROOT}/LogFetchingTool/*"
                 "/usr/*" "ext/*")
 
         setup_target_for_coverage_lcov(
@@ -122,6 +123,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
             EXCLUDE "${PROJECT_ROOT}/EventHandling/test/mocks/*"
              "${PROJECT_ROOT}/ImLogDetective/test/mocks/*"
              "${PROJECT_ROOT}/ImLogDetective/src/dearimgui/*"
+             "${PROJECT_ROOT}/LogFetchingTool/*"
              "/usr/*" "ext/*")
     endif()
 
