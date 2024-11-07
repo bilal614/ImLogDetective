@@ -11,6 +11,7 @@ if(GTest_FOUND)
     add_executable(${TEST_IM_LOG_DETECTIVE}
         ${IM_LOG_DETECTIVE_DIR}/test/src/models/TestGzipFileParsers.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/presenters/TestCopyLogsPresenterImpl.cxx
+        ${IM_LOG_DETECTIVE_DIR}/test/src/presenters/TestFileListPresenterImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/presenters/TestLogFilePresenter.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/presenters/TestLogFileTabsPresenter.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/presenters/TestMainPresenter.cxx
