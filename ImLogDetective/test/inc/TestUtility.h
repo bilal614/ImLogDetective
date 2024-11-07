@@ -10,9 +10,6 @@ MATCHER_P(imvec2_equal, a, "") { return arg.x == a.x && arg.y == a.y; };
 class TestUtility {
 
 public:
-    TestUtility();
-    ~TestUtility();
-
     static std::filesystem::path getTestDataFolder();
     static std::filesystem::path getTestExecutablePath();
 

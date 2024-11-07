@@ -4,12 +4,6 @@
 namespace TestImLogDetective
 {
 
-TestUtility::TestUtility()
-{
-}
-
-TestUtility::~TestUtility() = default;
-
 std::filesystem::path TestUtility::getTestExecutablePath()
 {
     char buffer[1048] = {'\0'};

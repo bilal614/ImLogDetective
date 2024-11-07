@@ -113,6 +113,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
             EXCLUDE "${PROJECT_ROOT}/EventHandling/test/mocks/*"
                 "${PROJECT_ROOT}/ImLogDetective/test/mocks/*"
                 "${PROJECT_ROOT}/ImLogDetective/src/dearimgui/*"
+                "${PROJECT_ROOT}/ImLogDetective/src/main.cxx"
                 "${PROJECT_ROOT}/LogFetchingTool/*"
                 "/usr/*" "ext/*")
 
@@ -123,6 +124,7 @@ if(OPENGL_FOUND AND GLFW3_FOUND)
             EXCLUDE "${PROJECT_ROOT}/EventHandling/test/mocks/*"
              "${PROJECT_ROOT}/ImLogDetective/test/mocks/*"
              "${PROJECT_ROOT}/ImLogDetective/src/dearimgui/*"
+             "${PROJECT_ROOT}/ImLogDetective/src/main.cxx"
              "${PROJECT_ROOT}/LogFetchingTool/*"
              "/usr/*" "ext/*")
     endif()
