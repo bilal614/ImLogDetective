@@ -66,14 +66,13 @@ WidgetFactoryImpl::Impl::Impl(WidgetFactory& widgetFactory,
 
 std::unique_ptr<ScopedImGuiWindow> WidgetFactoryImpl::Impl::addWindow()
 {
-    return std::make_unique<ScopedImGuiWindowImpl>(
+    return std::make_unique<ScopedImGuiWindowImpl<WindowType::MainWindow>>(
         parent,
         WindowDefs::ApplicationName, 
         mainViewPort.getAreaSize(), 
         mainViewPort.getViewportPosition(), 
         openCloseWidgetPresent.get(), 
-        mainWindowFlags,
-        WindowType::MainWindow);
+        mainWindowFlags);
 }
 
 void WidgetFactoryImpl::Impl::createPopupButton(const std::string& button, bool& clicked)
@@ -128,14 +127,13 @@ std::unique_ptr<ScopedImGuiWindow> WidgetFactoryImpl::createChildWindow(
     const ImVec2& position,
     const ImVec2& size)
 {
-    return std::make_unique<ScopedImGuiWindowImpl>(
+    return std::make_unique<ScopedImGuiWindowImpl<WindowType::ChildWindow>>(
         p->parent,
         windowName, 
         size, 
         position, 
         p->openCloseWidgetPresent.get(),
-        p->childWindowFlags,
-        WindowType::ChildWindow
+        p->childWindowFlags
     );
 }
 
