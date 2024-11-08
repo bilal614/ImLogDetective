@@ -34,9 +34,6 @@ public:
     //List tree widget
     std::unique_ptr<ListTreeWidget> createListTreeWidget() override;
 
-    //Layout manipulation
-    void onSameLine() override;
-
     //ModalPopup widgets
     void open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name) override;
     void beginLayout(const std::string& name) override;

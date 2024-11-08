@@ -28,6 +28,11 @@ public:
     MOCK_METHOD(void, textColored, (const ImVec4&, std::string_view));
     MOCK_METHOD(void, textUnformatted, (std::string_view));
     MOCK_METHOD(bool, selectableText,(const ImVec4&, std::string_view, bool));
+    MOCK_METHOD(void, setNextWindowPosAndSize, (const ImVec2&, const ImVec2&));
+    MOCK_METHOD(void, windowBegin,(const std::string&, bool*, ImGuiWindowFlags));
+    MOCK_METHOD(void, windowEnd, ());
+    MOCK_METHOD(void, childWindowBegin, (const std::string&, const ImVec2&, ImGuiWindowFlags));
+    MOCK_METHOD(void, childWindowEnd,());
 };
 
 }

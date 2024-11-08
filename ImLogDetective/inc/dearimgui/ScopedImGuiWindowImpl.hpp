@@ -14,12 +14,12 @@ namespace ImLogDetective
 struct ScopedImGuiWindowImplementation : public ScopedImGuiWindow {
     ImVec2 windowSize;
     ImVec2 windowPosition;
-    WidgetFactory& widgetFactory;
+    ImGuiWidgetWrapper& imGuiWidgetWrapper;
 
-    ScopedImGuiWindowImplementation(WidgetFactory& widgetFactory, 
+    ScopedImGuiWindowImplementation(ImGuiWidgetWrapper& imGuiWidgetWrapper, 
         const ImVec2& size, 
         const ImVec2& position) :
-        widgetFactory{widgetFactory}, windowSize{size}, windowPosition{position}
+        imGuiWidgetWrapper{imGuiWidgetWrapper}, windowSize{size}, windowPosition{position}
     {
     }
 
@@ -35,7 +35,7 @@ struct ScopedImGuiWindowImplementation : public ScopedImGuiWindow {
 
     void onSameLine() override
     {
-        widgetFactory.onSameLine();
+        imGuiWidgetWrapper.sameLine();
     }
 
 }; 
@@ -43,42 +43,41 @@ struct ScopedImGuiWindowImplementation : public ScopedImGuiWindow {
 template <WindowType wType>
 struct ScopedImGuiWindowImpl : public ScopedImGuiWindowImplementation
 {
-    ScopedImGuiWindowImpl(WidgetFactory& widgetFactory, 
+    ScopedImGuiWindowImpl(ImGuiWidgetWrapper& imGuiWidgetWrapper, 
         const std::string& windowName, 
         const ImVec2& size, 
         const ImVec2& position, 
         bool* openClose, 
         ImGuiWindowFlags windowFlags) 
-            : ScopedImGuiWindowImplementation(widgetFactory, size, position)
+            : ScopedImGuiWindowImplementation(imGuiWidgetWrapper, size, position)
     {
-            ImGui::SetNextWindowPos(ImVec2(windowPosition.x, windowPosition.y), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
-            ImGui::Begin(windowName.c_str(), openClose, windowFlags | ImGuiWindowFlags_NoTitleBar);
+        imGuiWidgetWrapper.setNextWindowPosAndSize(position, windowSize);
+        imGuiWidgetWrapper.windowBegin(windowName, openClose, windowFlags);
     }
 
     ~ScopedImGuiWindowImpl()
     {
-        ImGui::End();
+        imGuiWidgetWrapper.windowEnd();
     }
 };
 
 template<>
 struct ScopedImGuiWindowImpl<WindowType::ChildWindow> : public ScopedImGuiWindowImplementation
 {
-    ScopedImGuiWindowImpl(WidgetFactory& widgetFactory, 
+    ScopedImGuiWindowImpl(ImGuiWidgetWrapper& imGuiWidgetWrapper, 
         const std::string& windowName, 
         const ImVec2& size, 
         const ImVec2& position, 
         bool* openClose, 
         ImGuiWindowFlags windowFlags) 
-            : ScopedImGuiWindowImplementation(widgetFactory, size, position)
+            : ScopedImGuiWindowImplementation(imGuiWidgetWrapper, size, position)
     {
-        ImGui::BeginChild(windowName.c_str(), windowSize, true, windowFlags);
+        imGuiWidgetWrapper.childWindowBegin(windowName, windowSize, windowFlags);
     }
 
     ~ScopedImGuiWindowImpl()
     {
-        ImGui::EndChild();
+        imGuiWidgetWrapper.childWindowEnd();
     }
 };
 

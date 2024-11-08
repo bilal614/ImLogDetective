@@ -14,7 +14,6 @@ class WidgetFactory : public TextWidgetFactory, public WindowFactory, public Lis
 {
 public:
     virtual ~WidgetFactory() = default;
-    virtual void onSameLine() = 0;
 };
 
 }

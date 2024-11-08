@@ -28,6 +28,11 @@ public:
     void textColored(const ImVec4& color, std::string_view text) final;
     void textUnformatted(std::string_view text) final;
     bool selectableText(const ImVec4& color, std::string_view text, bool selected) final;
+    void setNextWindowPosAndSize(const ImVec2& pos, const ImVec2& size) final;
+    void windowBegin(const std::string& windowName, bool* openClose, ImGuiWindowFlags flags) final;
+    void windowEnd() final;
+    void childWindowBegin(const std::string& windowName, const ImVec2& size, ImGuiWindowFlags flags) final;
+    void childWindowEnd() final;
 };
 
 }

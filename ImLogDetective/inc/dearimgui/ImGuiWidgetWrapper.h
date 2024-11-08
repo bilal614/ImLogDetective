@@ -6,6 +6,7 @@
 
 struct ImVec2;
 struct ImVec4;
+typedef int ImGuiWindowFlags; 
 
 namespace ImLogDetective
 {
@@ -32,6 +33,11 @@ public:
     virtual void textColored(const ImVec4& color, std::string_view text) = 0;
     virtual void textUnformatted(std::string_view text) = 0;
     virtual bool selectableText(const ImVec4& color, std::string_view text, bool selected) = 0;
+    virtual void setNextWindowPosAndSize(const ImVec2& pos, const ImVec2& size) = 0;
+    virtual void windowBegin(const std::string& windowName, bool* openClose, ImGuiWindowFlags flags) = 0;
+    virtual void windowEnd() = 0;
+    virtual void childWindowBegin(const std::string& windowName, const ImVec2& size, ImGuiWindowFlags flags) = 0;
+    virtual void childWindowEnd() = 0;
 };
 
 }

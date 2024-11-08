@@ -114,4 +114,30 @@ bool ImGuiWidgetWrapperImpl::selectableText(const ImVec4& color, std::string_vie
     return text.empty() ? false : ImGui::Selectable(text.data(), selected);
 }
 
+void ImGuiWidgetWrapperImpl::setNextWindowPosAndSize(const ImVec2& pos, const ImVec2& size)
+{
+    ImGui::SetNextWindowPos(ImVec2(pos.x, pos.y), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(size, ImGuiCond_FirstUseEver);
+}
+
+void ImGuiWidgetWrapperImpl::windowBegin(const std::string& windowName, bool* openClose, ImGuiWindowFlags flags)
+{
+    ImGui::Begin(windowName.c_str(), openClose, flags | ImGuiWindowFlags_NoTitleBar);
+}
+
+void ImGuiWidgetWrapperImpl::windowEnd()
+{
+    ImGui::End();
+}
+
+void ImGuiWidgetWrapperImpl::childWindowBegin(const std::string& windowName, const ImVec2& size, ImGuiWindowFlags flags)
+{
+    ImGui::BeginChild(windowName.c_str(), size, true, flags);
+}
+
+void ImGuiWidgetWrapperImpl::childWindowEnd()
+{
+    ImGui::EndChild();
+}
+
 }

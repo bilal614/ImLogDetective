@@ -23,6 +23,7 @@ if(GTest_FOUND)
         ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestLogView.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestProtectedInputPopup.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestSelectionMenuBar.cxx
+        ${IM_LOG_DETECTIVE_DIR}/test/src/views/TestWidgetFactoryImpl.cxx
         ${IM_LOG_DETECTIVE_DIR}/test/main.cxx
     )
 

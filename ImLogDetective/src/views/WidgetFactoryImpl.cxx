@@ -14,8 +14,7 @@ namespace ImLogDetective
 
 struct WidgetFactoryImpl::Impl
 {
-    Impl(WidgetFactory& widgetFactory, 
-        const MainViewPort& mainViewPort,
+    Impl(const MainViewPort& mainViewPort,
         ImGuiWidgetWrapper& imGuiWidgetWrapper);
     ~Impl() = default;
     std::unique_ptr<ScopedImGuiWindow> addWindow();
@@ -36,14 +35,11 @@ struct WidgetFactoryImpl::Impl
     void drawInputTexBoxesGroup(std::vector<PopupInputTextBox>& inputTextBoxes, bool horizontal = true);
 
     std::unordered_map<TextColor, ImVec4> colorMap;
-    WidgetFactory& parent;
     ImGuiWidgetWrapper& imGuiWidgetWrapper;
 };
 
-WidgetFactoryImpl::Impl::Impl(WidgetFactory& widgetFactory, 
-    const MainViewPort& mainViewport, 
+WidgetFactoryImpl::Impl::Impl(const MainViewPort& mainViewport, 
     ImGuiWidgetWrapper& imGuiWidgetWrapper) :
-        parent{widgetFactory},
         imGuiWidgetWrapper{imGuiWidgetWrapper},
         mainViewPort{mainViewport},
         openCloseWidgetPresent{nullptr},
@@ -67,7 +63,7 @@ WidgetFactoryImpl::Impl::Impl(WidgetFactory& widgetFactory,
 std::unique_ptr<ScopedImGuiWindow> WidgetFactoryImpl::Impl::addWindow()
 {
     return std::make_unique<ScopedImGuiWindowImpl<WindowType::MainWindow>>(
-        parent,
+        imGuiWidgetWrapper,
         WindowDefs::ApplicationName, 
         mainViewPort.getAreaSize(), 
         mainViewPort.getViewportPosition(), 
@@ -111,7 +107,7 @@ void WidgetFactoryImpl::Impl::drawInputTexBoxesGroup(std::vector<PopupInputTextB
 }
 
 WidgetFactoryImpl::WidgetFactoryImpl(const MainViewPort& mainViewport, ImGuiWidgetWrapper& imGuiWidgetWrapper) :
-    p{std::make_unique<Impl>(*this, mainViewport, imGuiWidgetWrapper)}
+    p{std::make_unique<Impl>(mainViewport, imGuiWidgetWrapper)}
 {
 }
 
@@ -128,7 +124,7 @@ std::unique_ptr<ScopedImGuiWindow> WidgetFactoryImpl::createChildWindow(
     const ImVec2& size)
 {
     return std::make_unique<ScopedImGuiWindowImpl<WindowType::ChildWindow>>(
-        p->parent,
+        p->imGuiWidgetWrapper,
         windowName, 
         size, 
         position, 
@@ -171,11 +167,6 @@ std::unique_ptr<ListTreeWidget> WidgetFactoryImpl::createListTreeWidget()
     return std::make_unique<ListTreeWidgetImpl>();
 }
 
-void WidgetFactoryImpl::onSameLine()
-{
-    p->imGuiWidgetWrapper.sameLine();
-}
-
 void WidgetFactoryImpl::open(ImVec2 popupPosition, ImVec2 popupSize, const std::string& name)
 {
     p->imGuiWidgetWrapper.openPopup(name);
@@ -210,7 +201,7 @@ bool WidgetFactoryImpl::createButtonGroup(std::vector<PopupButton>& buttons)
             p->createPopupButton(it->name, it->clicked);
             if(it  != --buttons.end())
             {
-                onSameLine();
+                p->imGuiWidgetWrapper.sameLine();
             }
         }
         return true;
