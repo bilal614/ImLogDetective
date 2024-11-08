@@ -17,7 +17,7 @@ public:
     LogDataModelImpl(const std::string& dataSource);
     ~LogDataModelImpl();
     void addLogData(std::string dataLine) override;
-    const std::vector<LogLine>& getLogData() override; 
+    const std::vector<LogLine>& getLogData() override;
     void setCompleted(bool completed) override;
     bool getCompleted() override;
 private:
