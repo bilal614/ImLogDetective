@@ -33,14 +33,14 @@ void MiniImpl::set(const std::string& section, const std::string& name, const st
     p->ini[section][name] = value;
 }
 
-std::string MiniImpl::get(const std::string& section, const std::string& name)
+std::string MiniImpl::get(const std::string& section, const std::string& name) const
 {
     return p->ini[section][name];
 }
 
-void MiniImpl::updateIniFile()
+bool MiniImpl::updateIniFile()
 {
-    p->iniFile.write(p->ini);
+    return p->iniFile.write(p->ini);
 }
 
 }

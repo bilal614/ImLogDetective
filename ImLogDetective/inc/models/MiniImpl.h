@@ -14,8 +14,8 @@ public:
     MiniImpl(const std::filesystem::path& iniFilePath);
     ~MiniImpl();
     void set(const std::string& section, const std::string& name, const std::string& value) final;
-    std::string get(const std::string& section, const std::string& name) final;
-    void updateIniFile() final;
+    std::string get(const std::string& section, const std::string& name) const final;
+    bool updateIniFile() final;
 private:
     struct Impl;
     std::unique_ptr<Impl> p;
