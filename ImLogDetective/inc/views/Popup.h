@@ -38,8 +38,11 @@ struct CachedCopyLogsPopupInput
     T copyLogsInput;
     inline void initInput(const T& input)
     {
-        copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath).insert(0, input.getInputValue(CopyLogsDefs::SrcHostPath));
-        copyLogsInput.getInputRef(CopyLogsDefs::DestDir).insert(0, input.getInputValue(CopyLogsDefs::DestDir));
+        
+        copyLogsInput.getInputRef(CopyLogsDefs::RemoteHostIP).insert(0, input.getInputValue(CopyLogsDefs::RemoteHostIP));
+        copyLogsInput.getInputRef(CopyLogsDefs::RemoteHostUser).insert(0, input.getInputValue(CopyLogsDefs::RemoteHostUser));
+        copyLogsInput.getInputRef(CopyLogsDefs::RemoteHostDir).insert(0, input.getInputValue(CopyLogsDefs::RemoteHostDir));
+        copyLogsInput.getInputRef(CopyLogsDefs::LocalDir).insert(0, input.getInputValue(CopyLogsDefs::LocalDir));
         copyLogsInput.getInputRef(CopyLogsDefs::JumpHost1).insert(0, input.getInputValue(CopyLogsDefs::JumpHost1));
         copyLogsInput.getInputRef(CopyLogsDefs::JumpHost2).insert(0, input.getInputValue(CopyLogsDefs::JumpHost2));
         copyLogsInput.getInputRef(CopyLogsDefs::KeyFilePath1).insert(0, input.getInputValue(CopyLogsDefs::KeyFilePath1));
@@ -47,7 +50,7 @@ struct CachedCopyLogsPopupInput
     }
     inline void setInputValue(const std::string& key, const std::string& value)
     {
-        copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath).insert(0, value);
+        copyLogsInput.getInputRef(key).insert(0, value);
     }
     inline std::string& getInputRef(const std::string& key)
     {

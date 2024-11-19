@@ -21,8 +21,10 @@ namespace ImLogDetective
         const char* IniFile{"ImLogDetective.ini"};
         namespace CopyLogsSection {
             const char* Name{"CopyLogs"};
-            const char* SrcHostPath{"src_host_path"};
-            const char* DestinationPath{"destination_path"};
+            const char* RemoteHostIP{"remote_host_ip"};
+            const char* RemoteHostUser{"remote_host_user"};
+            const char* RemoteHostDir{"remote_host_dir"};
+            const char* LocalDir{"local_destination_path"};
             const char* JumpHost1{"jump_host1"};
             const char* JumpHost2{"jump_host2"};
             const char* KeyFilePath1{"key_file_path1"};
@@ -61,9 +63,12 @@ namespace ImLogDetective
     namespace CopyLogsDefs {
         const char* Name{"Copy Remote Logs"};
         const char* EnterPass{"Enter pass"};
-        const char* SrcDestGroup{"Directories"};
-        const char* SrcHostPath{"Source Host Path"};
-        const char* DestDir{"Destination Directory"};
+        const char* RemoteHostGroup{"Remote Host"};
+        const char* RemoteHostIP{"IP"};
+        const char* RemoteHostUser{"User"};
+        const char* DirectoriesGroup{"Directories"};
+        const char* RemoteHostDir{"Remote Host"};
+        const char* LocalDir{"Local Destination"};
         const char* JumpHostGroup{"Jump Host"};
         const char* JumpHost1{"Jump Host 1"};
         const char* JumpHost2{"Jump Host 2"};

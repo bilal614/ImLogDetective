@@ -51,15 +51,20 @@ void CopyLogsPopupImpl::draw()
     {
         modalPopupFactory.beginLayout(CopyLogsDefs::Name);
 
-        std::vector<PopupButton> popupButtons{
+        std::vector<PopupButton> buttons{
             PopupButton{Common::CopyBtn},
             PopupButton{Common::CloseBtn}};
-        modalPopupFactory.createButtonGroup(popupButtons);
+        modalPopupFactory.createButtonGroup(buttons);
 
-        std::vector<PopupInputTextBox> popupSrcDestFolders{
-            PopupInputTextBox{CopyLogsDefs::SrcHostPath, getInputRef(CopyLogsDefs::SrcHostPath), CopyLogsDefs::TextBoxWidth},
-            PopupInputTextBox{CopyLogsDefs::DestDir, getInputRef(CopyLogsDefs::DestDir), CopyLogsDefs::TextBoxWidth}};
-        modalPopupFactory.createInputTextBoxGroup(popupSrcDestFolders, CopyLogsDefs::SrcDestGroup, true);
+        std::vector<PopupInputTextBox> remoteHost{
+            PopupInputTextBox{CopyLogsDefs::RemoteHostIP, getInputRef(CopyLogsDefs::RemoteHostIP), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::RemoteHostUser, getInputRef(CopyLogsDefs::RemoteHostUser), CopyLogsDefs::TextBoxWidth}};
+        modalPopupFactory.createInputTextBoxGroup(remoteHost, CopyLogsDefs::RemoteHostGroup, true);
+
+        std::vector<PopupInputTextBox> srcDestFolders{
+            PopupInputTextBox{CopyLogsDefs::RemoteHostDir, getInputRef(CopyLogsDefs::RemoteHostDir), CopyLogsDefs::TextBoxWidth},
+            PopupInputTextBox{CopyLogsDefs::LocalDir, getInputRef(CopyLogsDefs::LocalDir), CopyLogsDefs::TextBoxWidth}};
+        modalPopupFactory.createInputTextBoxGroup(srcDestFolders, CopyLogsDefs::DirectoriesGroup, true);
 
         std::vector<PopupInputTextBox> jumpHosts{
             PopupInputTextBox{CopyLogsDefs::JumpHost1, getInputRef(CopyLogsDefs::JumpHost1), CopyLogsDefs::TextBoxWidth},
@@ -71,8 +76,8 @@ void CopyLogsPopupImpl::draw()
             PopupInputTextBox{CopyLogsDefs::KeyFilePath2, getInputRef(CopyLogsDefs::KeyFilePath2), CopyLogsDefs::TextBoxWidth}};
         modalPopupFactory.createInputTextBoxGroup(keyFiles, CopyLogsDefs::KeyFileGroup, false, true);
 
-        copyClicked = popupButtons[0].clicked;
-        closeClicked = popupButtons[1].clicked;
+        copyClicked = buttons[0].clicked;
+        closeClicked = buttons[1].clicked;
 
         modalPopupFactory.endLayout();
     }

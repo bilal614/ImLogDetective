@@ -35,4 +35,4 @@ The tool is built on top of the handy dearimgui library. Current implementation 
 * GLFW
 * Zlib
 * Gtest+Gmock
-* Scp
+* Scp(OpenSSH)

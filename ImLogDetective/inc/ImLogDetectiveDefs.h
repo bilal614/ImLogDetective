@@ -41,8 +41,10 @@ namespace ImLogDetective
         extern const char* IniFile;
         namespace CopyLogsSection {
             extern const char* Name;
-            extern const char* SrcHostPath;
-            extern const char* DestinationPath;
+            extern const char* RemoteHostIP;
+            extern const char* RemoteHostUser;
+            extern const char* RemoteHostDir;
+            extern const char* LocalDir;
             extern const char* JumpHost1;
             extern const char* JumpHost2;
             extern const char* KeyFilePath1;
@@ -88,9 +90,12 @@ namespace ImLogDetective
     namespace CopyLogsDefs {
         extern const char* Name;
         extern const char* EnterPass;
-        extern const char* SrcDestGroup;
-        extern const char* SrcHostPath;
-        extern const char* DestDir;
+        extern const char* RemoteHostGroup;
+        extern const char* RemoteHostIP;
+        extern const char* RemoteHostUser;
+        extern const char* DirectoriesGroup;
+        extern const char* RemoteHostDir;
+        extern const char* LocalDir;
         extern const char* JumpHostGroup;
         extern const char* JumpHost1;
         extern const char* JumpHost2;

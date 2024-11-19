@@ -44,18 +44,18 @@ TEST_F(TestCopyLogsPopup, test_CopyLogsPopup_copyLogsInput_contents_are_correctl
     auto expSrcHostPath{"foo/bar"};
     auto expDstDirectory{"bar/foo"};
     ImLogDetective::CopyLogs copyLogsInput{};
-    copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath) = expSrcHostPath;
-    copyLogsInput.getInputRef(CopyLogsDefs::DestDir) = expDstDirectory;
+    copyLogsInput.getInputRef(CopyLogsDefs::RemoteHostDir) = expSrcHostPath;
+    copyLogsInput.getInputRef(CopyLogsDefs::LocalDir) = expDstDirectory;
 
     auto input = copyLogsPopup.getInput();
-    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::SrcHostPath).data()).empty());
-    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::DestDir).data()).empty());
+    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::RemoteHostDir).data()).empty());
+    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::LocalDir).data()).empty());
 
     copyLogsPopup.initInput(copyLogsInput);
     input = copyLogsPopup.getInput();
 
-    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::SrcHostPath).data()), expSrcHostPath);
-    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::DestDir).data()), expDstDirectory);
+    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::RemoteHostDir).data()), expSrcHostPath);
+    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::LocalDir).data()), expDstDirectory);
 }
 
 TEST_F(TestCopyLogsPopup, test_draw_CopyLogsPopup_when_CopyLogsPopup_is_open) {
@@ -69,7 +69,8 @@ TEST_F(TestCopyLogsPopup, test_draw_CopyLogsPopup_when_CopyLogsPopup_is_open) {
 
     EXPECT_CALL(modalPopupFactoryMock, beginLayout(CopyLogsDefs::Name));
     EXPECT_CALL(modalPopupFactoryMock, createButtonGroup(_)).WillOnce(DoAll(SetArgReferee<0>(popupButtons), Return(true)));
-    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, Eq(CopyLogsDefs::SrcDestGroup), _, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::RemoteHostGroup, true, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, Eq(CopyLogsDefs::DirectoriesGroup), _, _));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, Eq(CopyLogsDefs::JumpHostGroup), _, _));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, _, _, _));
     EXPECT_CALL(modalPopupFactoryMock, endLayout());
@@ -79,23 +80,31 @@ TEST_F(TestCopyLogsPopup, test_draw_CopyLogsPopup_when_CopyLogsPopup_is_open) {
 
 TEST_F(TestCopyLogsPopup, test_CopyLogsPopup_close_resets_internal_state_of_CopyLogsPopup) {
 
-    auto expSrcHostPath{"foo/bar"};
+    auto expectedUser = "user";
+    auto expectedIp = "127.0.0.1";
+    auto expPath{"/foo/bar"};
     auto expDstDirectory{"bar/foo"};
     ImLogDetective::CopyLogs copyLogsInput{};
-    copyLogsInput.getInputRef(CopyLogsDefs::SrcHostPath) = expSrcHostPath;
-    copyLogsInput.getInputRef(CopyLogsDefs::DestDir) = expDstDirectory;
+    copyLogsInput.getInputRef(CopyLogsDefs::RemoteHostUser) = expectedUser;
+    copyLogsInput.getInputRef(CopyLogsDefs::RemoteHostIP) = expectedIp;
+    copyLogsInput.getInputRef(CopyLogsDefs::RemoteHostDir) = expPath;
+    copyLogsInput.getInputRef(CopyLogsDefs::LocalDir) = expDstDirectory;
 
     copyLogsPopup.initInput(copyLogsInput);
     auto input = copyLogsPopup.getInput();
-    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::SrcHostPath).data()), expSrcHostPath);
-    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::DestDir).data()), expDstDirectory);
+    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::RemoteHostUser).data()), expectedUser);
+    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::RemoteHostIP).data()), expectedIp);
+    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::RemoteHostDir).data()), expPath);
+    EXPECT_EQ(toString(input.getInputRef(CopyLogsDefs::LocalDir).data()), expDstDirectory);
 
     EXPECT_CALL(modalPopupFactoryMock, close());
     copyLogsPopup.close();
 
     input = copyLogsPopup.getInput();
-    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::SrcHostPath).data()).empty());
-    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::DestDir).data()).empty());
+    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::RemoteHostUser).data()).empty());
+    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::RemoteHostIP).data()).empty());
+    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::RemoteHostDir).data()).empty());
+    EXPECT_TRUE(toString(input.getInputRef(CopyLogsDefs::LocalDir).data()).empty());
 
     EXPECT_FALSE(copyLogsPopup.closeBtnClicked());
     EXPECT_FALSE(copyLogsPopup.okBtnClicked());

@@ -52,11 +52,12 @@ TEST_F(TestCopyLogsPresenterImpl, test_copyLogsPresenterImpl_when_popup_is_opene
             PopupButton{Common::CopyBtn},
             PopupButton{Common::CloseBtn}};
 
-    EXPECT_CALL(miniMock, get(IniDefs::CopyLogsSection::Name, _)).Times(6);
+    EXPECT_CALL(miniMock, get(IniDefs::CopyLogsSection::Name, _)).Times(8);
     EXPECT_CALL(modalPopupFactoryMock, open(position, size, CopyLogsDefs::Name));
     EXPECT_CALL(modalPopupFactoryMock, beginLayout(CopyLogsDefs::Name));
     EXPECT_CALL(modalPopupFactoryMock, createButtonGroup(_));
-    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::SrcDestGroup, true, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::RemoteHostGroup, true, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::DirectoriesGroup, true, _));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, CopyLogsDefs::JumpHostGroup, false, true));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, CopyLogsDefs::KeyFileGroup, false, true));
     EXPECT_CALL(modalPopupFactoryMock, endLayout());
@@ -75,11 +76,12 @@ TEST_F(TestCopyLogsPresenterImpl, test_copyLogsPresenterImpl_when_popup_is_opene
     
     popupButtons[1].clicked = true;
 
-    EXPECT_CALL(miniMock, get(IniDefs::CopyLogsSection::Name, _)).Times(6);
+    EXPECT_CALL(miniMock, get(IniDefs::CopyLogsSection::Name, _)).Times(8);
     EXPECT_CALL(modalPopupFactoryMock, open(position, size, CopyLogsDefs::Name));
     EXPECT_CALL(modalPopupFactoryMock, beginLayout(CopyLogsDefs::Name));
     EXPECT_CALL(modalPopupFactoryMock, createButtonGroup(_)).WillOnce(DoAll(SetArgReferee<0>(popupButtons), Return(true)));
-    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::SrcDestGroup, true, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::RemoteHostGroup, true, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::DirectoriesGroup, true, _));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, CopyLogsDefs::JumpHostGroup, false, true));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, CopyLogsDefs::KeyFileGroup, false, true));
     EXPECT_CALL(modalPopupFactoryMock, endLayout());
@@ -101,11 +103,19 @@ TEST_F(TestCopyLogsPresenterImpl, test_copyLogsPresenterImpl_when_popup_is_opene
     
     popupButtons[0].clicked = true;
 
-    auto expectedSrcHostPath = "foo/bar";
-    copyLogsPopup.getInputRef(CopyLogsDefs::SrcHostPath) = expectedSrcHostPath;
+    std::string expectedUser = "user";
+    copyLogsPopup.getInputRef(CopyLogsDefs::RemoteHostUser) = expectedUser;
+
+    std::string expectedIp = "127.0.0.1";
+    copyLogsPopup.getInputRef(CopyLogsDefs::RemoteHostIP) = expectedIp;
+
+    std::string expectedFolder = "/foo/bar";
+    copyLogsPopup.getInputRef(CopyLogsDefs::RemoteHostDir) = expectedFolder;
+
+    std::string networkPath = expectedUser + '@' + expectedIp + ':' + expectedFolder;
 
     std::filesystem::path expectedDstDir = "bar/foo";
-    copyLogsPopup.getInputRef(CopyLogsDefs::DestDir) = expectedDstDir.string();
+    copyLogsPopup.getInputRef(CopyLogsDefs::LocalDir) = expectedDstDir.string();
 
     auto expJumpHost1 = "jump_host_1";
     copyLogsPopup.getInputRef(CopyLogsDefs::JumpHost1) = expJumpHost1;
@@ -119,19 +129,22 @@ TEST_F(TestCopyLogsPresenterImpl, test_copyLogsPresenterImpl_when_popup_is_opene
     std::filesystem::path  expKeyFile2 = "key/file/2";
     copyLogsPopup.getInputRef(CopyLogsDefs::KeyFilePath2) = expKeyFile2.string();
 
-    EXPECT_CALL(miniMock, get(IniDefs::CopyLogsSection::Name, _)).Times(6);
+    EXPECT_CALL(miniMock, get(IniDefs::CopyLogsSection::Name, _)).Times(8);
     EXPECT_CALL(modalPopupFactoryMock, open(position, size, CopyLogsDefs::Name));
     EXPECT_CALL(modalPopupFactoryMock, beginLayout(CopyLogsDefs::Name));
     EXPECT_CALL(modalPopupFactoryMock, createButtonGroup(_)).WillOnce(DoAll(SetArgReferee<0>(popupButtons), Return(true)));
-    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::SrcDestGroup, true, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::RemoteHostGroup, true, _));
+    EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, ImLogDetective::CopyLogsDefs::DirectoriesGroup, true, _));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, CopyLogsDefs::JumpHostGroup, false, true));
     EXPECT_CALL(modalPopupFactoryMock, createInputTextBoxGroup(_, CopyLogsDefs::KeyFileGroup, false, true));
     EXPECT_CALL(modalPopupFactoryMock, endLayout());
 
-    EXPECT_CALL(miniMock, set(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::SrcHostPath, _));
-    EXPECT_CALL(scpExecutorMock, setSourceRemoteHostPath(expectedSrcHostPath));
+    EXPECT_CALL(miniMock, set(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::RemoteHostUser, _));
+    EXPECT_CALL(miniMock, set(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::RemoteHostIP, _));
+    EXPECT_CALL(miniMock, set(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::RemoteHostDir, _));
+    EXPECT_CALL(scpExecutorMock, setSourceRemoteHostPath(networkPath));
 
-    EXPECT_CALL(miniMock, set(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::DestinationPath, _));
+    EXPECT_CALL(miniMock, set(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::LocalDir, _));
     EXPECT_CALL(scpExecutorMock, setDestinationLocalPath(expectedDstDir));
 
     EXPECT_CALL(miniMock, set(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost1, _));
@@ -153,6 +166,5 @@ TEST_F(TestCopyLogsPresenterImpl, test_copyLogsPresenterImpl_when_popup_is_opene
 
     copyLogsPresenterImpl.update(true, position, size);
 }
-
 
 }

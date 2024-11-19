@@ -99,6 +99,8 @@ struct CopyLogsPresenterImpl::Impl
 
     void processPopupInput();
     void cleanInput(std::string& input);
+    bool setSourceRemoteHostPath(const std::string& user, const std::string& ip, const std::string& folder);
+    void updateIni(const std::string& key, const std::string& val);
 
     CopyLogsPopupImpl& copyPopupLogs;
     ProtectedInputPopupImpl& protectedInputPopup;
@@ -125,6 +127,25 @@ CopyLogsPresenterImpl::Impl::Impl(CopyLogsPopupImpl& copyPopupLogs,
 {
 }
 
+void CopyLogsPresenterImpl::Impl::updateIni(const std::string& key, const std::string& val)
+{
+    if(!val.empty())
+    {
+        mini.set(IniDefs::CopyLogsSection::Name, key, val);
+    }
+}
+
+bool CopyLogsPresenterImpl::Impl::setSourceRemoteHostPath(const std::string& user, const std::string& ip, const std::string& folder)
+{
+    updateIni(IniDefs::CopyLogsSection::RemoteHostUser, user);
+    updateIni(IniDefs::CopyLogsSection::RemoteHostIP, ip);
+    updateIni(IniDefs::CopyLogsSection::RemoteHostDir, folder);
+
+    std::string networkPath = user + '@' + ip + ':' + folder;
+
+    return scpExecutor.setSourceRemoteHostPath(networkPath);
+}
+
 void CopyLogsPresenterImpl::Impl::processPopupInput()
 {
     if (copyPopupLogs.closeBtnClicked())
@@ -141,17 +162,15 @@ void CopyLogsPresenterImpl::Impl::processPopupInput()
     {
         if(!downloadInit)
         {
-            if(auto srcHostPath = copyPopupLogs.getInputValue(CopyLogsDefs::SrcHostPath); !srcHostPath.empty())
+            setSourceRemoteHostPath(copyPopupLogs.getInputValue(CopyLogsDefs::RemoteHostUser),
+                copyPopupLogs.getInputValue(CopyLogsDefs::RemoteHostIP),
+                copyPopupLogs.getInputValue(CopyLogsDefs::RemoteHostDir)
+            );
+
+            if(auto dstDirectory = copyPopupLogs.getInputValue(CopyLogsDefs::LocalDir); !dstDirectory.empty())
             {
                 mini.set(IniDefs::CopyLogsSection::Name, 
-                    IniDefs::CopyLogsSection::SrcHostPath, 
-                    srcHostPath);
-                scpExecutor.setSourceRemoteHostPath(srcHostPath);
-            }
-            if(auto dstDirectory = copyPopupLogs.getInputValue(CopyLogsDefs::DestDir); !dstDirectory.empty())
-            {
-                mini.set(IniDefs::CopyLogsSection::Name, 
-                    IniDefs::CopyLogsSection::DestinationPath, 
+                    IniDefs::CopyLogsSection::LocalDir, 
                     dstDirectory);
                 scpExecutor.setDestinationLocalPath(dstDirectory);
             }
@@ -214,12 +233,14 @@ void CopyLogsPresenterImpl::update(bool openPopup, const ImVec2& popupPosition, 
         if(p->isClosed)
         {
             CopyLogs initialCopyLogs;
-            initialCopyLogs.getInputRef(CopyLogsDefs::SrcHostPath)  =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::SrcHostPath);
-            initialCopyLogs.getInputRef(CopyLogsDefs::DestDir)      =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::DestinationPath);
-            initialCopyLogs.getInputRef(CopyLogsDefs::JumpHost1)    =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost1);
-            initialCopyLogs.getInputRef(CopyLogsDefs::JumpHost2)    =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost2);
-            initialCopyLogs.getInputRef(CopyLogsDefs::KeyFilePath1) =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath1);
-            initialCopyLogs.getInputRef(CopyLogsDefs::KeyFilePath2) =   p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath2);
+            initialCopyLogs.getInputRef(CopyLogsDefs::RemoteHostUser)   = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::RemoteHostUser);
+            initialCopyLogs.getInputRef(CopyLogsDefs::RemoteHostIP)     = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::RemoteHostIP);
+            initialCopyLogs.getInputRef(CopyLogsDefs::RemoteHostDir)    = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::RemoteHostDir);
+            initialCopyLogs.getInputRef(CopyLogsDefs::LocalDir)         = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::LocalDir);
+            initialCopyLogs.getInputRef(CopyLogsDefs::JumpHost1)        = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost1);
+            initialCopyLogs.getInputRef(CopyLogsDefs::JumpHost2)        = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::JumpHost2);
+            initialCopyLogs.getInputRef(CopyLogsDefs::KeyFilePath1)     = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath1);
+            initialCopyLogs.getInputRef(CopyLogsDefs::KeyFilePath2)     = p->mini.get(IniDefs::CopyLogsSection::Name, IniDefs::CopyLogsSection::KeyFilePath2);
             p->copyPopupLogs.initInput(initialCopyLogs);
         }
         p->isClosed = false;

@@ -18,8 +18,10 @@ namespace ImLogDetective
 struct CopyLogs{
     CopyLogs() :
         popInputs{
-            {CopyLogsDefs::SrcHostPath, std::string(1024, '\0')},
-            {CopyLogsDefs::DestDir, std::string(1024, '\0')},
+            {CopyLogsDefs::RemoteHostIP, std::string(1024, '\0')},
+            {CopyLogsDefs::RemoteHostUser, std::string(1024, '\0')},
+            {CopyLogsDefs::RemoteHostDir, std::string(1024, '\0')},
+            {CopyLogsDefs::LocalDir, std::string(1024, '\0')},
             {CopyLogsDefs::JumpHost1, std::string(1024, '\0')},
             {CopyLogsDefs::JumpHost2, std::string(1024, '\0')},
             {CopyLogsDefs::KeyFilePath1, std::string(1024, '\0')},
